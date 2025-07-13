@@ -7,7 +7,12 @@ import java.util.Map;
 import com.google.gson.Gson;
 
 import entidades.Serie;
+import objetosFront.AgregarSeries;
+import objetosFront.AgregarDirector;
+import objetosFront.AgregarGenero;
+import objetosFront.EliminarSerie;
 import servicio.ServicioAdministrador;
+
 
 public class ControladorAdministrador {
 
@@ -15,21 +20,71 @@ public class ControladorAdministrador {
         ServicioAdministrador servicio = new ServicioAdministrador();
 
 
-		app.post("/series", ctx -> {
+		app.post("/agregarSerie", ctx -> {
 		    ctx.req().setCharacterEncoding("UTF-8");
 		
 		    
 		    
 		    // lee JSON del cuerpo y convertir a serie
-		    Serie nuevaSerie = new Gson().fromJson(ctx.body(), Serie.class);
+		    AgregarSeries nuevaSerie = new Gson().fromJson(ctx.body(), AgregarSeries.class);
 		
-		    boolean seAgrego = servicio.agregarSerie(nuevaSerie);
+		    boolean seAgrego = servicio.agregarSerie(nuevaSerie.nombre, nuevaSerie.estreno, nuevaSerie.sinopsis, nuevaSerie.id_genero, nuevaSerie.id_director, nuevaSerie.imagen_url);
 		
 		    if (seAgrego) {
 		        ctx.json(Map.of("mensaje", "Serie agregada correctamente"));
 		    } else {
 		        ctx.status(500).json(Map.of("error", "No se pudo agregar la serie"));
-		    }
+		    } 
+		});
+		
+		
+		app.post("/agregarGenero", ctx -> {
+		    ctx.req().setCharacterEncoding("UTF-8");
+		
+		    
+		    
+		    
+		    AgregarGenero nuevoGenero = new Gson().fromJson(ctx.body(), AgregarGenero.class);
+		
+		    boolean seAgrego = servicio.agregarGenero(nuevoGenero.nombre);
+		
+		    if (seAgrego) {
+		        ctx.json(Map.of("mensaje", "genero agregado correctamente"));
+		    } else {
+		        ctx.status(500).json(Map.of("error", "No se pudo agregar el genero"));
+		    } 
+		});
+		
+		
+		app.post("/agregarDirector", ctx -> {
+		    ctx.req().setCharacterEncoding("UTF-8");
+		
+		    
+		    AgregarDirector nuevoDirector = new Gson().fromJson(ctx.body(), AgregarDirector.class);
+		
+		    boolean seAgrego = servicio.agregarDirector(nuevoDirector.nombre, nuevoDirector.biografia);
+		
+		    if (seAgrego) {
+		        ctx.json(Map.of("mensaje", "Director agregado correctamente"));
+		    } else {
+		        ctx.status(500).json(Map.of("error", "No se pudo agregar el director"));
+		    } 
+		});
+		
+		
+		app.delete("/eliminarSerie", ctx -> { //solo recibe nombre/////
+		    ctx.req().setCharacterEncoding("UTF-8");
+		
+		    
+		    EliminarSerie serie = new Gson().fromJson(ctx.body(), EliminarSerie.class);
+		
+		    boolean seElimino = servicio.eliminarSerie(serie.nombre);
+		
+		    if (seElimino) {
+		        ctx.json(Map.of("mensaje", "Serie eliminada correctamente"));
+		    } else {
+		        ctx.status(500).json(Map.of("error", "No se pudo eliminar la serie"));
+		    } 
 		});
     }
 }

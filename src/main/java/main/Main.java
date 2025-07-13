@@ -13,13 +13,25 @@ public class Main {
           
            Javalin app = Javalin.create(config -> {
         	   
-        	   
+        	 
+        	   //configuraciones 
+        	    config.staticFiles.add(staticFileConfig -> {
+        	        staticFileConfig.hostedPath = "/";
+        	        staticFileConfig.directory = "/public";
+        	        staticFileConfig.location = Location.CLASSPATH;
+        	    });
+        	    
+        	    config.plugins.enableCors(cors -> {
+        	        cors.add(it -> {
+        	            it.anyHost(); 
+        	        });
+        	    });
             
         });
         
         
         
-        new ControladorUsuario(app); //registrar rutas //al probarsolo se pone la ruta del api (/actualizarContrasena)
+        new ControladorUsuario(app); //registrar rutas //al probarsolo se pone la ruta del api (endpoints /actualizarContrasena)
         new ControladorAdministrador(app);
         new ControladorSerie(app);
         
