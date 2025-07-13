@@ -13,7 +13,7 @@ public class Main {
           
            Javalin app = Javalin.create(config -> {
         	   
-        	 
+        	 /*
         	   //configuraciones 
         	    config.staticFiles.add(staticFileConfig -> {
         	        staticFileConfig.hostedPath = "/";
@@ -26,7 +26,7 @@ public class Main {
         	            it.anyHost(); 
         	        });
         	    });
-            
+            */
         });
         
         
@@ -35,8 +35,8 @@ public class Main {
         new ControladorAdministrador(app);
         new ControladorSerie(app);
         
-        app.start(7001);
-        System.out.println("Servidor iniciado en http://localhost:7001");
+        app.start(7002);
+        System.out.println("Servidor iniciado en http://localhost:7002");
         
 
     }
