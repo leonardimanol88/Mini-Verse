@@ -80,7 +80,7 @@ public class ControladorAdministrador {
 		    
 		    AgregarTemporada nuevaTemporada = new Gson().fromJson(ctx.body(), AgregarTemporada.class);
 		
-		    boolean seAgrego = servicio.agregarTemporada(nuevaTemporada.numero, nuevaTemporada.nombreSerie, nuevaTemporada.imagen_url);
+		    boolean seAgrego = servicio.agregarTemporada(nuevaTemporada.numero, nuevaTemporada.nombreSerie, nuevaTemporada.imagen_url, nuevaTemporada.nombreTemporada, nuevaTemporada.descripcion);
 		
 		    if (seAgrego) {
 		        ctx.json(Map.of("mensaje", "Temporada agregada correctamente"));

@@ -28,11 +28,11 @@ public class ServicioAdministrador {
 	}
 	
 	
-    public boolean agregarTemporada(int numero, String nombreSerie, String imagen_url) { //numero y nombre de la serie
+    public boolean agregarTemporada(int numero, String nombreSerie, String imagen_url, String nombreTemporada, String descripcion) { //numero y nombre de la serie
 		
     	int idSerie = repo.buscarIdSerieporNombre(nombreSerie);
     	
-    	if (idSerie == 0 || idSerie == 0) {
+    	if (idSerie == 0 ) {
 		    System.out.println("Error: Serie no encontrados");
 		    return false;
 		}
@@ -44,7 +44,7 @@ public class ServicioAdministrador {
     	
         if (!repo.existeSerie(nombreSerie)) {System.out.println("La serie no existe");;return false;}
       
-		return repo.agregarTemporada(numero, idSerie, imagen_url);
+		return repo.agregarTemporada(numero, idSerie, imagen_url, nombreTemporada, descripcion);
 	}
     
     

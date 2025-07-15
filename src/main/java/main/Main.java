@@ -40,7 +40,7 @@ public class Main {
         new ControladorAdministrador(app);
         new ControladorSerie(app);
         
-        app.start(7002);
+        app.start("0.0.0.0", 7002);
         System.out.println("Servidor iniciado en http://44.209.91.221:7002");
         
 

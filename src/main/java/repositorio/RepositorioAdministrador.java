@@ -319,11 +319,11 @@ public class RepositorioAdministrador {
     }
     
     
-    public boolean agregarTemporada(int numero, int idSerie, String imagen_url) {
+    public boolean agregarTemporada(int numero, int idSerie, String imagen_url, String nombre, String descripcion) {
 		
 		boolean insertado = false;
 		
-		String sql = "INSERT INTO temporada (numero, id_serie, imagen_url) VALUES (?, ?, ?)";
+		String sql = "INSERT INTO temporada (numero, id_serie, imagen_url, nombre, descripcion) VALUES (?, ?, ?, ?, ?)";
 		
 		try(Connection con = Conexion.conectar();){
 			
@@ -331,6 +331,8 @@ public class RepositorioAdministrador {
 			    ps.setInt(1, numero);
 			    ps.setInt(2, idSerie);
 			    ps.setString(3, imagen_url);
+			    ps.setString(4, nombre);
+			    ps.setString(5, descripcion);
 			    insertado = ps.executeUpdate() >0;
 			}
 			
