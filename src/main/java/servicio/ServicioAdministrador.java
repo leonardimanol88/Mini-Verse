@@ -37,6 +37,11 @@ public class ServicioAdministrador {
 		    return false;
 		}
     	
+    	if (repo.existeTemporadaporNumero(numero, idSerie)) {
+    	        System.out.println("Ya existe una temporada con ese numero para esta serie");
+    	        return false;
+    	    }
+    	
         if (!repo.existeSerie(nombreSerie)) {System.out.println("La serie no existe");;return false;}
       
 		return repo.agregarTemporada(numero, idSerie, imagen_url);
@@ -60,7 +65,9 @@ public class ServicioAdministrador {
     	    return false;
     	}
     	
-        if (!repo.existeTemporada(idSerie, idTemporada)) {System.out.println("La temporada no existe");;return false;}
+        if (!repo.existeTemporada(idTemporada)) {System.out.println("La temporada no existe");;return false;}
+        
+        if (repo.existeCapituloporNombre(titulo, idTemporada)) {System.out.println("El capitulo ya existe");;return false;}
       
 		return repo.agregarCapitulo(titulo, numero, duracion, idTemporada);
 	}

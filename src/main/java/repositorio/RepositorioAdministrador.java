@@ -175,21 +175,62 @@ public class RepositorioAdministrador {
         } 
     }
     
-    public boolean existeTemporada(int idSerie, int idTemporada) {
+    
+    public boolean existeTemporada(int idTemporada) {
     	
-        String sql = "SELECT 1 FROM temporada WHERE id = ? AND id_serie = ?";
+        String sql = "SELECT 1 FROM temporada WHERE id = ?";
         
         try (Connection con = Conexion.conectar();
             PreparedStatement Consulta = con.prepareStatement(sql)) {
         	
             Consulta.setInt(1, idTemporada);
+      
+            ResultSet rs = Consulta.executeQuery();
+            
+            return rs.next();
+            
+        } catch (Exception e) {
+            System.out.println("error al verificar si la temporada existe: " + e.getMessage());
+            return false;
+        } 
+    }
+    
+    
+    public boolean existeTemporadaporNumero(int numTemporada, int idSerie) {
+    	
+        String sql = "SELECT 1 FROM temporada WHERE numero = ? AND id_serie = ?";
+        
+        try (Connection con = Conexion.conectar();
+            PreparedStatement Consulta = con.prepareStatement(sql)) {
+        	
+            Consulta.setInt(1, numTemporada);
             Consulta.setInt(2, idSerie);
             ResultSet rs = Consulta.executeQuery();
             
             return rs.next();
             
         } catch (Exception e) {
-            System.out.println("error al verificar si la serie existe: " + e.getMessage());
+            System.out.println("error al verificar si la temporada existe: " + e.getMessage());
+            return false;
+        } 
+    }
+    
+    
+    public boolean existeCapituloporNombre(String nombreCapitulo, int idTemporada) {
+    	
+        String sql = "SELECT 1 FROM capitulo WHERE nombre = ? AND id_temporada = ?";
+        
+        try (Connection con = Conexion.conectar();
+            PreparedStatement Consulta = con.prepareStatement(sql)) {
+        	
+            Consulta.setString(1, nombreCapitulo);
+            Consulta.setInt(2, idTemporada);
+            ResultSet rs = Consulta.executeQuery();
+            
+            return rs.next();
+            
+        } catch (Exception e) {
+            System.out.println("error al verificar si el capitulo existe: " + e.getMessage());
             return false;
         } 
     }
