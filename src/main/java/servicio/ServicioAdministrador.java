@@ -1,6 +1,9 @@
 package servicio;
 
 import repositorio.RepositorioAdministrador;
+
+import java.time.LocalTime;
+
 import entidades.Serie;
 
 public class ServicioAdministrador {
@@ -25,6 +28,44 @@ public class ServicioAdministrador {
 	}
 	
 	
+    public boolean agregarTemporada(int numero, String nombreSerie, String imagen_url) { //numero y nombre de la serie
+		
+    	int idSerie = repo.buscarIdSerieporNombre(nombreSerie);
+    	
+    	if (idSerie == 0 || idSerie == 0) {
+		    System.out.println("Error: Serie no encontrados");
+		    return false;
+		}
+    	
+        if (!repo.existeSerie(nombreSerie)) {System.out.println("La serie no existe");;return false;}
+      
+		return repo.agregarTemporada(numero, idSerie, imagen_url);
+	}
+    
+    
+    public boolean agregarCapitulo(String titulo, int numero, String duracion, String nombreSerie, int numeroTemporada) { //numero y nombre de la serie
+		
+    	if (!repo.existeSerie(nombreSerie)) {System.out.println("La serie no existe");;return false;}
+    	
+    	int idSerie = repo.buscarIdSerieporNombre(nombreSerie); 
+    	int idTemporada = repo.buscarIdTemporadaporNumero(numeroTemporada, idSerie);
+    	
+    	if (idSerie == 0) {
+    	    System.out.println("Error: Serie no valida, faltan datos");
+    	    return false;
+    	}
+
+    	if (idTemporada == 0) {
+    	    System.out.println("Error: Temporada no valida, faltan datos");
+    	    return false;
+    	}
+    	
+        if (!repo.existeTemporada(idSerie, idTemporada)) {System.out.println("La temporada no existe");;return false;}
+      
+		return repo.agregarCapitulo(titulo, numero, duracion, idTemporada);
+	}
+	
+	
 	public boolean agregarGenero(String nombre) {
 		
 		if (repo.existeGenero(nombre)) {System.out.println("El genero ya existe");return false;}
@@ -37,6 +78,7 @@ public class ServicioAdministrador {
         if (repo.existeDirector(nombre)) {System.out.println("El director ya existe");return false;}
 		return repo.agregarDirector(nombre, biografia);
 	}
+	
 	
 	
 	public boolean eliminarSerie(String nombre) {

@@ -11,6 +11,8 @@ public class Conexion {
     private static final String CLAVE = "mar55"; 
 
     
+    
+    
     public static Connection conectar() {
     	
         try {

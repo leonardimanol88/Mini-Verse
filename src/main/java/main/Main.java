@@ -13,6 +13,8 @@ public class Main {
           
            Javalin app = Javalin.create(config -> {
         	   
+        	  
+        	   
         	 /*
         	   //configuraciones 
         	    config.staticFiles.add(staticFileConfig -> {
@@ -20,13 +22,16 @@ public class Main {
         	        staticFileConfig.directory = "/public";
         	        staticFileConfig.location = Location.CLASSPATH;
         	    });
-        	    
+        	  */
         	    config.plugins.enableCors(cors -> {
-        	        cors.add(it -> {
-        	            it.anyHost(); 
+        	    	cors.add(it -> {
+                        it.anyHost();
+                        it.exposeHeader("Authorization");
+                        it.allowCredentials = true;
+         	   
         	        });
         	    });
-            */
+            
         });
         
         
@@ -35,8 +40,8 @@ public class Main {
         new ControladorAdministrador(app);
         new ControladorSerie(app);
         
-        app.start(7002);
-        System.out.println("Servidor iniciado en http://localhost:7002");
+        app.start("0.0.0.0", 7002);
+        System.out.println("Servidor iniciado en http://44.209.91.221:7002");
         
 
     }

@@ -10,7 +10,9 @@ import entidades.Serie;
 import objetosFront.AgregarSeries;
 import objetosFront.AgregarDirector;
 import objetosFront.AgregarGenero;
+import objetosFront.AgregarTemporada;
 import objetosFront.EliminarSerie;
+import objetosFront.AgregarCapitulo;
 import servicio.ServicioAdministrador;
 
 
@@ -20,20 +22,20 @@ public class ControladorAdministrador {
         ServicioAdministrador servicio = new ServicioAdministrador();
 
 
-		app.post("/agregarSerie", ctx -> {
-		    ctx.req().setCharacterEncoding("UTF-8");
+		app.post("/agregarSerie", contexto -> {
+		    contexto.req().setCharacterEncoding("UTF-8");
 		
 		    
 		    
 		    // lee JSON del cuerpo y convertir a serie
-		    AgregarSeries nuevaSerie = new Gson().fromJson(ctx.body(), AgregarSeries.class);
+		    AgregarSeries nuevaSerie = new Gson().fromJson(contexto.body(), AgregarSeries.class);
 		
 		    boolean seAgrego = servicio.agregarSerie(nuevaSerie.nombre, nuevaSerie.estreno, nuevaSerie.sinopsis, nuevaSerie.id_genero, nuevaSerie.id_director, nuevaSerie.imagen_url);
 		
 		    if (seAgrego) {
-		        ctx.json(Map.of("mensaje", "Serie agregada correctamente"));
+		        contexto.json(Map.of("mensaje", "Serie agregada correctamente"));
 		    } else {
-		        ctx.status(500).json(Map.of("error", "No se pudo agregar la serie"));
+		        contexto.status(500).json(Map.of("error", "No se pudo agregar la serie"));
 		    } 
 		});
 		
@@ -68,6 +70,38 @@ public class ControladorAdministrador {
 		        ctx.json(Map.of("mensaje", "Director agregado correctamente"));
 		    } else {
 		        ctx.status(500).json(Map.of("error", "No se pudo agregar el director"));
+		    } 
+		});
+		
+		
+		app.post("/agregarTemporada", ctx -> {  //formulario numero , nombre de la serie, link imagen
+		    ctx.req().setCharacterEncoding("UTF-8");
+		
+		    
+		    AgregarTemporada nuevaTemporada = new Gson().fromJson(ctx.body(), AgregarTemporada.class);
+		
+		    boolean seAgrego = servicio.agregarTemporada(nuevaTemporada.numero, nuevaTemporada.nombreSerie, nuevaTemporada.imagen_url);
+		
+		    if (seAgrego) {
+		        ctx.json(Map.of("mensaje", "Temporada agregada correctamente"));
+		    } else {
+		        ctx.status(500).json(Map.of("error", "No se pudo agregar la temporada"));
+		    } 
+		});
+		
+		
+		app.post("/agregarCapitulo", ctx -> { //formulario titulo, numero, duracion(solo 00:00:00), nombre de la serie, numero de temporada )
+		    ctx.req().setCharacterEncoding("UTF-8");
+		
+		    
+		    AgregarCapitulo nuevoCapitulo = new Gson().fromJson(ctx.body(), AgregarCapitulo.class);
+		
+		    boolean seAgrego = servicio.agregarCapitulo(nuevoCapitulo.titulo, nuevoCapitulo.numero, nuevoCapitulo.duracion, nuevoCapitulo.nombreSerie, nuevoCapitulo.temporada);
+		
+		    if (seAgrego) {
+		        ctx.json(Map.of("mensaje", "Capitulo agregado correctamente"));
+		    } else {
+		        ctx.status(500).json(Map.of("error", "No se pudo agregar el capitulo"));
 		    } 
 		});
 		

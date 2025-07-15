@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalTime;
+import java.sql.Time;
 import java.util.ArrayList;
 
 import dao.Conexion;
@@ -110,6 +112,31 @@ public class RepositorioAdministrador {
         return id;
 	}
     
+    
+    public int buscarIdSerieporNombre(String nombre) {
+		
+		int id = 0;
+		String sql = "SELECT * from serie WHERE nombre = ?";
+		
+        try(Connection con = Conexion.conectar();
+        	PreparedStatement ps = con.prepareStatement(sql);
+        	
+        	){ 
+			ps.setString(1, nombre);
+            ResultSet rs = ps.executeQuery();
+			
+			if (rs.next()) { 
+	            id = rs.getInt("id");
+	        }
+        	
+        }catch (Exception e) {
+            System.out.println("esa serie no existe: " + e.getMessage());
+        }
+        
+        return id;
+	}
+    
+    
     public boolean existeSerieId(int id) {
     	
         String sql = "SELECT * FROM serie WHERE id = ?";
@@ -132,7 +159,7 @@ public class RepositorioAdministrador {
     
     public boolean existeSerie(String nombre) {
     	
-        String sql = "SELECT * FROM serie WHERE nombre = ?";
+        String sql = "SELECT 1 FROM serie WHERE nombre = ?";
         
         try (Connection con = Conexion.conectar();
             PreparedStatement Consulta = con.prepareStatement(sql)) {
@@ -145,8 +172,26 @@ public class RepositorioAdministrador {
         } catch (Exception e) {
             System.out.println("error al verificar si la serie existe: " + e.getMessage());
             return false;
-        }
-       
+        } 
+    }
+    
+    public boolean existeTemporada(int idSerie, int idTemporada) {
+    	
+        String sql = "SELECT 1 FROM temporada WHERE id = ? AND id_serie = ?";
+        
+        try (Connection con = Conexion.conectar();
+            PreparedStatement Consulta = con.prepareStatement(sql)) {
+        	
+            Consulta.setInt(1, idTemporada);
+            Consulta.setInt(2, idSerie);
+            ResultSet rs = Consulta.executeQuery();
+            
+            return rs.next();
+            
+        } catch (Exception e) {
+            System.out.println("error al verificar si la serie existe: " + e.getMessage());
+            return false;
+        } 
     }
     
 	
@@ -231,6 +276,111 @@ public class RepositorioAdministrador {
         }
        
     }
+    
+    
+    public boolean agregarTemporada(int numero, int idSerie, String imagen_url) {
+		
+		boolean insertado = false;
+		
+		String sql = "INSERT INTO temporada (numero, id_serie, imagen_url) VALUES (?, ?, ?)";
+		
+		try(Connection con = Conexion.conectar();){
+			
+			try(PreparedStatement ps = con.prepareStatement(sql);){
+			    ps.setInt(1, numero);
+			    ps.setInt(2, idSerie);
+			    ps.setString(3, imagen_url);
+			    insertado = ps.executeUpdate() >0;
+			}
+			
+		} catch (Exception e) {
+            System.out.println("Error al guardar serie: " + e.getMessage());
+        }
+		return insertado;
+	}
+    
+    
+    public int buscarIdTemporadaporNumero(int numeroTemporada, int id_serie) {
+		
+		int id = 0;
+		String sql = "SELECT id from temporada WHERE numero = ? AND id_serie = ?";
+		
+        try(Connection con = Conexion.conectar();
+        	PreparedStatement ps = con.prepareStatement(sql);
+        	
+        	){ 
+			ps.setInt(1, numeroTemporada);
+			ps.setInt(2, id_serie);
+            ResultSet rs = ps.executeQuery();
+			
+			if (rs.next()) { 
+	            id = rs.getInt("id");
+	        }
+        	
+        }catch (Exception e) {
+            System.out.println("esa temporada no existe: " + e.getMessage());
+        }
+        
+        return id;
+	}
+    
+    
+    public boolean agregarCapitulo(String titulo, int numero, String duracion, int idTemporada) {
+		
+		boolean insertado = false;
+		
+		String sql = "INSERT INTO capitulo (titulo, numero, duracion, id_temporada) VALUES (?, ?, ?, ?)";
+		
+		try(Connection con = Conexion.conectar();){
+			
+			try(PreparedStatement ps = con.prepareStatement(sql);){
+			    ps.setString(1, titulo);
+			    ps.setInt(2, numero);
+			    LocalTime hora = LocalTime.parse(duracion); // debe ser "00;00;00"
+		        ps.setTime(3, Time.valueOf(hora));
+			    ps.setInt(4, idTemporada);
+			    insertado = ps.executeUpdate() >0;
+			}
+			
+		} catch (Exception e) {
+            System.out.println("Error al guardar capitulo: " + e.getMessage());
+        }
+		return insertado;
+	}
+    
+    
+    public ArrayList<Serie> obtenerSeries() { 
+    	
+        ArrayList<Serie> lista = new ArrayList<>();
+        String sql = "SELECT * FROM serie";
+        
+        try (
+    	    Connection con = Conexion.conectar(); //hacer el metodo conectar de la clase conexion en el objeto con
+            PreparedStatement ps = con.prepareStatement(sql); 
+            ResultSet rs = ps.executeQuery()) { //obtener el resultado al ejecutar la sentencia (select)
+            while (rs.next()) { //con .next() avanza al siguiente elemento de la sentencia ejecutada 
+                Serie serieObtenida = new Serie( 
+                   
+                    rs.getString("nombre"), 
+                    rs.getInt("estreno"),
+                    rs.getString("sinopsis"),
+                    rs.getInt("id_genero"),
+                    rs.getInt("id_director"),
+                    rs.getString("imagen_url")
+            );
+                lista.add(serieObtenida);
+            }
+        } catch (Exception e) {
+            System.out.println("Error al obtener las series: " + e.getMessage()); 
+        }
+        return lista;
+    }
+    
+    
+    
+	
+	
+	
 	
 
 }
