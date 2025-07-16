@@ -3,16 +3,24 @@ package repositorio;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Time;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import org.mindrot.jbcrypt.BCrypt; //contrasenas
+import java.util.Date;
+
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 
 
 import dao.Conexion;
+import entidades.Serie;
 import entidades.Usuario;
 
 
 public class RepositorioUsuario {
 
+	
 	//post //registrarusuario
 	//guardar usuarios en base, (recibe un objeto usuario) ///registro
     public boolean agregarUsuario(Usuario usuario) { 
@@ -77,6 +85,8 @@ public class RepositorioUsuario {
     
     
     public boolean actualizarContrasena(Usuario usuario, String nuevaContrasena) {////
+    
+    	
     	
     	String hashContrasena = BCrypt.hashpw(nuevaContrasena, BCrypt.gensalt());
     	boolean actualizada = false;
@@ -157,36 +167,142 @@ public class RepositorioUsuario {
         return usuario;
     }
     
-     
     
-    
-    
-    
-
-    
-    //obtener una lista de objetos usuario 
-    public ArrayList<Usuario> obtenerTodos() { //metodo que retorna un array de objetos usuario
+    public Usuario buscarUsuarioPorCorreoyContrasena(String correo, String contrasena) {
     	
-        ArrayList<Usuario> lista = new ArrayList<>();//creacion del array de objetos usuario
-        String sql = "SELECT * FROM usuario"; // string de consulta select en la base
+        Usuario usuario = null;
+        String sql = "SELECT 1 FROM usuario WHERE correo = ?";
         
-        try (
-    	    Connection con = Conexion.conectar(); //hacer el metodo conectar de la clase conexion en el objeto con
-            PreparedStatement ps = con.prepareStatement(sql); //ejecutar la sentencia sql con el string
-            ResultSet rs = ps.executeQuery()) { //obtener el resultado al ejecutar la sentencia (select)
-            while (rs.next()) { //con .next() avanza al siguiente elemento de la sentencia ejecutada 
-                Usuario u = new Usuario( //creacion de un objeto usuario dentro del while, y en su constructor se guaradaran los elementos siguientes
-                    rs.getInt("id"), //obtener el primer elemento "id" de lo obtenido de la ejecucion
-                    rs.getString("nombre"), //en esta seccion obtiene lo de cada elemento de lo seleccionado en la base
-                    rs.getString("correo"),
-                    rs.getString("contrasena"),
-                    rs.getInt("edad")
-            );
-                lista.add(u); // se agrega el usuario creado en el array creado al inicio , se agregan todos los usuarios hasta finalizar el while
+        try (Connection con = Conexion.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            
+            ps.setString(1, correo);
+            ResultSet rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                String hashAlmacenado = rs.getString("contrasena");// contrasena modificada almacenada
+                
+                if (BCrypt.checkpw(contrasena, hashAlmacenado)) { 
+                    usuario = new Usuario(
+                        rs.getInt("id"),
+                        rs.getString("nombre"),
+                        rs.getString("correo"),
+                        hashAlmacenado, 
+                        rs.getInt("edad")
+                    );
+                }
             }
         } catch (Exception e) {
-            System.out.println("Error al obtener usuarios: " + e.getMessage()); //mostrar el error
+            System.out.println("Error al buscar usuario: " + e.getMessage());
+        }
+        return usuario;
+    }
+
+    
+    
+    public boolean agregarResena(String titulo, String contenido, String duracion, int id_capitulo, int id_usuario) { 
+    	
+    	boolean insertado = false;
+    	
+        String sql = "INSERT INTO resena (titulo, contenido, fecha_creacion, id_capitulo, id_usuario) VALUES (?, ?, ?, ?, ?)"; 
+        
+        try (Connection con = Conexion.conectar();
+            PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, titulo);
+            ps.setString(2, contenido);
+            LocalTime duracio = LocalTime.parse(duracion); // debe ser "00;00;00"
+	        ps.setTime(3, Time.valueOf(duracio));
+            ps.setInt(4, id_capitulo);
+            ps.setInt(5, id_usuario);
+            
+            insertado = ps.executeUpdate() >0;
+        } catch (Exception e) {
+            System.out.println("Error al guardar resena: " + e.getMessage());
+        }
+        return insertado;
+    }
+    
+    
+     public ArrayList<Serie> obtenerSeriesporGenero(String genero) { 
+    	
+        ArrayList<Serie> lista = new ArrayList<>();
+        String sql = "SELECT * FROM serie WHERE genero = ?";
+        
+        try (
+    	    Connection con = Conexion.conectar(); 
+            PreparedStatement ps = con.prepareStatement(sql);
+            )
+        	{ 
+        	ps.setString(1, genero);
+        	ResultSet rs = ps.executeQuery();
+                
+            while (rs.next()) {
+                Serie serieObtenida = new Serie( 
+                		
+                	
+                   
+                    rs.getString("nombre"), 
+                    rs.getInt("estreno"),
+                    rs.getString("sinopsis"),
+                    rs.getInt("id_genero"),
+                    rs.getInt("id_director"),
+                    rs.getString("imagen_url")
+            );
+                lista.add(serieObtenida);
+            }
+        } catch (Exception e) {
+            System.out.println("Error al obtener las series: " + e.getMessage()); 
         }
         return lista;
     }
+    
+     
+     public boolean existeGenero(String nombre) {
+     	
+         String sql = "SELECT * FROM genero WHERE nombre = ?";
+         
+         try (Connection con = Conexion.conectar();
+             PreparedStatement Consulta = con.prepareStatement(sql)) {
+         	
+             Consulta.setString(1, nombre);
+             ResultSet rs = Consulta.executeQuery();
+             
+             return rs.next();
+             
+         } catch (Exception e) {
+             System.out.println("error al verificar el genero existe: " + e.getMessage());
+             return false;
+         }
+        
+     }
+    
+    
+     
+     public ArrayList<Serie> obtenerSeries() { 
+     	
+         ArrayList<Serie> lista = new ArrayList<>();
+         String sql = "SELECT * FROM serie";
+         
+         try (
+     	    Connection con = Conexion.conectar(); 
+             PreparedStatement ps = con.prepareStatement(sql); 
+             ResultSet rs = ps.executeQuery()) {
+             while (rs.next()) { 
+                 Serie serieObtenida = new Serie( 
+                    
+                     rs.getString("nombre"), 
+                     rs.getInt("estreno"),
+                     rs.getString("sinopsis"),
+                     rs.getInt("id_genero"),
+                     rs.getInt("id_director"),
+                     rs.getString("imagen_url")
+             );
+                 lista.add(serieObtenida);
+             }
+         } catch (Exception e) {
+             System.out.println("Error al obtener las series: " + e.getMessage()); 
+         }
+         return lista;
+     }
+    
 }

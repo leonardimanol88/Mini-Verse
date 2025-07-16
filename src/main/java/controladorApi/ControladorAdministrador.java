@@ -3,10 +3,13 @@ package controladorApi;
 
 import io.javalin.Javalin;
 import io.javalin.http.Context;
+
+import java.util.ArrayList;
 import java.util.Map;
 import com.google.gson.Gson;
 
 import entidades.Serie;
+import entidades.Usuario;
 import objetosFront.AgregarSeries;
 import objetosFront.AgregarDirector;
 import objetosFront.AgregarGenero;
@@ -120,5 +123,27 @@ public class ControladorAdministrador {
 		        ctx.status(500).json(Map.of("error", "No se pudo eliminar la serie"));
 		    } 
 		});
+		
+		
+		app.get("/obtenerSeries", ctx -> { 
+		    ctx.res().setCharacterEncoding("UTF-8");
+
+		    ArrayList<Serie> obtener = servicio.obtenerSeries();
+		    
+		    ctx.json(obtener); 
+		});
+		
+		
+		app.get("/mostrarUsuarios", contexto -> {
+		    contexto.req().setCharacterEncoding("UTF-8");
+
+		  
+		    ArrayList<Usuario> obtener = servicio.obtenerUsuarios();
+		    contexto.json(obtener); 
+		});
+		
+		
+		
+		
     }
 }

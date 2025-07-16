@@ -3,6 +3,10 @@ package servicio;
 
 import repositorio.RepositorioUsuario;
 import entidades.Usuario;
+import entidades.Serie;
+
+import java.util.ArrayList;
+
 import org.mindrot.jbcrypt.BCrypt;
 
 public class ServicioUsuario {
@@ -81,7 +85,7 @@ RepositorioUsuario repo = new RepositorioUsuario();
 		return repo.actualizarContrasena(usuario, nuevaContrasena);	
 	}
 	
-	
+	/* /loggg
 	public boolean iniciarSesion(String correo, String contrasena) {
 	    
 		if (correo.isBlank() || contrasena.isBlank()) {
@@ -103,5 +107,24 @@ RepositorioUsuario repo = new RepositorioUsuario();
 		
 		return true;
 	}
+	
+	*/
+	
+	public Usuario devolverUsuario(String correo, String contrasena) {
+		return repo.buscarUsuarioPorCorreoyContrasena(correo, contrasena);
+	}
+	
+	
+	
+    public ArrayList<Serie> obtenerSeriesporGenero(String genero) {
+    	return repo.obtenerSeriesporGenero(genero);
+	}
+	
+    
+    public ArrayList<Serie> obtenerTodasSeries() {
+    	return repo.obtenerSeries();
+	}
+	
+	
 	
 }

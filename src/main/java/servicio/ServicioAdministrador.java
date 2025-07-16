@@ -3,8 +3,10 @@ package servicio;
 import repositorio.RepositorioAdministrador;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 import entidades.Serie;
+import entidades.Usuario;
 
 public class ServicioAdministrador {
 
@@ -97,5 +99,18 @@ public class ServicioAdministrador {
 		
 		return repo.eliminarSerie(nombre);
 	}
+	
+	
+    public ArrayList<Serie> obtenerSeries() {
+		
+		return repo.obtenerSeries();
+	}
+    
+    
+    public ArrayList<Usuario> obtenerUsuarios() {
+		
+		return repo.obtenerTodos();
+	} 
+	
 
 }

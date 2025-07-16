@@ -3,14 +3,27 @@ package controladorApi;
 
 import io.javalin.Javalin;
 import io.javalin.http.Context;
+
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Map;
+
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.google.gson.Gson;
 
+import entidades.Serie;
 import entidades.Usuario;
 import objetosFront.ActualizarContrasena;
 import objetosFront.EliminarUsuario;
 import objetosFront.Login;
 import servicio.ServicioUsuario;
+
+import java.util.Date;
+
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 
 public class ControladorUsuario {
 
@@ -41,10 +54,12 @@ public class ControladorUsuario {
 		
 		    
 		    
-		    
 		    ActualizarContrasena datos = new Gson().fromJson(contexto.body(), ActualizarContrasena.class);
-		
-		    boolean seCambio = servicio.actualizarContrasena(datos.id, datos.contrasena, datos.nuevaContrasena);
+		    
+		    Usuario usuario = servicio.devolverUsuario(datos.correo, datos.contrasena);
+		    int idUsuario = usuario.getId();
+		  
+		    boolean seCambio = servicio.actualizarContrasena(idUsuario, datos.contrasena, datos.nuevaContrasena);
 		
 		    if (seCambio) {
 		        contexto.json(Map.of("mensaje", "contrasena actualizada correctamente"));
@@ -80,19 +95,45 @@ public class ControladorUsuario {
 		    
 		    Login datos = new Gson().fromJson(contexto.body(), Login.class);
 
-		    boolean acceso = servicio.iniciarSesion(datos.correo, datos.contrasena);
+		    Usuario usuario = servicio.devolverUsuario(datos.correo, datos.contrasena);
+		    
 
-		    if (acceso) {
+		    if (usuario != null) {
+		    	
+		    	int token = usuario.getId();
 		        contexto.json(Map.of(
-		            "mensaje", "Inicio de sesion exitoso"
+		            "mensaje", "Inicio de sesion exitoso",
+		            "token", token
 		        ));
+
 		    } else {
-		        contexto.status(401).json(Map.of(
-		            "error", "Correo o contrasena incorrectos"
-		        ));
+		        contexto.status(500).json(Map.of(
+		            "error", "Correo o contrasena incorrecto"));
 		    }
 		});
+
 		
+		
+		
+		app.get("/mostrarSeriesporGenero", contexto -> {
+		    contexto.req().setCharacterEncoding("UTF-8");
+
+		    
+		    String genero = contexto.queryParam("genero"); 
+
+		    ArrayList<Serie> obtener = servicio.obtenerSeriesporGenero(genero);
+		    contexto.json(obtener); 
+		});
+		
+		
+		
+		app.get("/mostrarSeries", contexto -> {
+		    contexto.req().setCharacterEncoding("UTF-8");
+
+		  
+		    ArrayList<Serie> obtener = servicio.obtenerTodasSeries();
+		    contexto.json(obtener); 
+		});
 		
 		
 		

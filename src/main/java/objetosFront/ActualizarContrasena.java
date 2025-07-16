@@ -2,7 +2,7 @@ package objetosFront;
 
 public class ActualizarContrasena {
 
-	public int id;
+	public String correo;
     public String contrasena;
     public String nuevaContrasena;
 
