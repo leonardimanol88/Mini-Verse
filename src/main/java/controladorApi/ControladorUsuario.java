@@ -128,7 +128,7 @@ public class ControladorUsuario {
 		
 		
 		
-		app.get("/obtenerGeneros", ctx -> { 
+		app.get("/obtenerGenerosparaUsuario", ctx -> { 
 		    ctx.res().setCharacterEncoding("UTF-8");
 
 		    ArrayList<Genero> obtener = servicio.obtenerGeneros();

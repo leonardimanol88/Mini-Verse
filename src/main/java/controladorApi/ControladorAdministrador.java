@@ -110,7 +110,7 @@ public class ControladorAdministrador {
 		
 		
 		
-		app.delete("/eliminarSerie/:nombre", ctx -> {
+		app.delete("/eliminarSerie/{nombre}", ctx -> {
 			
 		    String nombre = ctx.pathParam("nombre");
 
@@ -134,6 +134,8 @@ public class ControladorAdministrador {
 		
 		
 		app.get("/obtenerGeneros", ctx -> { 
+			
+			
 		    ctx.res().setCharacterEncoding("UTF-8");
 
 		    ArrayList<Genero> obtener = servicio.obtenerGeneros();

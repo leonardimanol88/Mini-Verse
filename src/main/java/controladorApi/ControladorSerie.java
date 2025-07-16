@@ -31,10 +31,31 @@ public class ControladorSerie {
 
 		});
 		
+		/*
+		
+		app.get("/detalleSerie", contexto -> {
+			contexto.req().setCharacterEncoding("UTF-8");
+			
+			
+			
+		    int idSerie = Integer.parseInt(contexto.queryParam("id"));
+		    
+		    
+
+		    
+		    Serie serie = servicio.obtenerSerieporId(idSerie);
+		    ArrayList<Temporada> temporadas = servicio.obtenerTemporadasPorSerie(idSerie);
+
+		    contexto.json(Map.of(
+		        "serie", serie,
+		        "temporadas", temporadas
+		    ));
+		});
 		
 		
 		
 		
+		*/
 		
     }
 }

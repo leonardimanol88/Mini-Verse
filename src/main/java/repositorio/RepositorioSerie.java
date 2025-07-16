@@ -74,7 +74,7 @@ public class RepositorioSerie {
 		 return listaOrdenada;	
 	}
 	
-	
+	/*
 	public Serie obtenerSerieporId(int id) {
 		
 		
@@ -89,9 +89,9 @@ public class RepositorioSerie {
 			ResultSet rs = ps.executeQuery();
 			if(rs.next()) {
 				    
-				
-				    serieMostrar.setId(rs.getInt("id"));
+				    Serie serieMostrar = new Serie();
 					serieMostrar.setNombre(rs.getString("nombre"));
+					serieMostrar.setEstreno(rs.getInt("estreno"));
 					serieMostrar.setSinopsis(rs.getString("sinopsis"));
 					serieMostrar.setIdGenero(rs.getInt("id_genero"));
 					serieMostrar.setIdDirector(rs.getInt("id_director"));
@@ -99,13 +99,13 @@ public class RepositorioSerie {
 			}
 			
 		}catch (Exception e) {
-            System.out.println("Error al obtener las series: " + e.getMessage()); 
+            System.out.println("Error al obtener la serie: " + e.getMessage()); 
         }
 		return serieMostrar;	
 		
 	}
 	
-
+*/
 	
 
 }
