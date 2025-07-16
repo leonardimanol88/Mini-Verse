@@ -14,6 +14,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 
 
 import dao.Conexion;
+import entidades.Genero;
 import entidades.Serie;
 import entidades.Usuario;
 
@@ -255,6 +256,31 @@ public class RepositorioUsuario {
         }
         return lista;
     }
+     
+     
+     
+     public ArrayList<Genero> obtenerGeneros() { 
+     	
+         ArrayList<Genero> lista = new ArrayList<>();
+         String sql = "SELECT * FROM genero";
+         
+         try (
+     	    Connection con = Conexion.conectar(); 
+             PreparedStatement ps = con.prepareStatement(sql); 
+             ResultSet rs = ps.executeQuery()) { 
+             while (rs.next()) { 
+                 Genero generoObtenido = new Genero( 
+                    
+                     rs.getString("nombre")
+             );
+                 lista.add(generoObtenido);
+             }
+         } catch (Exception e) {
+             System.out.println("Error al obtener los generos: " + e.getMessage()); 
+         }
+         return lista;
+     }
+     
     
      
      public boolean existeGenero(String nombre) {

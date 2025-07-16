@@ -7,7 +7,8 @@ import java.util.Map;
 import com.google.gson.Gson;
 import java.util.ArrayList;
 
-import entidades.	Serie;
+import entidades.Serie;
+import entidades.Temporada;
 import servicio.ServicioSerie;
 
 public class ControladorSerie {
@@ -29,6 +30,7 @@ public class ControladorSerie {
 		    contexto.json(lista);//enviar al front la lista
 
 		});
+		
 		
 		
 		

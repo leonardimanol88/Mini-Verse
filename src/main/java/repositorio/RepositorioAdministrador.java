@@ -421,6 +421,69 @@ public class RepositorioAdministrador {
     }
     
     
+    public ArrayList<Genero> obtenerGeneros() { 
+    	
+        ArrayList<Genero> lista = new ArrayList<>();
+        String sql = "SELECT * FROM genero";
+        
+        try (
+    	    Connection con = Conexion.conectar(); 
+            PreparedStatement ps = con.prepareStatement(sql); 
+            ResultSet rs = ps.executeQuery()) { 
+            while (rs.next()) { 
+                Genero generoObtenido = new Genero( 
+                   
+                    rs.getString("nombre")
+            );
+                lista.add(generoObtenido);
+            }
+        } catch (Exception e) {
+            System.out.println("Error al obtener los generos: " + e.getMessage()); 
+        }
+        return lista;
+    }
+    
+    
+    public boolean eliminarCapitulos(int id) {
+		
+		boolean eliminados = false;
+		String sql = "DELETE * from capitulo WHERE id_serie = ?";
+		
+		 try(Connection con = Conexion.conectar();
+		     PreparedStatement ps = con.prepareStatement(sql);
+         ){
+			 
+			ps.setInt(1, id);
+	    	eliminados = ps.executeUpdate() > 0;
+			 
+		 } catch (Exception e) {
+	            System.out.println("error al eliminar: " + e.getMessage());
+		 }
+		 
+		 return eliminados;
+	}
+    
+    
+    public boolean eliminarTemporadas(int id) {
+		
+		boolean eliminados = false;
+		String sql = "DELETE * from temporada WHERE id_serie = ?";
+		
+		 try(Connection con = Conexion.conectar();
+		     PreparedStatement ps = con.prepareStatement(sql);
+         ){
+			 
+			ps.setInt(1, id);
+	    	eliminados = ps.executeUpdate() > 0;
+			 
+		 } catch (Exception e) {
+	            System.out.println("error al eliminar: " + e.getMessage());
+		 }
+		 
+		 return eliminados;
+	}
+    
+    
   //obtener una lista de objetos usuario 
     public ArrayList<Usuario> obtenerTodos() { //metodo que retorna un array de objetos usuario
     	

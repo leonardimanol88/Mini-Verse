@@ -13,6 +13,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.google.gson.Gson;
 
+import entidades.Genero;
 import entidades.Serie;
 import entidades.Usuario;
 import objetosFront.ActualizarContrasena;
@@ -123,6 +124,16 @@ public class ControladorUsuario {
 
 		    ArrayList<Serie> obtener = servicio.obtenerSeriesporGenero(genero);
 		    contexto.json(obtener); 
+		});
+		
+		
+		
+		app.get("/obtenerGeneros", ctx -> { 
+		    ctx.res().setCharacterEncoding("UTF-8");
+
+		    ArrayList<Genero> obtener = servicio.obtenerGeneros();
+		    
+		    ctx.json(obtener); 
 		});
 		
 		

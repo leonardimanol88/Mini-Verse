@@ -19,6 +19,12 @@ public class ServicioSerie {
 		
 		return repo.obtenerSeriesOrdenadas(string);
 	}
+	
+	
+    public Serie obtenerSerieporId(int id){
+		
+		return repo.obtenerSerieporId(id);
+	}
 
 
 }

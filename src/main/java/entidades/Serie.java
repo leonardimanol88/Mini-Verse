@@ -38,4 +38,13 @@ public class Serie {
     public int getIdGenero() { return this.id_genero; }
     public String getimagenUrl() { return this.imagen_url; }
     public int getIdDirector() { return this.id_director;} 
+    
+    
+    public void setId(int id) { this.id = id; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
+    public void setEstreno(int estreno) { this.estreno = estreno; }
+    public void setSinopsis(String sinopsis) { this.sinopsis = sinopsis; }
+    public void setIdGenero(int idGenero) { this.id_genero = idGenero; }
+    public void setimagenUrl(String imagenurl) { this.imagen_url = imagenurl;}
+    public void setIdDirector(int idDirector) { this.id_director = idDirector;} 
 }

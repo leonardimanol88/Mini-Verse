@@ -9,12 +9,12 @@ import java.util.Map;
 import com.google.gson.Gson;
 
 import entidades.Serie;
+import entidades.Genero;
 import entidades.Usuario;
 import objetosFront.AgregarSeries;
 import objetosFront.AgregarDirector;
 import objetosFront.AgregarGenero;
 import objetosFront.AgregarTemporada;
-import objetosFront.EliminarSerie;
 import objetosFront.AgregarCapitulo;
 import servicio.ServicioAdministrador;
 
@@ -109,19 +109,18 @@ public class ControladorAdministrador {
 		});
 		
 		
-		app.delete("/eliminarSerie", ctx -> { //solo recibe nombre/////
-		    ctx.req().setCharacterEncoding("UTF-8");
 		
-		    
-		    EliminarSerie serie = new Gson().fromJson(ctx.body(), EliminarSerie.class);
-		
-		    boolean seElimino = servicio.eliminarSerie(serie.nombre);
-		
+		app.delete("/eliminarSerie/:nombre", ctx -> {
+			
+		    String nombre = ctx.pathParam("nombre");
+
+		    boolean seElimino = servicio.eliminarSerie(nombre);
+
 		    if (seElimino) {
 		        ctx.json(Map.of("mensaje", "Serie eliminada correctamente"));
 		    } else {
 		        ctx.status(500).json(Map.of("error", "No se pudo eliminar la serie"));
-		    } 
+		    }
 		});
 		
 		
@@ -129,6 +128,15 @@ public class ControladorAdministrador {
 		    ctx.res().setCharacterEncoding("UTF-8");
 
 		    ArrayList<Serie> obtener = servicio.obtenerSeries();
+		    
+		    ctx.json(obtener); 
+		});
+		
+		
+		app.get("/obtenerGeneros", ctx -> { 
+		    ctx.res().setCharacterEncoding("UTF-8");
+
+		    ArrayList<Genero> obtener = servicio.obtenerGeneros();
 		    
 		    ctx.json(obtener); 
 		});

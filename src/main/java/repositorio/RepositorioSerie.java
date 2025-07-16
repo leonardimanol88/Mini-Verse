@@ -75,7 +75,35 @@ public class RepositorioSerie {
 	}
 	
 	
-	
+	public Serie obtenerSerieporId(int id) {
+		
+		
+		Serie serieMostrar = null;
+		String sql = "SELECT * FROM serie WHERE id = ?";
+		
+		try (
+				Connection con = Conexion.conectar();
+				PreparedStatement ps = con.prepareStatement(sql);
+			){
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				    
+				
+				    serieMostrar.setId(rs.getInt("id"));
+					serieMostrar.setNombre(rs.getString("nombre"));
+					serieMostrar.setSinopsis(rs.getString("sinopsis"));
+					serieMostrar.setIdGenero(rs.getInt("id_genero"));
+					serieMostrar.setIdDirector(rs.getInt("id_director"));
+					serieMostrar.setimagenUrl(rs.getString("imagen_url"));
+			}
+			
+		}catch (Exception e) {
+            System.out.println("Error al obtener las series: " + e.getMessage()); 
+        }
+		return serieMostrar;	
+		
+	}
 	
 
 	

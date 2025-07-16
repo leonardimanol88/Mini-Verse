@@ -6,6 +6,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 
 import entidades.Serie;
+import entidades.Genero;
 import entidades.Usuario;
 
 public class ServicioAdministrador {
@@ -93,7 +94,7 @@ public class ServicioAdministrador {
 	public boolean eliminarSerie(String nombre) {
 		
 		if (nombre.isBlank()) {
-	        System.out.println("contrasena vacia");
+	        System.out.println("campo vacio");
 	        return false;
 	    }
 		
@@ -106,6 +107,12 @@ public class ServicioAdministrador {
 		return repo.obtenerSeries();
 	}
     
+    
+     public ArrayList<Genero> obtenerGeneros() {
+		
+		return repo.obtenerGeneros();
+	}
+ 
     
     public ArrayList<Usuario> obtenerUsuarios() {
 		

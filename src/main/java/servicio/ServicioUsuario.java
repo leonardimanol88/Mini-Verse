@@ -3,6 +3,7 @@ package servicio;
 
 import repositorio.RepositorioUsuario;
 import entidades.Usuario;
+import entidades.Genero;
 import entidades.Serie;
 
 import java.util.ArrayList;
@@ -127,6 +128,12 @@ RepositorioUsuario repo = new RepositorioUsuario();
     	
     	return repo.obtenerSeriesporGenero(idGenero);
     	
+	}
+    
+    
+    public ArrayList<Genero> obtenerGeneros() {
+		
+		return repo.obtenerGeneros();
 	}
 	
     
