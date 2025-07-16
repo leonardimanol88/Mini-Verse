@@ -226,7 +226,7 @@ public class RepositorioUsuario {
      public ArrayList<Serie> obtenerSeriesporGenero(int idGenero) { 
     	
         ArrayList<Serie> lista = new ArrayList<>();
-        String sql = "SELECT * FROM serie WHERE genero = ?";
+        String sql = "SELECT * FROM serie WHERE id_genero = ?";
         
         try (
     	    Connection con = Conexion.conectar(); 
