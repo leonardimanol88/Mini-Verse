@@ -117,7 +117,16 @@ RepositorioUsuario repo = new RepositorioUsuario();
 	
 	
     public ArrayList<Serie> obtenerSeriesporGenero(String genero) {
-    	return repo.obtenerSeriesporGenero(genero);
+    	
+    	if (genero == null) {
+		    System.out.println("Error: GENERO no encontrado");
+		    return new ArrayList<>();
+		}
+    	
+    	int idGenero = repo.buscarIdGeneroporNombre(genero);
+    	
+    	return repo.obtenerSeriesporGenero(idGenero);
+    	
 	}
 	
     

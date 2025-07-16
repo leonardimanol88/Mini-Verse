@@ -223,7 +223,7 @@ public class RepositorioUsuario {
     }
     
     
-     public ArrayList<Serie> obtenerSeriesporGenero(String genero) { 
+     public ArrayList<Serie> obtenerSeriesporGenero(int idGenero) { 
     	
         ArrayList<Serie> lista = new ArrayList<>();
         String sql = "SELECT * FROM serie WHERE genero = ?";
@@ -233,7 +233,7 @@ public class RepositorioUsuario {
             PreparedStatement ps = con.prepareStatement(sql);
             )
         	{ 
-        	ps.setString(1, genero);
+        	ps.setInt(1, idGenero);
         	ResultSet rs = ps.executeQuery();
                 
             while (rs.next()) {
@@ -275,6 +275,30 @@ public class RepositorioUsuario {
          }
         
      }
+     
+     
+     public int buscarIdGeneroporNombre(String nombre) {
+ 		
+ 		int id = 0;
+ 		String sql = "SELECT * from genero WHERE nombre = ?";
+ 		
+         try(Connection con = Conexion.conectar();
+         	PreparedStatement ps = con.prepareStatement(sql);
+         	
+         	){ 
+ 			ps.setString(1, nombre);
+             ResultSet rs = ps.executeQuery();
+ 			
+ 			if (rs.next()) { 
+ 	            id = rs.getInt("id");
+ 	        }
+         	
+         }catch (Exception e) {
+             System.out.println("ese genero no existe: " + e.getMessage());
+         }
+         
+         return id;
+ 	}
     
     
      

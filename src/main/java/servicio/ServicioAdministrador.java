@@ -18,7 +18,7 @@ public class ServicioAdministrador {
 		int idDirector = repo.buscarIdDirectorporNombre(id_director); //estas funciones porque serie tiene fk
 		int idGenero = repo.buscarIdGeneroporNombre(id_genero);
 		 
-		if (idDirector == 0 || idGenero == 0) {
+		if (idDirector == 0) {
 			    System.out.println("Error: Director o género no encontrados");
 			    return false;
 			}
