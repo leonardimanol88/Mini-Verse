@@ -124,6 +124,21 @@ public class ControladorAdministrador {
 		});
 		
 		
+		
+        app.delete("/eliminarGenero/{nombre}", ctx -> {
+			
+		    String nombre = ctx.pathParam("nombre");
+
+		    boolean seElimino = servicio.eliminarGenero(nombre);
+
+		    if (seElimino) {
+		        ctx.json(Map.of("mensaje", "genero eliminado correctamente"));
+		    } else {
+		        ctx.status(500).json(Map.of("error", "No se pudo eliminar el genero"));
+		    }
+		});
+		
+		
 		app.get("/obtenerSeries", ctx -> { 
 		    ctx.res().setCharacterEncoding("UTF-8");
 

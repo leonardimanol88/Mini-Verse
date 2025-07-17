@@ -102,6 +102,17 @@ public class ServicioAdministrador {
 	}
 	
 	
+    public boolean eliminarGenero(String nombre) {
+		
+		if (nombre.isBlank()) {
+	        System.out.println("campo vacio");
+	        return false;
+	    }
+		
+		return repo.eliminarGenero(nombre);
+	}
+	
+	
     public ArrayList<Serie> obtenerSeries() {
 		
 		return repo.obtenerSeries();

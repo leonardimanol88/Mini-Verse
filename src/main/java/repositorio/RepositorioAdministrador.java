@@ -66,6 +66,26 @@ public class RepositorioAdministrador {
 	}
 	
 	
+    public boolean eliminarGenero(String nombre) {
+		
+		boolean eliminado = false;
+		String sql = "DELETE from genero WHERE nombre = ?";
+		
+		 try(Connection con = Conexion.conectar();
+		     PreparedStatement ps = con.prepareStatement(sql);
+         ){
+			 
+			ps.setString(1, nombre);
+	    	eliminado = ps.executeUpdate() > 0;
+			 
+		 } catch (Exception e) {
+	            System.out.println("error al eliminar: " + e.getMessage());
+		 }
+		 
+		 return eliminado;
+	}
+	
+	
 	public int buscarIdDirectorporNombre(String nombre) {
 		
 		int id = 0;
