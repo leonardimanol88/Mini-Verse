@@ -4,10 +4,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.util.ArrayList;
+import java.time.LocalTime;
 
 import dao.Conexion;
 import entidades.Serie;
+import entidades.Temporada;
+import entidades.Capitulo;
 
 
 public class RepositorioSerie {
@@ -74,38 +78,112 @@ public class RepositorioSerie {
 		 return listaOrdenada;	
 	}
 	
-	/*
+	
 	public Serie obtenerSerieporId(int id) {
+	   
 		
-		
-		Serie serieMostrar = null;
-		String sql = "SELECT * FROM serie WHERE id = ?";
-		
-		try (
-				Connection con = Conexion.conectar();
-				PreparedStatement ps = con.prepareStatement(sql);
-			){
-			ps.setInt(1, id);
-			ResultSet rs = ps.executeQuery();
-			if(rs.next()) {
-				    
-				    Serie serieMostrar = new Serie();
-					serieMostrar.setNombre(rs.getString("nombre"));
-					serieMostrar.setEstreno(rs.getInt("estreno"));
-					serieMostrar.setSinopsis(rs.getString("sinopsis"));
-					serieMostrar.setIdGenero(rs.getInt("id_genero"));
-					serieMostrar.setIdDirector(rs.getInt("id_director"));
-					serieMostrar.setimagenUrl(rs.getString("imagen_url"));
-			}
-			
-		}catch (Exception e) {
-            System.out.println("Error al obtener la serie: " + e.getMessage()); 
-        }
-		return serieMostrar;	
-		
+	    Serie serieMostrar = null;
+	    String sql = "SELECT * FROM serie WHERE id = ?";
+	    
+	    try (
+	        Connection con = Conexion.conectar();
+	        PreparedStatement ps = con.prepareStatement(sql);
+	    ) {
+	        ps.setInt(1, id);
+	        
+	        try (ResultSet rs = ps.executeQuery()) {
+	            if(rs.next()) {
+	                serieMostrar = new Serie(
+	                    rs.getString("nombre"),
+	                    rs.getInt("estreno"),
+	                    rs.getString("sinopsis"),
+	                    rs.getInt("id_genero"),
+	                    rs.getInt("id_director"),
+	                    rs.getString("imagen_url")
+	                );
+	            }
+	        }
+	        
+	    } catch (Exception e) {
+	        System.out.println("Error al obtener la serie: " + e.getMessage()); 
+	    }
+	    
+	    return serieMostrar;    
 	}
 	
-*/
 	
+	public ArrayList<Temporada> obtenerTemporadasPorSerie(int idSerie){
+		
+		ArrayList<Temporada> lista = new ArrayList<>();
+        String sql = "SELECT * FROM temporada WHERE id_serie = ?";
+        
+        try (
+    	    Connection con = Conexion.conectar();
+            PreparedStatement ps = con.prepareStatement(sql);){
+        	ps.setInt(1, idSerie);
+        	
+        	try(ResultSet rs = ps.executeQuery()){
+        		while (rs.next()) {
+                    Temporada temporadaObtenida = new Temporada( 
+                    		
+                    	rs.getInt("id"),
+                        rs.getInt("numero"),
+                        rs.getString("imagen_url"),
+                        rs.getString("nombre"),
+                        rs.getString("descripcion")
+                );
+                    lista.add(temporadaObtenida);
+        	    }
+            }
+        } catch (Exception e) {
+            System.out.println("Error al obtener las series: " + e.getMessage()); 
+        }
+        return lista;
+	}
+        	
+	
+	
+    public ArrayList<Capitulo> obtenerCapitulosPorTemporada(int idTemporada){
+		
+		ArrayList<Capitulo> lista = new ArrayList<>();
+        String sql = "SELECT * FROM capitulo WHERE id_temporada = ?";
+        
+        try (
+    	    Connection con = Conexion.conectar();
+            PreparedStatement ps = con.prepareStatement(sql);){
+        	ps.setInt(1, idTemporada);
+        	
+        	try(ResultSet rs = ps.executeQuery()){
+        		while (rs.next()) {
+        			
+        			Time tiempoSQL = rs.getTime("duracion");
+        			LocalTime duracion;
 
+        			if (tiempoSQL != null) {  
+        			    duracion = tiempoSQL.toLocalTime();  
+        			} else {  //
+        			    duracion = LocalTime.of(0, 0, 0);  
+        			} 
+        			
+                    Capitulo capituloObtenido = new Capitulo( 
+                    		
+                    	rs.getInt("id"),
+                    	rs.getString("titulo"),
+                        rs.getInt("numero"),
+                        duracion,
+                        rs.getInt("id_temporada")
+                );
+                    lista.add(capituloObtenido);
+        	    }
+            }
+        } catch (Exception e) {
+            System.out.println("Error al obtener las series: " + e.getMessage()); 
+        }
+        return lista;
+	}
+    
+    
+	
+	
+	
 }

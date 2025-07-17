@@ -6,7 +6,10 @@ import io.javalin.http.Context;
 import java.util.Map;
 import com.google.gson.Gson;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
+import entidades.Capitulo;
 import entidades.Serie;
 import entidades.Temporada;
 import servicio.ServicioSerie;
@@ -31,31 +34,38 @@ public class ControladorSerie {
 
 		});
 		
-		/*
 		
-		app.get("/detalleSerie", contexto -> {
+		
+		app.get("/detalleSerie", contexto -> { 
 			contexto.req().setCharacterEncoding("UTF-8");
 			
 			
 			
-		    int idSerie = Integer.parseInt(contexto.queryParam("id"));
+		    int idSerie = Integer.parseInt(contexto.queryParam("id")); //recibo el id de la serie a la que se le da clic
 		    
 		    
 
 		    
 		    Serie serie = servicio.obtenerSerieporId(idSerie);
 		    ArrayList<Temporada> temporadas = servicio.obtenerTemporadasPorSerie(idSerie);
+		    
+		    
+		    Map<Integer, List<Capitulo>> capitulosPorTemporada = new HashMap<>();
+		    
+		    for (Temporada t : temporadas) {
+		        List<Capitulo> capitulos = servicio.obtenerCapitulosPorTemporada(t.getId());
+		        capitulosPorTemporada.put(t.getId(), capitulos);
+		    }
 
 		    contexto.json(Map.of(
 		        "serie", serie,
-		        "temporadas", temporadas
+		        "temporadas", temporadas,
+		        "capitulosPorTemporada", capitulosPorTemporada
 		    ));
 		});
 		
 		
 		
-		
-		*/
 		
     }
 }
