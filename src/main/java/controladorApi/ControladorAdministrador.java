@@ -168,6 +168,15 @@ public class ControladorAdministrador {
 		});
 		
 		
+		app.get("/mostrarSeriesAdmin", contexto -> {
+		    contexto.req().setCharacterEncoding("UTF-8");
+
+		  
+		    ArrayList<Serie> obtener = servicio.obtenerSeries();
+		    contexto.json(obtener); 
+		});
+		
+		
 		
 		
     }

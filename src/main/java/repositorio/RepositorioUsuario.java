@@ -183,7 +183,7 @@ public class RepositorioUsuario {
             if (rs.next()) {
                 String hashAlmacenado = rs.getString("contrasena");// contrasena modificada almacenada
                 
-                if (BCrypt.checkpw(contrasena, hashAlmacenado)) { 
+                if (BCrypt.checkpw(contrasena, hashAlmacenado)) { //verificar la contrasena original con la encriptada con .checkpw
                     usuario = new Usuario(
                         rs.getInt("id"),
                         rs.getString("nombre"),

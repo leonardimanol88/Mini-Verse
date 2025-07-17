@@ -20,6 +20,7 @@ import objetosFront.ActualizarContrasena;
 import objetosFront.EliminarUsuario;
 import objetosFront.Login;
 import servicio.ServicioUsuario;
+import util.JWTUtil;
 
 import java.util.Date;
 
@@ -50,35 +51,71 @@ public class ControladorUsuario {
 		});
 		
 		
-		app.put("/actualizarContrasena", contexto -> { 
-		    contexto.req().setCharacterEncoding("UTF-8");
 		
+		app.put("/actualizarContrasena", contexto -> {
+		    contexto.req().setCharacterEncoding("UTF-8");
+
+		    
+		    
+		    
+		    String header = contexto.header("Authorization");
+
+		    if (header == null || !header.startsWith("Bearer ")) {
+		        contexto.status(401).json(Map.of("error", "falta el token de autorizacion"));
+		        return;
+		    }
+
+		    String token = header.replace("Bearer ", "");
+		    Integer idUsuario = JWTUtil.verificarToken(token);
+
+		    if (idUsuario == null) {
+		        contexto.status(401).json(Map.of("error", "Token invalido o expirado"));
+		        return;
+		    }
+
+		    
 		    
 		    
 		    ActualizarContrasena datos = new Gson().fromJson(contexto.body(), ActualizarContrasena.class);
-		    
-		    Usuario usuario = servicio.devolverUsuario(datos.correo, datos.contrasena);
-		    int idUsuario = usuario.getId();
-		  
+
 		    boolean seCambio = servicio.actualizarContrasena(idUsuario, datos.contrasena, datos.nuevaContrasena);
-		
+
 		    if (seCambio) {
-		        contexto.json(Map.of("mensaje", "contrasena actualizada correctamente"));
+		        contexto.json(Map.of("mensaje", "Contrasena actualizada correctamente"));
 		    } else {
-		        contexto.status(500).json(Map.of("error", "No se pudo actualizar"));
+		        contexto.status(400).json(Map.of("error", "No se pudo actualizar"));
 		    }
 		});
+
 		
 		
-		app.delete("/eliminarUsuario", contexto -> { 
+		app.delete("/eliminarMiUsuario", contexto -> { 
 		    contexto.req().setCharacterEncoding("UTF-8");
+		    
+		    
+		    
+		    ///recibe lo del header , el token creado cuando se inicio sesion
+		    String header = contexto.header("Authorization");
+
+		    if (header == null || !header.startsWith("Bearer ")) {
+		        contexto.status(401).json(Map.of("error", "falta el token de autorizacion"));
+		        return;
+		    }
+            ///verifica el token
+		    String token = header.replace("Bearer ", "");
+		    Integer idUsuario = JWTUtil.verificarToken(token);
+
+		    if (idUsuario == null) {
+		        contexto.status(401).json(Map.of("error", "Token invalido o expirado"));
+		        return;
+		    }
 		
 		    
 		    
 		    
 		    EliminarUsuario datos = new Gson().fromJson(contexto.body(), EliminarUsuario.class);
 		
-		    boolean seCambio = servicio.eliminarUsuario(datos.id, datos.contrasena);
+		    boolean seCambio = servicio.eliminarUsuario(idUsuario, datos.contrasena);
 		
 		    if (seCambio) {
 		        contexto.json(Map.of("mensaje", "cuenta eliminada correctamente"));
@@ -88,6 +125,7 @@ public class ControladorUsuario {
 		});
 		
 		
+		/*  ///antiguo inicio de sesion
 		app.post("/iniciarSesion", contexto -> {
 		    contexto.req().setCharacterEncoding("UTF-8");
 
@@ -110,6 +148,30 @@ public class ControladorUsuario {
 		    } else {
 		        contexto.status(500).json(Map.of(
 		            "error", "Correo o contrasena incorrecto"));
+		    }
+		});
+		*/
+		
+		app.post("/iniciarSesion", contexto -> {
+		    contexto.req().setCharacterEncoding("UTF-8");
+		    
+		    
+		    
+
+		    Login datos = new Gson().fromJson(contexto.body(), Login.class);
+
+		    Usuario usuario = servicio.devolverUsuario(datos.correo, datos.contrasena);
+
+		    if (usuario != null) {
+		        String token = JWTUtil.crearToken(usuario.getId()); //se crea el token con el metodo de jwtutil
+		        contexto.json(Map.of(
+		            "mensaje", "Inicio de sesion exitoso",
+		            "token", token  //devuelvo el token al front
+		        ));
+		    } else {
+		        contexto.status(401).json(Map.of(
+		            "error", "Correo o contrasena incorrecto"
+		        ));
 		    }
 		});
 
