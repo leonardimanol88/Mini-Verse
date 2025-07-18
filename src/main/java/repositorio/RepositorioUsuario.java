@@ -240,14 +240,14 @@ public class RepositorioUsuario {
             while (rs.next()) {
                 Serie serieObtenida = new Serie( 
                 		
-                	
-                   
+                    rs.getInt("id"),
                     rs.getString("nombre"), 
                     rs.getInt("estreno"),
                     rs.getString("sinopsis"),
                     rs.getInt("id_genero"),
-                    rs.getInt("id_director"),
-                    rs.getString("imagen_url")
+       
+                    rs.getString("imagen_url"),
+                    rs.getInt("id_director")
             );
                 lista.add(serieObtenida);
             }
@@ -340,12 +340,14 @@ public class RepositorioUsuario {
              while (rs.next()) { 
                  Serie serieObtenida = new Serie( 
                     
+                     rs.getInt("id"),
                      rs.getString("nombre"), 
                      rs.getInt("estreno"),
                      rs.getString("sinopsis"),
                      rs.getInt("id_genero"),
-                     rs.getInt("id_director"),
-                     rs.getString("imagen_url")
+                  
+                     rs.getString("imagen_url"),
+                     rs.getInt("id_director")
              );
                  lista.add(serieObtenida);
              }
