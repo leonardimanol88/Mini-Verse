@@ -272,13 +272,33 @@ public class RepositorioAdministrador {
     
     public boolean existeCapituloporNombre(String nombreCapitulo, int idTemporada) {
     	
-        String sql = "SELECT 1 FROM capitulo WHERE nombre = ? AND id_temporada = ?";
+        String sql = "SELECT 1 FROM capitulo WHERE titulo = ? AND id_temporada = ?";
         
         try (Connection con = Conexion.conectar();
             PreparedStatement Consulta = con.prepareStatement(sql)) {
         	
             Consulta.setString(1, nombreCapitulo);
             Consulta.setInt(2, idTemporada);
+            ResultSet rs = Consulta.executeQuery();
+            
+            return rs.next();
+            
+        } catch (Exception e) {
+            System.out.println("error al verificar si el capitulo existe: " + e.getMessage());
+            return false;
+        } 
+    }
+    
+    
+    public boolean existeCapituloporNumero(int numero) {
+    	
+        String sql = "SELECT 1 FROM capitulo WHERE numero = ?";
+        
+        try (Connection con = Conexion.conectar();
+            PreparedStatement Consulta = con.prepareStatement(sql)) {
+        	
+            Consulta.setInt(1, numero);
+          
             ResultSet rs = Consulta.executeQuery();
             
             return rs.next();

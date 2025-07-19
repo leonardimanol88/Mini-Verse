@@ -172,19 +172,23 @@ public class RepositorioUsuario {
     public Usuario buscarUsuarioPorCorreoyContrasena(String correo, String contrasena) {
     	
         Usuario usuario = null;
-        String sql = "SELECT 1 FROM usuario WHERE correo = ?";
+        String sql = "SELECT id, nombre, correo, contrasena, edad FROM usuario WHERE correo = ?";
         
         try (Connection con = Conexion.conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {
             
             ps.setString(1, correo);
+            
             ResultSet rs = ps.executeQuery();
+           
             
             if (rs.next()) {
                 String hashAlmacenado = rs.getString("contrasena");// contrasena modificada almacenada
                 
                 if (BCrypt.checkpw(contrasena, hashAlmacenado)) { //verificar la contrasena original con la encriptada con .checkpw
-                    usuario = new Usuario(
+                   
+                	
+                	usuario = new Usuario(
                         rs.getInt("id"),
                         rs.getString("nombre"),
                         rs.getString("correo"),
@@ -197,6 +201,27 @@ public class RepositorioUsuario {
             System.out.println("Error al buscar usuario: " + e.getMessage());
         }
         return usuario;
+    }
+    
+    
+    public boolean existeUsuarioPorCorreo(String correo) {
+    	
+    	
+        String sql = "SELECT COUNT(*) FROM usuario WHERE correo = ?";
+        try (Connection con = Conexion.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, correo);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0; 
+            }
+        } catch (Exception e) {
+            System.out.println("error al verificar correo: " + e.getMessage());
+        }
+        
+        
+        
+        return false;
     }
 
     
