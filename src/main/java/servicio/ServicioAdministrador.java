@@ -51,6 +51,54 @@ public class ServicioAdministrador {
 	}
     
     
+    public boolean eliminarTemporada(int numero, String nombreSerie) { //numero y nombre de la serie
+		
+    	if (numero <= 0 || nombreSerie == null || nombreSerie.trim().isEmpty()) {
+            System.out.println("Error: numero invalido o nombre de serie vacio");
+            return false;
+        }
+    	
+    	int idSerie = repo.buscarIdSerieporNombre(nombreSerie);
+    	
+    	if (idSerie == 0 ) {
+		    System.out.println("Error: Serie no encontrados");
+		    return false;
+		}
+    	
+    	
+    	
+        if (!repo.existeSerie(nombreSerie)) {System.out.println("La serie no existe");;return false;}
+      
+		return repo.eliminarTemporada(numero, idSerie);
+	}
+    
+    
+    public boolean eliminarCapitulo(String titulo, String nombreSerie, int numTemporada) { //numero y nombre de la serie
+		
+    	if (numTemporada <= 0 || titulo == null || titulo.trim().isEmpty()) {
+            System.out.println("Error: numero invalido o nombre de serie vacio");
+            return false;
+        }
+    	
+    	int idSerie = repo.buscarIdSerieporNombre(nombreSerie);
+
+    	if (idSerie == 0 ) {
+		    System.out.println("Error: Serie no encontrada");
+		    return false;
+		}
+    	int idTemporada = repo.buscarIdTemporadaporNumero(numTemporada, idSerie);
+    	if (idTemporada == 0) {
+            System.out.println("Error: la temporada no existe");
+            return false;
+        }
+    	
+    	
+        if (!repo.existeSerie(nombreSerie)) {System.out.println("La serie no existe");;return false;}
+      
+		return repo.eliminarCapitulo(titulo, idTemporada);
+	}
+    
+    
     public boolean agregarCapitulo(String titulo, int numero, String duracion, String nombreSerie, int numeroTemporada) { //numero y nombre de la serie
 		
     	if (!repo.existeSerie(nombreSerie)) {System.out.println("La serie no existe");;return false;}
@@ -74,6 +122,8 @@ public class ServicioAdministrador {
       
 		return repo.agregarCapitulo(titulo, numero, duracion, idTemporada);
 	}
+    
+    
 	
 	
 	public boolean agregarGenero(String nombre) {

@@ -217,6 +217,39 @@ public class RepositorioAdministrador {
     }
     
     
+    
+    public boolean eliminarTemporada(int numeroTemporada, int idSerie) {
+    	
+    	if (numeroTemporada <= 0 || idSerie <= 0) {
+            System.out.println("Error: numero de temporada o ID de serie invalido");
+            return false;
+        }
+		
+		boolean eliminado = false;
+		String sql = "DELETE from temporada WHERE numero = ? AND id_serie = ?";
+		
+		 try(Connection con = Conexion.conectar();
+		     PreparedStatement ps = con.prepareStatement(sql);
+         ){
+			 
+			ps.setInt(1, numeroTemporada);
+			ps.setInt(2, idSerie);
+			
+			int filasAfectadas = ps.executeUpdate();
+	        if (filasAfectadas == 0) {
+	            System.out.println("No se elimino ninguna temporada");
+	        }
+	    	eliminado = ps.executeUpdate() > 0;
+	    	
+	    	
+		 } catch (Exception e) {
+	            System.out.println("error al eliminar: " + e.getMessage());
+		 }
+		 
+		 return eliminado;
+	}
+    
+    
     public boolean existeTemporadaporNumero(int numTemporada, int idSerie) {
     	
         String sql = "SELECT 1 FROM temporada WHERE numero = ? AND id_serie = ?";
@@ -474,6 +507,32 @@ public class RepositorioAdministrador {
          ){
 			 
 			ps.setInt(1, id);
+	    	eliminados = ps.executeUpdate() > 0;
+			 
+		 } catch (Exception e) {
+	            System.out.println("error al eliminar: " + e.getMessage());
+		 }
+		 
+		 return eliminados;
+	}
+    
+    
+    public boolean eliminarCapitulo(String titulo, int idTemporada) {
+    	
+    	if (titulo == null || titulo.trim().isEmpty() || idTemporada <= 0) {
+            System.out.println("Error: título vacío o ID de temporada inválido");
+            return false;
+        }
+		
+		boolean eliminados = false;
+		String sql = "DELETE from capitulo WHERE titulo = ? AND id_temporada = ?";
+		
+		 try(Connection con = Conexion.conectar();
+		     PreparedStatement ps = con.prepareStatement(sql);
+         ){
+			 
+			ps.setString(1, titulo);
+			ps.setInt(2, idTemporada);
 	    	eliminados = ps.executeUpdate() > 0;
 			 
 		 } catch (Exception e) {
