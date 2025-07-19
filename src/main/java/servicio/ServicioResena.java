@@ -19,4 +19,18 @@ public class ServicioResena {
 		
 	}
 	
+	
+    public boolean agregarComentario(int idUsuario, int idResena, String contenido) {
+		
+		if (contenido.isBlank()) {
+	        System.out.println("Campos vacios");
+	        return false;
+	    }
+		
+		if (repo.buscarComentarioIgual(idUsuario, contenido)) { System.out.println("Comentario repetido"); return false;}
+		
+		return repo.agregarComentario(idUsuario, idResena, contenido);
+		
+	}
+    
 }
