@@ -161,6 +161,12 @@ RepositorioUsuario repo = new RepositorioUsuario();
     	
     	return repo.obtenerUltimosComentarios(idUsuario);
     }
+    
+    
+    public Usuario obtenerMiUsuario(int idUsuario){
+    	
+    	return repo.buscarUsuarioPorId(idUsuario);
+    }
 	
 	
 }

@@ -293,6 +293,33 @@ public class ControladorUsuario {
 		
 		
 		
+		app.get("/mostrarMiUsuario", contexto -> {  //para la info del perfil donde estan las favoritas
+		    contexto.req().setCharacterEncoding("UTF-8");
+		    
+		    
+		    String header = contexto.header("Authorization");
+		    
+		    if (header == null || !header.startsWith("Bearer ")) {
+		        contexto.status(401).json(Map.of("error", "falta el token de autorizacion"));
+		        return;
+		    }
+           
+		    String token = header.replace("Bearer ", "");
+		    Integer idUsuario = JWTUtil.verificarToken(token);
+
+		    if (idUsuario == null) {
+		        contexto.status(401).json(Map.of("error", "Token invalido o expirado"));
+		        return;
+		    }
+		    
+		    
+		  
+		    Usuario miUsuario = servicio.obtenerMiUsuario(idUsuario);
+		    contexto.json(miUsuario); 
+		   
+		});
+		
+		
 		
 		
 		
