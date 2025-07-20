@@ -3,6 +3,7 @@ package repositorio;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Time;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -14,7 +15,9 @@ import com.auth0.jwt.algorithms.Algorithm;
 
 
 import dao.Conexion;
+import entidades.Comentario;
 import entidades.Genero;
+import entidades.Resena;
 import entidades.Serie;
 import entidades.Usuario;
 
@@ -381,5 +384,149 @@ public class RepositorioUsuario {
          }
          return lista;
      }
+     
+     
+     
+     public ArrayList<Serie> obtenerSeriesFavoritas(int idUsuario) {
+    	 
+    	 
+    	    ArrayList<Serie> favoritas = new ArrayList<>();
+    	    
+    	    String sql = "SELECT s.* FROM favorita f JOIN serie s ON f.id_serie = s.id WHERE f.id_usuario = ?";
+
+    	    try (Connection con = Conexion.conectar();
+    	         PreparedStatement ps = con.prepareStatement(sql)) {
+
+    	        ps.setInt(1, idUsuario);
+    	        ResultSet rs = ps.executeQuery();
+
+    	        while (rs.next()) {
+    	            Serie serie = new Serie(
+    	            		rs.getInt("id"),
+    	    	            rs.getString("nombre"),
+    	    	            rs.getInt("estreno"),
+    	    	            rs.getString("sinopsis"),
+    	    	            rs.getInt("id_genero"),
+    	    	            rs.getString("imagen_url"),
+    	    	            rs.getInt("id_director")
+    	            		);
+    	            
+    	            favoritas.add(serie);
+    	        }
+
+    	    } catch (Exception e) {
+                System.out.println("Error al obtener las series favoritas: " + e.getMessage()); 
+            }
+            return favoritas;
+    	}
+     
+     
+     public ArrayList<Comentario> obtenerUltimosComentarios(int idUsuario) {
+    	 
+    	 
+    	    ArrayList<Comentario> lista = new ArrayList<>();
+    	    
+    	    String sql = "SELECT * FROM comentario WHERE id_usuario = ? ORDER BY fecha_creacion DESC LIMIT 3";
+
+    	    try (Connection con = Conexion.conectar();
+    	         PreparedStatement ps = con.prepareStatement(sql)) {
+
+    	        ps.setInt(1, idUsuario);
+    	        ResultSet rs = ps.executeQuery();
+
+    	        while (rs.next()) {
+    	            Comentario c = new Comentario(
+    	            		
+    	                rs.getInt("id"), 
+    	                rs.getString("contenido"),
+    	                rs.getTimestamp("fecha_creacion").toLocalDateTime(),
+    	                rs.getInt("id_usuario"),
+    	                rs.getInt("id_resena")
+    	            		);
+    	          
+    	          
+    	            lista.add(c);
+    	        }
+
+    	    } catch (Exception e) {
+                System.out.println("Error al obtener los ultimos comentarios: " + e.getMessage()); 
+            }
+            return lista;
+    	}
+     
+     
+     public ArrayList<Resena> obtenerUltimasResenas(int idUsuario) {
+    	 
+    	 
+ 	    ArrayList<Resena> lista = new ArrayList<>();
+ 	    
+ 	    String sql = "SELECT * FROM resena WHERE id_usuario = ? ORDER BY fecha_creacion DESC LIMIT 3";
+
+ 	    try (Connection con = Conexion.conectar();
+ 	         PreparedStatement ps = con.prepareStatement(sql)) {
+
+ 	        ps.setInt(1, idUsuario);
+ 	        ResultSet rs = ps.executeQuery();
+
+ 	        while (rs.next()) {
+ 	            Resena r = new Resena(
+ 	            		
+ 	                rs.getInt("id"), 
+ 	                rs.getString("contenido"),
+ 	                rs.getTimestamp("fecha_creacion").toLocalDateTime(),
+ 	                rs.getInt("id_capitulo"),
+ 	                rs.getInt("id_usuario")
+ 	            		);
+ 	          
+ 	          
+ 	            lista.add(r);
+ 	        }
+
+ 	    } catch (Exception e) {
+             System.out.println("Error al obtener las ultimas resenas: " + e.getMessage()); 
+         }
+         return lista;
+ 	}
     
+     
+//     public boolean agregarFavorita(int idUsuario, int idSerie) {
+// 
+//
+//    	    String sql = "INSERT INTO favorita (id_usuario, id_serie) VALUES (?, ?)";
+//
+//    	    try (Connection con = Conexion.conectar();
+//    	         PreparedStatement ps = con.prepareStatement(sql)) {
+//
+//    	        ps.setInt(1, idUsuario);
+//    	        ps.setInt(2, idSerie);
+//    	        ps.executeUpdate();
+//    	        return true;
+//
+//    	    } catch (SQLException e) {
+//    	        e.printStackTrace();
+//    	        return false;
+//    	    }
+//    	}
+//     
+//     
+//     public int contarFavoritas(int idUsuario) {
+//    	    String sql = "SELECT COUNT(*) FROM favorito WHERE id_usuario = ?";
+//    	    int total = 0;
+//
+//    	    try (Connection con = Conexion.conectar();
+//    	         PreparedStatement ps = con.prepareStatement(sql)) {
+//
+//    	        ps.setInt(1, idUsuario);
+//    	        ResultSet rs = ps.executeQuery();
+//
+//    	        if (rs.next()) {
+//    	            total = rs.getInt(1);
+//    	        }
+//    	    } catch (SQLException e) {
+//    	        e.printStackTrace();
+//    	    }
+//
+//    	    return total;
+//    	}
+     
 }

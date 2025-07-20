@@ -13,6 +13,7 @@ import entidades.Capitulo;
 import entidades.Serie;
 import entidades.Temporada;
 import servicio.ServicioSerie;
+import util.JWTUtil;
 
 public class ControladorSerie {
 
@@ -64,6 +65,45 @@ public class ControladorSerie {
 		    ));
 		});
 		
+		
+		app.post("/agregarFavorita/{idSerie}", contexto -> {
+		    contexto.req().setCharacterEncoding("UTF-8");
+		    
+		    
+		    String header = contexto.header("Authorization");
+
+		    if (header == null || !header.startsWith("Bearer ")) {
+		        contexto.status(401).json(Map.of("error", "falta el token de autorizacion"));
+		        return;
+		    }
+		    
+		    String token = header.replace("Bearer ", "");
+		    Integer idUsuario = JWTUtil.verificarToken(token);
+
+		    if (idUsuario == null) {
+		        contexto.status(401).json(Map.of("error", "Token invalido o expirado"));
+		        return;
+		    }
+
+		    
+		    
+		     int idSerie;
+		    
+		    try {
+		        idSerie = Integer.parseInt(contexto.pathParam("idSerie"));
+		    } catch (NumberFormatException e) {
+		        contexto.status(400).json(Map.of("error", "id de serie invalido"));
+		        return;
+		    }
+
+		    boolean agregada = servicio.agregarSerieFavorita(idUsuario, idSerie);
+
+		    if (agregada) {
+		        contexto.status(200).result("Serie agregada a favoritos");
+		    } else {
+		        contexto.status(400).result("No se puede agregar mas de 4 series favoritas");
+		    }
+		});
 		
 		
 		

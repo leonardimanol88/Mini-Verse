@@ -3,7 +3,9 @@ package servicio;
 
 import repositorio.RepositorioUsuario;
 import entidades.Usuario;
+import entidades.Comentario;
 import entidades.Genero;
+import entidades.Resena;
 import entidades.Serie;
 
 import java.util.ArrayList;
@@ -142,7 +144,23 @@ RepositorioUsuario repo = new RepositorioUsuario();
     public ArrayList<Serie> obtenerTodasSeries() {
     	return repo.obtenerSeries();
 	}
+    
+    
+    public ArrayList<Serie> obtenerTodasFavoritas(int idUsuario) {
+    	return repo.obtenerSeriesFavoritas(idUsuario);
+	}
 	
+    
+    public ArrayList<Resena> obtenerUltimasResenas(int idUsuario){
+    	
+    	return repo.obtenerUltimasResenas(idUsuario);
+    }
+    
+    
+    public ArrayList<Comentario> obtenerUltimosComentarios(int idUsuario){
+    	
+    	return repo.obtenerUltimosComentarios(idUsuario);
+    }
 	
 	
 }

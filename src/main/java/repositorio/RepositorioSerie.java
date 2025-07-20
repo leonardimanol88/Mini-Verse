@@ -183,7 +183,47 @@ public class RepositorioSerie {
 	}
     
     
-	
+    public boolean agregarFavorita(int idUsuario, int idSerie) {
+    	 
+
+	    String sql = "INSERT INTO favorita (id_usuario, id_serie) VALUES (?, ?)";
+
+	    try (Connection con = Conexion.conectar();
+	         PreparedStatement ps = con.prepareStatement(sql)) {
+
+	        ps.setInt(1, idUsuario);
+	        ps.setInt(2, idSerie);
+	        ps.executeUpdate();
+	        return true;
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        return false;
+	    }
+	}
+ 
+ 
+     public int contarFavoritas(int idUsuario) {
+    	 
+    	 
+	    String sql = "SELECT COUNT(*) FROM favorito WHERE id_usuario = ?";
+	    int total = 0;
+
+	    try (Connection con = Conexion.conectar();
+	         PreparedStatement ps = con.prepareStatement(sql)) {
+
+	        ps.setInt(1, idUsuario);
+	        ResultSet rs = ps.executeQuery();
+
+	        if (rs.next()) {
+	            total = rs.getInt(1);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return total;
+	}
 	
 	
 }

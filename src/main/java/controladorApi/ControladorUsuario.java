@@ -16,8 +16,11 @@ import com.google.gson.Gson;
 import entidades.Genero;
 import entidades.Serie;
 import entidades.Usuario;
+import entidades.Resena;
+import entidades.Comentario;
 import objetosFront.ActualizarContrasena;
 import objetosFront.EliminarUsuario;
+import objetosFront.FavoritaDatos;
 import objetosFront.Login;
 import servicio.ServicioUsuario;
 import util.JWTUtil;
@@ -207,6 +210,91 @@ public class ControladorUsuario {
 		    ArrayList<Serie> obtener = servicio.obtenerTodasSeries();
 		    contexto.json(obtener); 
 		});
+		
+		
+		app.get("/mostrarSeriesFavoritas", contexto -> {
+		    contexto.req().setCharacterEncoding("UTF-8");
+		    
+		    
+		    String header = contexto.header("Authorization");
+		    
+		    if (header == null || !header.startsWith("Bearer ")) {
+		        contexto.status(401).json(Map.of("error", "falta el token de autorizacion"));
+		        return;
+		    }
+           
+		    String token = header.replace("Bearer ", "");
+		    Integer idUsuario = JWTUtil.verificarToken(token);
+
+		    if (idUsuario == null) {
+		        contexto.status(401).json(Map.of("error", "Token invalido o expirado"));
+		        return;
+		    }
+		    
+		    
+		  
+		    ArrayList<Serie> obtenerFavoritas = servicio.obtenerTodasFavoritas(idUsuario);
+		    contexto.json(obtenerFavoritas); 
+		});
+		
+		
+		
+		app.get("/mostrarUltimasResenas", contexto -> {
+		    contexto.req().setCharacterEncoding("UTF-8");
+		    
+		    
+		    String header = contexto.header("Authorization");
+		    
+		    if (header == null || !header.startsWith("Bearer ")) {
+		        contexto.status(401).json(Map.of("error", "falta el token de autorizacion"));
+		        return;
+		    }
+           
+		    String token = header.replace("Bearer ", "");
+		    Integer idUsuario = JWTUtil.verificarToken(token);
+
+		    if (idUsuario == null) {
+		        contexto.status(401).json(Map.of("error", "Token invalido o expirado"));
+		        return;
+		    }
+		    
+		    
+		  
+		    ArrayList<Resena> obtenerUltimas = servicio.obtenerUltimasResenas(idUsuario);
+		    contexto.json(obtenerUltimas); 
+		   
+		});
+		
+		
+		app.get("/mostrarUltimosComentarios", contexto -> {
+		    contexto.req().setCharacterEncoding("UTF-8");
+		    
+		    
+		    String header = contexto.header("Authorization");
+		    
+		    if (header == null || !header.startsWith("Bearer ")) {
+		        contexto.status(401).json(Map.of("error", "falta el token de autorizacion"));
+		        return;
+		    }
+           
+		    String token = header.replace("Bearer ", "");
+		    Integer idUsuario = JWTUtil.verificarToken(token);
+
+		    if (idUsuario == null) {
+		        contexto.status(401).json(Map.of("error", "Token invalido o expirado"));
+		        return;
+		    }
+		    
+		    
+		  
+		    ArrayList<Comentario> obtenerUltimas = servicio.obtenerUltimosComentarios(idUsuario);
+		    contexto.json(obtenerUltimas); 
+		});
+		
+		
+		
+		
+		
 		
 		
 		
