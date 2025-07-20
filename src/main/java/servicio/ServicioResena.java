@@ -1,6 +1,14 @@
 package servicio;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
+import entidades.Resena;
+import entidades.Comentario;
+import objetosFront.ResenaConComentario;
 import repositorio.RepositorioResena;
+
 
 public class ServicioResena {
 	
@@ -32,5 +40,33 @@ public class ServicioResena {
 		return repo.agregarComentario(idUsuario, idResena, contenido);
 		
 	}
+    
+    
+    public List<ResenaConComentario> obtenerResenasConComentarios(int idCapitulo) {
+    	
+    	
+    	List<ResenaConComentario> resultado = new ArrayList<>(); ////
+    	
+        List<Resena> resenas = repo.obtenerResenasPorCapitulo(idCapitulo);
+
+        
+        for (Resena r : resenas) {
+        	
+            List<Comentario> comentarios = repo.obtenerComentariosPorResena(r.getId());
+            
+            ResenaConComentario combinado = new ResenaConComentario();
+            
+            combinado.setId(r.getId());
+            combinado.setContenido(r.getContenido());
+            combinado.setNombreUsuario(repo.buscarNombreUsuario(r.getIdUsuario()));
+            combinado.setFechaCreacion(r.getFechaCreacion());
+            
+            combinado.setComentarios(comentarios);
+            
+            resultado.add(combinado);
+        }
+
+        return resultado;
+    }
     
 }

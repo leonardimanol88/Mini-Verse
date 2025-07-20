@@ -5,15 +5,20 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.List;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 
 
 import dao.Conexion;
 import entidades.Usuario;
+import objetosFront.ResenaConComentario;
 import entidades.Resena;
 import entidades.Capitulo;
+import entidades.Comentario;
 
 
 
@@ -125,6 +130,98 @@ public class RepositorioResena {
     
     
     
+    public List<Resena> obtenerResenasPorCapitulo(int idCapitulo){
+    	
+    	List<Resena> listaResenas = new ArrayList<>();
+    	
+    	String sql = "SELECT * from resena WHERE id_capitulo = ?";
+    	
+    	try (Connection con = Conexion.conectar();
+    		PreparedStatement ps = con.prepareStatement(sql)){
+    		
+    		ps.setInt(1, idCapitulo); 
+    		
+    		try(ResultSet rs = ps.executeQuery();){
+    			
+    			while(rs.next()) {
+    				Resena r = new Resena(
+    						 rs.getInt("id"),
+    	                     rs.getString("contenido"), 
+    	                     rs.getTimestamp("fecha_creacion").toLocalDateTime(),
+    	                     rs.getInt("id_capitulo"),
+    	                     rs.getInt("id_usuario")
+    						);
+    				listaResenas.add(r);
+    			}
+    		}
+    	}
+    	catch (Exception e) {
+            System.out.println("Error al obtener las resenas: " + e.getMessage()); 
+        }
+        return listaResenas;
+    }
     
+    
+    
+   public List<Comentario> obtenerComentariosPorResena(int idResena){
+    	
+    	List<Comentario> listaComentarios = new ArrayList<>();
+    	
+    	String sql = "SELECT * from comentario WHERE id_resena = ?";
+    	
+    	try (Connection con = Conexion.conectar();
+    		PreparedStatement ps = con.prepareStatement(sql)){
+    		
+    		ps.setInt(1, idResena); 
+    		
+    		try(ResultSet rs = ps.executeQuery();){
+    			
+    			while(rs.next()) {
+    				Comentario r = new Comentario(
+    						 rs.getInt("id"),
+    	                     rs.getString("contenido"), 
+    	                     rs.getTimestamp("fecha_creacion").toLocalDateTime(),
+    	                     rs.getInt("id_usuario"),
+    	                     rs.getInt("id_resena")
+    						);
+    				listaComentarios.add(r);
+    			}
+    		}
+    	}
+    	catch (Exception e) {
+            System.out.println("Error al obtener los comentarios: " + e.getMessage()); 
+        }
+        return listaComentarios;
+    }
+   
+   
+   public String buscarNombreUsuario(int id) {
+	   
+	   Usuario usuario = null;
+   	
+       String sql = "SELECT * FROM usuario WHERE id = ?";
+       
+       try (Connection con = Conexion.conectar();
+            PreparedStatement ps = con.prepareStatement(sql)) {
+           
+           ps.setInt(1, id);
+           ResultSet rs = ps.executeQuery();
+           
+           if (rs.next()) {
+               usuario = new Usuario(
+                   rs.getInt("id"),
+                   rs.getString("nombre"),
+                   rs.getString("correo"),
+                   rs.getString("contrasena"), 
+                   rs.getInt("edad")
+               );
+           }
+       } catch (Exception e) {
+           System.out.println("Error al buscar usuario: " + e.getMessage());
+       }
+       return (usuario != null) ? usuario.getNombre() : "Usuario desconocido";
+   }
+   
+   
     
 }

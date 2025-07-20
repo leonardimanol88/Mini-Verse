@@ -7,11 +7,13 @@ import io.javalin.http.Context;
 import java.util.Map;
 import com.google.gson.Gson;
 import java.util.ArrayList;
+import java.util.List;
 
 
 import objetosFront.DatosResena;
 import objetosFront.DatosComentario;
 import servicio.ServicioResena;
+import objetosFront.ResenaConComentario;
 import util.JWTUtil;
 
 public class ControladorResena {
@@ -19,6 +21,17 @@ public class ControladorResena {
     public ControladorResena(Javalin app) {
     	
         ServicioResena servicio = new ServicioResena();
+        
+        
+        app.get("/resenasConComentarios/{idCapitulo}", contexto -> {
+        	contexto.req().setCharacterEncoding("UTF-8");
+        	
+            int idCapitulo = Integer.parseInt(contexto.pathParam("idCapitulo"));
+
+            List<ResenaConComentario> resenasConComentarios = servicio.obtenerResenasConComentarios(idCapitulo);
+
+            contexto.json(resenasConComentarios);
+        });
 
         
 		app.post("/hacerResena", contexto -> { 
@@ -82,9 +95,9 @@ public class ControladorResena {
 		    boolean seAgregoComentario = servicio.agregarComentario(idUsuario, datos.getId(), datos.getContenido());
 		    
 		    if (seAgregoComentario) {
-		        contexto.json(Map.of("mensaje", "Resena agregada correctamente"));
+		        contexto.json(Map.of("mensaje", "Comentario agregada correctamente"));
 		    } else {
-		        contexto.status(500).json(Map.of("error", "No se pudo agregar la resena"));
+		        contexto.status(500).json(Map.of("error", "No se pudo agregar el comentario"));
 		    }
 
 		});
