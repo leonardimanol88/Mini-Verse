@@ -5,6 +5,7 @@ import repositorio.RepositorioSerie;
 import entidades.Serie;
 import entidades.Temporada;
 import entidades.Capitulo;
+import entidades.Director;
 
 public class ServicioSerie {
 	
@@ -49,6 +50,16 @@ public class ServicioSerie {
     	
     	return repo.agregarFavorita(idUsuario, idSerie);
     }
+     
+    
+     public Director buscarDirectorPorIdSerie(int idSerie) {
+    	 
+    	 
+    	 Serie serie = repo.obtenerSerieporId(idSerie);
+    	 
+    	 return repo.buscarDirectorPorId(serie.getIdDirector());
+    	 
+     }
 	
 	
 

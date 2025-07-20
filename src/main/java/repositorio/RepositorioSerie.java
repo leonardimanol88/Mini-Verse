@@ -12,6 +12,7 @@ import dao.Conexion;
 import entidades.Serie;
 import entidades.Temporada;
 import entidades.Capitulo;
+import entidades.Director;
 
 
 public class RepositorioSerie {
@@ -224,6 +225,36 @@ public class RepositorioSerie {
 
 	    return total;
 	}
+     
+     
+     public Director buscarDirectorPorId(int idDirector) {
+ 		
+ 	    Director director = null;
+ 		String sql = "SELECT * from director WHERE id = ?";
+ 		
+         try(Connection con = Conexion.conectar();
+         	PreparedStatement ps = con.prepareStatement(sql);
+
+         	){ 
+ 			ps.setInt(1, idDirector);
+ 			ResultSet rs = ps.executeQuery();
+ 			
+ 			if (rs.next()) { 
+ 				
+ 				 director = new Director(
+ 						rs.getInt("id"),
+ 						rs.getString("nombre"),
+ 						rs.getString("biografia")
+ 						 
+ 						 );	
+ 	        }
+         	
+         }catch (Exception e) {
+             System.out.println("ese director no existe: " + e.getMessage());
+         }
+         
+		 return director;
+ 	}
 	
 	
 }

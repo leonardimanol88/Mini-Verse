@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import entidades.Capitulo;
+import entidades.Director;
 import entidades.Serie;
 import entidades.Temporada;
 import servicio.ServicioSerie;
@@ -64,6 +65,23 @@ public class ControladorSerie {
 		        "capitulosPorTemporada", capitulosPorTemporada
 		    ));
 		});
+		
+		
+		app.get("/detalleDirector", contexto -> { 
+			contexto.req().setCharacterEncoding("UTF-8");
+			
+			
+			
+		    int idSerie = Integer.parseInt(contexto.queryParam("id"));
+		    
+           Director director = servicio.buscarDirectorPorIdSerie(idSerie);
+		    
+
+		    contexto.json(Map.of(
+		        "director", director
+		    ));
+		});
+		
 		
 		
 		app.post("/agregarFavorita/{idSerie}", contexto -> {
