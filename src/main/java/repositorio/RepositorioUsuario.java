@@ -9,6 +9,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import org.mindrot.jbcrypt.BCrypt; //contrasenas
 import java.util.Date;
+import java.util.List;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -529,5 +530,40 @@ public class RepositorioUsuario {
 //
 //    	    return total;
 //    	}
+     
+     
+     
+     public List<Serie> buscarSeriesPorNombre(String nombre) {
+    	 
+    	 
+    	    List<Serie> series = new ArrayList<>();
+    	    String sql = "SELECT * FROM serie WHERE nombre LIKE ?";
+
+    	    try (Connection con = Conexion.conectar();
+    	         PreparedStatement ps = con.prepareStatement(sql)) {
+
+    	        ps.setString(1, "%" + nombre + "%");
+
+    	        try (ResultSet rs = ps.executeQuery()) {
+    	            while (rs.next()) {
+    	                Serie s = new Serie(
+    	                		rs.getInt("id"),
+        	    	            rs.getString("nombre"),
+        	    	            rs.getInt("estreno"),
+        	    	            rs.getString("sinopsis"),
+        	    	            rs.getInt("id_genero"),
+        	    	            rs.getString("imagen_url"),
+        	    	            rs.getInt("id_director")
+        	            		
+    	                );
+    	                series.add(s);
+    	            }
+    	        }
+    	    } catch (SQLException e) {
+    	        e.printStackTrace();
+    	    }
+
+    	    return series;
+    	}
      
 }

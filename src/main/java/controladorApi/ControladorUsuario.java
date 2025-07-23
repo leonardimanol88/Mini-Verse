@@ -6,6 +6,7 @@ import io.javalin.http.Context;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import com.auth0.jwt.JWT;
@@ -320,6 +321,43 @@ public class ControladorUsuario {
 		});
 		
 		
+		
+		app.get("/busquedaSeries", contexto -> {
+			
+		    contexto.req().setCharacterEncoding("UTF-8");
+		    
+		    
+		    String header = contexto.header("Authorization");
+		    
+		    if (header == null || !header.startsWith("Bearer ")) {
+		        contexto.status(401).json(Map.of("error", "falta el token de autorizacion"));
+		        return;
+		    }
+           
+		    
+		    String token = header.replace("Bearer ", "");
+		    Integer idUsuario = JWTUtil.verificarToken(token);
+
+		    if (idUsuario == null) {
+		        contexto.status(401).json(Map.of("error", "Token invalido o expirado"));
+		        return;
+		    }
+		    
+		    String nombre = contexto.queryParam("nombre");
+		    if (nombre == null || nombre.isEmpty()) {
+		        contexto.status(400).result("Falta el parametro de busqueda");
+		        return;
+		    }
+		    
+		    List<Serie> resultados = servicio.buscarPorNombre(nombre);
+		    
+		    if (resultados.isEmpty()) {
+		        contexto.status(404).result("No se encontraron series con ese nombre");
+		    } else {
+		        contexto.json(resultados);
+		    }
+		   
+		});
 		
 		
 		

@@ -9,6 +9,7 @@ import entidades.Resena;
 import entidades.Serie;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -167,6 +168,13 @@ RepositorioUsuario repo = new RepositorioUsuario();
     	
     	return repo.buscarUsuarioPorId(idUsuario);
     }
+    
+    
+    public List<Serie> buscarPorNombre(String nombre){
+    	
+    	return repo.buscarSeriesPorNombre(nombre);
+    }
+    
 	
 	
 }
