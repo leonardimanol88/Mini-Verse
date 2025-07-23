@@ -290,14 +290,15 @@ public class RepositorioAdministrador {
     }
     
     
-    public boolean existeCapituloporNumero(int numero) {
+    public boolean existeCapituloporNumero(int numero, int idTemporada) {
     	
-        String sql = "SELECT 1 FROM capitulo WHERE numero = ?";
+        String sql = "SELECT 1 FROM capitulo WHERE numero = ? AND id_temporada = ?";
         
         try (Connection con = Conexion.conectar();
             PreparedStatement Consulta = con.prepareStatement(sql)) {
         	
             Consulta.setInt(1, numero);
+            Consulta.setInt(2, idTemporada);
           
             ResultSet rs = Consulta.executeQuery();
             

@@ -59,6 +59,11 @@ public class ControladorSerie {
 		        capitulosPorTemporada.put(t.getId(), capitulos);
 		    }
 
+		    if (serie == null || temporadas == null || capitulosPorTemporada == null) {
+		    	contexto.status(404).result("Datos no encontrados");
+		    	return;
+		    }
+		    
 		    contexto.json(Map.of(
 		        "serie", serie,
 		        "temporadas", temporadas,

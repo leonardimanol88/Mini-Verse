@@ -44,9 +44,9 @@ public class ServicioSerie {
     
      public boolean agregarSerieFavorita(int idUsuario, int idSerie ){
     	
-    	if (repo.contarFavoritas(idUsuario) >= 4) {
-	        return false; 
-	    }
+//    	if (repo.contarFavoritas(idUsuario) >= 4) {
+//	        return false; 
+//	    }
     	
     	return repo.agregarFavorita(idUsuario, idSerie);
     }

@@ -185,29 +185,48 @@ public class RepositorioSerie {
     
     
     public boolean agregarFavorita(int idUsuario, int idSerie) {
-    	 
+    	
+    	
+        String sqlVerificarUsuario = "SELECT 1 FROM usuario WHERE id = ?";
+        String sqlVerificarSerie = "SELECT 1 FROM serie WHERE id = ?";
+        String sqlInsertar = "INSERT INTO favorita (id_usuario, id_serie) VALUES (?, ?)";
 
-	    String sql = "INSERT INTO favorita (id_usuario, id_serie) VALUES (?, ?)";
+        try (Connection con = Conexion.conectar()) {
 
-	    try (Connection con = Conexion.conectar();
-	         PreparedStatement ps = con.prepareStatement(sql)) {
+            try (PreparedStatement psUsuario = con.prepareStatement(sqlVerificarUsuario)) {
+                psUsuario.setInt(1, idUsuario);
+                if (!psUsuario.executeQuery().next()) {
+                    System.out.println("Usuario no encontrado");
+                    return false;
+                }
+            }
 
-	        ps.setInt(1, idUsuario);
-	        ps.setInt(2, idSerie);
-	        ps.executeUpdate();
-	        return true;
+            try (PreparedStatement psSerie = con.prepareStatement(sqlVerificarSerie)) {
+                psSerie.setInt(1, idSerie);
+                if (!psSerie.executeQuery().next()) {
+                    System.out.println("Serie no encontrada");
+                    return false;
+                }
+            }
 
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	        return false;
-	    }
-	}
+            try (PreparedStatement psInsertar = con.prepareStatement(sqlInsertar)) {
+                psInsertar.setInt(1, idUsuario);
+                psInsertar.setInt(2, idSerie);
+                psInsertar.executeUpdate();
+                return true;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
  
- 
+    
      public int contarFavoritas(int idUsuario) {
     	 
     	 
-	    String sql = "SELECT COUNT(*) FROM favorito WHERE id_usuario = ?";
+	    String sql = "SELECT COUNT(*) FROM favorita WHERE id_usuario = ?";
 	    int total = 0;
 
 	    try (Connection con = Conexion.conectar();

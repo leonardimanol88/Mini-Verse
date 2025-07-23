@@ -120,7 +120,7 @@ public class ServicioAdministrador {
         
         if (repo.existeCapituloporNombre(titulo, idTemporada)) {System.out.println("El capitulo ya existe");;return false;}
       
-        if (repo.existeCapituloporNumero(numero)) {System.out.println("El capitulo ya existe");;return false;}
+       if (repo.existeCapituloporNumero(numero, idTemporada)) {System.out.println("El capitulo ya existe");;return false;}//
         
 		return repo.agregarCapitulo(titulo, numero, duracion, idTemporada);
 	}

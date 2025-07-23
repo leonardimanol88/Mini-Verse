@@ -21,7 +21,7 @@ public class JWTUtil {
     	
         return JWT.create()
                 .withClaim("id", idUsuario)
-                .withExpiresAt(new Date(System.currentTimeMillis() + 3600 * 1000)) // 1 hora
+                .withExpiresAt(new Date(System.currentTimeMillis()  + 24 * 3600 * 1000)) // 1 hora
                 .sign(algoritmo);
     }
 

@@ -25,7 +25,20 @@ public class ControladorAdministrador {
         ServicioAdministrador servicio = new ServicioAdministrador();
         
         
-        app.post("/agregarDirector", ctx -> {
+        
+	    app.before("/admin/*", contexto -> {/////////
+			
+		    Usuario u = contexto.sessionAttribute("usuario");
+		    
+		    if (u == null || !"admin".equals(u.getRol())) {
+		        contexto.status(403).result("Acceso denegado");
+		        return;
+		    }
+		});
+        
+        
+	    
+        app.post("/admin/agregarDirector", ctx -> {///////////
 		    ctx.req().setCharacterEncoding("UTF-8");
 		
 		    
@@ -42,7 +55,7 @@ public class ControladorAdministrador {
         
 		
 		
-		app.post("/agregarGenero", ctx -> {
+		app.post("/admin/agregarGenero", ctx -> {/////////
 		    ctx.req().setCharacterEncoding("UTF-8");
 		
 		    
@@ -59,7 +72,7 @@ public class ControladorAdministrador {
 		    } 
 		});
 		
-        app.get("/obtenerGeneros", ctx -> { 
+        app.get("/admin/obtenerGeneros", ctx -> { ////////
 			
 			
 		    ctx.res().setCharacterEncoding("UTF-8");
@@ -69,7 +82,7 @@ public class ControladorAdministrador {
 		    ctx.json(obtener); 
 		});
 		
-        app.delete("/eliminarGenero/{nombre}", ctx -> {
+        app.delete("/admin/eliminarGenero/{nombre}", ctx -> {///////
 			
 		    String nombre = ctx.pathParam("nombre");
 
@@ -84,7 +97,7 @@ public class ControladorAdministrador {
 
         
 		
-		app.post("/agregarSerie", contexto -> {
+		app.post("/admin/agregarSerie", contexto -> {/////////
 		    contexto.req().setCharacterEncoding("UTF-8");
 		
 		    
@@ -101,7 +114,7 @@ public class ControladorAdministrador {
 		    } 
 		});
 		
-		app.get("/obtenerSeries", ctx -> { 
+		app.get("/admin/obtenerSeries", ctx -> { //////
 		    ctx.res().setCharacterEncoding("UTF-8");
 
 		    ArrayList<Serie> obtener = servicio.obtenerSeries();
@@ -109,7 +122,7 @@ public class ControladorAdministrador {
 		    ctx.json(obtener); 
 		});
 		
-		app.delete("/eliminarSerie/{nombre}", ctx -> {
+		app.delete("/admin/eliminarSerie/{nombre}", ctx -> {//////
 			
 		    String nombre = ctx.pathParam("nombre");
 
@@ -124,7 +137,7 @@ public class ControladorAdministrador {
 	
 		
 		
-		app.post("/agregarTemporada", ctx -> {  //formulario numero , nombre de la serie, link imagen
+		app.post("/admin/agregarTemporada", ctx -> {  //formulario numero , nombre de la serie, link imagen
 		    ctx.req().setCharacterEncoding("UTF-8");
 		
 		    
@@ -139,7 +152,7 @@ public class ControladorAdministrador {
 		    } 
 		});
 		
-        app.delete("/eliminarTemporada", ctx -> {
+        app.delete("/admin/eliminarTemporada", ctx -> {////
 			
         	AgregarTemporada datosEliminar = new Gson().fromJson(ctx.body(), AgregarTemporada.class);
 
@@ -154,7 +167,7 @@ public class ControladorAdministrador {
         
         
         
-        app.post("/agregarCapitulo", ctx -> { //formulario titulo, numero, duracion(solo 00:00:00), nombre de la serie, numero de temporada )
+        app.post("/admin/agregarCapitulo", ctx -> { //formulario titulo, numero, duracion(solo 00:00:00), nombre de la serie, numero de temporada )
 		    ctx.req().setCharacterEncoding("UTF-8");
 		
 		    
@@ -169,7 +182,7 @@ public class ControladorAdministrador {
 		    } 
 		});
         
-        app.delete("/eliminarCapitulo", ctx -> {
+        app.delete("/admin/eliminarCapitulo", ctx -> {//////
         	
         	
 			
@@ -197,7 +210,7 @@ public class ControladorAdministrador {
 	
 		
 		
-		app.get("/mostrarUsuarios", contexto -> {
+		app.get("/admin/mostrarUsuarios", contexto -> {/////
 		    contexto.req().setCharacterEncoding("UTF-8");
 
 		  
@@ -206,13 +219,14 @@ public class ControladorAdministrador {
 		});
 		
 		
-		app.get("/mostrarSeriesAdmin", contexto -> {
+		app.get("/admin/mostrarSeriesAdmin", contexto -> {
 		    contexto.req().setCharacterEncoding("UTF-8");
 
 		  
 		    ArrayList<Serie> obtener = servicio.obtenerSeries();
 		    contexto.json(obtener); 
 		});
+		
 		
 		
 		
