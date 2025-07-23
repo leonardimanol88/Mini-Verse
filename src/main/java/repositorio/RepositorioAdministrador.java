@@ -8,6 +8,8 @@ import java.time.LocalTime;
 import java.sql.Time;
 import java.util.ArrayList;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import dao.Conexion;
 import entidades.Serie;
 import entidades.Usuario;
@@ -608,6 +610,42 @@ public class RepositorioAdministrador {
             System.out.println("Error al obtener usuarios: " + e.getMessage()); //mostrar el error
         }
         return lista;
+    }
+    
+    
+    public Usuario buscarUsuarioPorCorreoyContrasena(String correo, String contrasena) {
+    	
+        Usuario usuario = null;
+        String sql = "SELECT id, nombre, correo, contrasena, edad, rol FROM usuario WHERE correo = ?";
+        
+        try (Connection con = Conexion.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            
+            ps.setString(1, correo);
+            
+            ResultSet rs = ps.executeQuery();
+           
+            
+            if (rs.next()) {
+                String hashAlmacenado = rs.getString("contrasena");// contrasena modificada almacenada
+                
+                if (BCrypt.checkpw(contrasena, hashAlmacenado)) { //verificar la contrasena original con la encriptada con .checkpw
+                   
+                	
+                	usuario = new Usuario(
+                        rs.getInt("id"),
+                        rs.getString("nombre"),
+                        rs.getString("correo"),
+                        hashAlmacenado, 
+                        rs.getInt("edad")
+                    );
+                	usuario.setRol(rs.getString("rol"));
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error al buscar usuario: " + e.getMessage());
+        }
+        return usuario;
     }
 	
 	

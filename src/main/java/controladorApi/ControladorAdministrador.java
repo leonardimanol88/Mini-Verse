@@ -15,8 +15,10 @@ import objetosFront.AgregarSeries;
 import objetosFront.AgregarDirector;
 import objetosFront.AgregarGenero;
 import objetosFront.AgregarTemporada;
+import objetosFront.Login;
 import objetosFront.AgregarCapitulo;
 import servicio.ServicioAdministrador;
+import util.JWTUtil;
 
 
 public class ControladorAdministrador {
@@ -25,17 +27,29 @@ public class ControladorAdministrador {
         ServicioAdministrador servicio = new ServicioAdministrador();
         
         
-        
-	    app.before("/admin/*", contexto -> {/////////
-			
-		    Usuario u = contexto.sessionAttribute("usuario");
-		    
-		    if (u == null || !"admin".equals(u.getRol())) {
-		        contexto.status(403).result("Acceso denegado");
-		        return;
-		    }
-		});
-        
+        app.post("/admin/iniciarSesion", contexto -> {
+        	
+        	
+            contexto.req().setCharacterEncoding("UTF-8");
+
+            Login datos = new Gson().fromJson(contexto.body(), Login.class);
+            Usuario usuario = servicio.devolverUsuario(datos.correo, datos.contrasena);
+
+            
+            if (usuario != null && "admin".equals(usuario.getRol())) {
+            	
+                String token = JWTUtil.crearToken(usuario.getId());
+                contexto.json(Map.of(
+                    "mensaje", "Inicio de sesion exitoso",
+                    "token", token
+                ));
+            } else {
+                contexto.status(401).json(Map.of(
+                    "error", "no eres administrador"
+                ));
+            }
+        });
+
         
 	    
         app.post("/admin/agregarDirector", ctx -> {///////////
@@ -81,6 +95,7 @@ public class ControladorAdministrador {
 		    
 		    ctx.json(obtener); 
 		});
+        
 		
         app.delete("/admin/eliminarGenero/{nombre}", ctx -> {///////
 			

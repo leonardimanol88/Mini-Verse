@@ -181,6 +181,13 @@ public class ServicioAdministrador {
 		
 		return repo.obtenerTodos();
 	} 
+    
+    
+    public Usuario devolverUsuario(String correo, String contrasena) {
+		
+		
+		return repo.buscarUsuarioPorCorreoyContrasena(correo, contrasena);
+	}
 	
 
 }

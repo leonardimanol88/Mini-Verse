@@ -175,7 +175,7 @@ public class RepositorioUsuario {
     public Usuario buscarUsuarioPorCorreoyContrasena(String correo, String contrasena) {
     	
         Usuario usuario = null;
-        String sql = "SELECT id, nombre, correo, contrasena, edad FROM usuario WHERE correo = ?";
+        String sql = "SELECT id, nombre, correo, contrasena, edad, rol FROM usuario WHERE correo = ?";
         
         try (Connection con = Conexion.conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -198,6 +198,7 @@ public class RepositorioUsuario {
                         hashAlmacenado, 
                         rs.getInt("edad")
                     );
+                	usuario.setRol(rs.getString("rol"));
                 }
             }
         } catch (Exception e) {
