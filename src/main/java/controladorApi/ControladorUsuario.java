@@ -22,6 +22,7 @@ import entidades.Comentario;
 import objetosFront.ActualizarContrasena;
 import objetosFront.EliminarUsuario;
 import objetosFront.FavoritaDatos;
+import objetosFront.HacerResena;
 import objetosFront.Login;
 import servicio.ServicioUsuario;
 import util.JWTUtil;
@@ -357,6 +358,45 @@ public class ControladorUsuario {
 		        contexto.json(resultados);
 		    }
 		   
+		});
+		
+		
+		
+		app.post("/hacerResenaUsuario", contexto -> {
+			
+			contexto.req().setCharacterEncoding("UTF-8");
+			
+            String header = contexto.header("Authorization");
+		    
+		    if (header == null || !header.startsWith("Bearer ")) {
+		        contexto.status(401).json(Map.of("error", "falta el token de autorizacion"));
+		        return;
+		    }
+           
+		    
+		    String token = header.replace("Bearer ", "");
+		    Integer idUsuario = JWTUtil.verificarToken(token);
+
+		    if (idUsuario == null) {
+		        contexto.status(401).json(Map.of("error", "Token invalido o expirado"));
+		        return;
+		    }
+		
+
+//		    String contenido = contexto.formParam("contenido");
+//		    int idCapitulo = Integer.parseInt(contexto.formParam("idCapitulo"));
+		   
+		    
+
+		    HacerResena datos = new Gson().fromJson(contexto.body(), HacerResena.class);
+		    
+		    boolean guardado = servicio.guardarResena(idUsuario, datos.contenido, datos.id_capitulo);
+		    
+		    if (guardado) {
+		        contexto.status(200).result("Resena guardada correctamente");
+		    } else {
+		        contexto.status(500).result("Error al guardar la resena");
+		    }
 		});
 		
 		

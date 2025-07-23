@@ -1,15 +1,18 @@
 package repositorio;
 
+//import java.security.Timestamp;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import org.mindrot.jbcrypt.BCrypt; //contrasenas
 import java.util.Date;
 import java.util.List;
+import java.sql.Timestamp;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -231,20 +234,20 @@ public class RepositorioUsuario {
 
     
     
-    public boolean agregarResena(String titulo, String contenido, String duracion, int id_capitulo, int id_usuario) { 
+    public boolean agregarResena(int id_usuario, String contenido, int id_capitulo) { 
     	
     	boolean insertado = false;
     	
-        String sql = "INSERT INTO resena (titulo, contenido, fecha_creacion, id_capitulo, id_usuario) VALUES (?, ?, ?, ?, ?)"; 
+        String sql = "INSERT INTO resena (contenido, fecha_creacion, id_capitulo, id_usuario) VALUES (?, ?, ?, ?)"; 
         
         try (Connection con = Conexion.conectar();
             PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setString(1, titulo);
-            ps.setString(2, contenido);
-            LocalTime duracio = LocalTime.parse(duracion); // debe ser "00;00;00"
-	        ps.setTime(3, Time.valueOf(duracio));
-            ps.setInt(4, id_capitulo);
-            ps.setInt(5, id_usuario);
+            ps.setString(1, contenido);
+            LocalDateTime fechaCreacion = LocalDateTime.now();
+            ps.setTimestamp(2, Timestamp.valueOf(fechaCreacion));
+           
+            ps.setInt(3, id_capitulo);
+            ps.setInt(4, id_usuario);
             
             insertado = ps.executeUpdate() >0;
         } catch (Exception e) {

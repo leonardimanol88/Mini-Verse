@@ -176,5 +176,16 @@ RepositorioUsuario repo = new RepositorioUsuario();
     }
     
 	
+    public boolean guardarResena(int idUsuario, String contenido, int id_capitulo ) {
+		
+		if (contenido.isBlank()) {
+	        System.out.println("contenido vacio");
+	        return false;
+	    }
+		
+		
+		
+		return repo.agregarResena(idUsuario, contenido, id_capitulo);	
+	}
 	
 }
