@@ -7,13 +7,18 @@ import java.sql.SQLException;
 import java.time.LocalTime;
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.mindrot.jbcrypt.BCrypt;
 
 import dao.Conexion;
 import entidades.Serie;
 import entidades.Usuario;
+import entidades.Director;
 import entidades.Genero;
+import entidades.Resena;
+import objetosFront.CapituloEstadistica;
+import objetosFront.CapituloEstadisticaEdad;
 
 public class RepositorioAdministrador {
 
@@ -91,17 +96,18 @@ public class RepositorioAdministrador {
 	public int buscarIdDirectorporNombre(String nombre) {
 		
 		int id = 0;
-		String sql = "SELECT * from director WHERE nombre = ?";
+		System.out.println("Buscando director con nombre exacto: '" + nombre + "'");
+		String sql = "SELECT id from director WHERE nombre= ?";
 		
         try(Connection con = Conexion.conectar();
         	PreparedStatement ps = con.prepareStatement(sql);
-
+            
         	){ 
 			ps.setString(1, nombre);
 			ResultSet rs = ps.executeQuery();
 			
 			if (rs.next()) { 
-	            id = rs.getInt("id");
+	             id = rs.getInt("id");
 	        }
         	
         }catch (Exception e) {
@@ -509,12 +515,40 @@ public class RepositorioAdministrador {
             while (rs.next()) { 
                 Genero generoObtenido = new Genero( 
                    
+                    rs.getInt("id"),
                     rs.getString("nombre")
             );
                 lista.add(generoObtenido);
             }
         } catch (Exception e) {
             System.out.println("Error al obtener los generos: " + e.getMessage()); 
+        }
+        return lista;
+    }
+    
+    
+    
+    public ArrayList<Director> obtenerDirectores() { 
+    	
+        ArrayList<Director> lista = new ArrayList<>();
+        String sql = "SELECT * FROM director";
+        
+        try (
+    	    Connection con = Conexion.conectar(); 
+            PreparedStatement ps = con.prepareStatement(sql); 
+            ResultSet rs = ps.executeQuery()) { 
+            while (rs.next()) { 
+                Director directorObtenido = new Director( 
+                   
+                    rs.getInt("id"),
+                    rs.getString("nombre"),
+                    rs.getString("biografia")
+                    
+            );
+                lista.add(directorObtenido);
+            }
+        } catch (Exception e) {
+            System.out.println("Error al obtener los directores: " + e.getMessage()); 
         }
         return lista;
     }
@@ -649,7 +683,120 @@ public class RepositorioAdministrador {
     }
 	
 	
+    public ArrayList<Resena> obtenerResenas(int idUsuario) {
+   	 
+   	 
+ 	    ArrayList<Resena> lista = new ArrayList<>();
+ 	    
+ 	    String sql = "SELECT * FROM resena WHERE id_usuario = ?";
+
+ 	    try (Connection con = Conexion.conectar();
+ 	         PreparedStatement ps = con.prepareStatement(sql)) {
+
+ 	        ps.setInt(1, idUsuario);
+ 	        ResultSet rs = ps.executeQuery();
+
+ 	        while (rs.next()) {
+ 	            Resena r = new Resena(
+ 	            		
+ 	                rs.getInt("id"), 
+ 	                rs.getString("contenido"),
+ 	                rs.getTimestamp("fecha_creacion").toLocalDateTime(),
+ 	                rs.getInt("id_capitulo"),
+ 	                rs.getInt("id_usuario")
+ 	            		);
+ 	          
+ 	          
+ 	            lista.add(r);
+ 	        }
+
+ 	    } catch (Exception e) {
+             System.out.println("Error al obtener las ultimas resenas: " + e.getMessage()); 
+         }
+         return lista;
+ 	}
+    
+    
+    public List<CapituloEstadistica> obtenerCapitulosMasResenados(){
+    	
+    	
+    	List<CapituloEstadistica> lista = new ArrayList<>();
+    	String sql = 
+    			"SELECT " +
+    				    "  s.nombre AS serie, " +
+    				    "  c.titulo AS capitulo, " +
+    				    "  COUNT(r.id) AS cantidad_resenas " +
+    				    "FROM capitulo c " +
+    				    "JOIN temporada t ON c.id_temporada = t.id " +
+    				    "JOIN serie s ON t.id_serie = s.id " +
+    				    "JOIN resena r ON c.id = r.id_capitulo " +
+    				    "GROUP BY s.nombre, c.titulo " +
+    				    "ORDER BY cantidad_resenas DESC"
+    		    ;
+    	
+    	
+    	try (Connection con = Conexion.conectar();
+    	     PreparedStatement ps = con.prepareStatement(sql)) {
+
+	        ResultSet rs = ps.executeQuery();
+	        while (rs.next()) {
+	        	
+	        	CapituloEstadistica ce = new CapituloEstadistica();
+	            //ce.setId(rs.getInt("id"));
+	            ce.setTitulo(rs.getString("capitulo")); 
+	            ce.setSerie(rs.getString("serie"));
+	            ce.setCantidadResenas(rs.getInt("cantidad_resenas"));
+	            lista.add(ce);
+	            
+	        }
+    }catch (Exception e) {
+        System.out.println("Errorr al obtener las ultimas resenas: " + e.getMessage()); 
+    }
+    return lista;
+    }
+    
 	
-	
+   public List<CapituloEstadisticaEdad> obtenerCapitulosMasResenadosEdad(){
+    	
+    	
+    	List<CapituloEstadisticaEdad> lista = new ArrayList<>();
+    	String sql = 
+    			"SELECT " +
+    				    "  c.id AS id, " +
+    				    "  c.titulo AS capitulo, " +
+    				    "  s.nombre AS serie, " +
+    				    "  COUNT(r.id) AS cantidad_resenas, " +
+    				    "  ROUND(AVG(u.edad), 1) AS edad_promedio " +
+    				    "FROM capitulo c " +
+    				    "JOIN temporada t ON c.id_temporada = t.id " +
+    				    "JOIN serie s ON t.id_serie = s.id " +
+    				    "JOIN resena r ON c.id = r.id_capitulo " +
+    				    "JOIN usuario u ON r.id_usuario = u.id " +
+    				    
+    				    "GROUP BY c.id, c.titulo, s.nombre " +
+    				    "ORDER BY cantidad_resenas DESC";
+    		    ;
+    	
+    	
+    	try (Connection con = Conexion.conectar();
+    	     PreparedStatement ps = con.prepareStatement(sql)) {
+
+	        ResultSet rs = ps.executeQuery();
+	        while (rs.next()) {
+	        	
+	        	CapituloEstadisticaEdad ce = new CapituloEstadisticaEdad();
+	           
+	            ce.setTitulo(rs.getString("capitulo")); 
+	            ce.setSerie(rs.getString("serie"));
+	            ce.setCantidadResenas(rs.getInt("cantidad_resenas"));
+	            ce.setEdadPromedio(rs.getDouble("edad_promedio"));
+	            lista.add(ce);
+	            
+	        }
+    }catch (Exception e) {
+        System.out.println("Errorr al obtener las ultimas resenas co edad: " + e.getMessage()); 
+    }
+    return lista;
+    }
 
 }

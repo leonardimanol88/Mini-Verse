@@ -4,10 +4,15 @@ import repositorio.RepositorioAdministrador;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.List;
 
 import entidades.Serie;
+import entidades.Director;
 import entidades.Genero;
+import entidades.Resena;
 import entidades.Usuario;
+import objetosFront.CapituloEstadistica;
+import objetosFront.CapituloEstadisticaEdad;
 
 public class ServicioAdministrador {
 
@@ -16,6 +21,8 @@ public class ServicioAdministrador {
 	
 	public boolean agregarSerie(String nombre, int estreno, String sinopsis, String id_genero, String id_director, String imagen_url) {
 		
+		
+		//System.out.println("buscando director con nombre : '" + id_director + "'");
 		int idDirector = repo.buscarIdDirectorporNombre(id_director); //estas funciones porque serie tiene fk
 		int idGenero = repo.buscarIdGeneroporNombre(id_genero);
 		 
@@ -24,11 +31,19 @@ public class ServicioAdministrador {
 			    return false;
 			}
 		
+		if (idGenero == 0) {
+		    System.out.println("Error:  o género no encontrados");
+		    return false;
+		}
+		
 	    if (repo.existeSerie(nombre)) {System.out.println("La serie ya existe");return false;}
 		
 		Serie serieNueva = new Serie(nombre, estreno, sinopsis, idGenero, idDirector, imagen_url);
+		
 		return repo.agregarSerie(serieNueva);
 	}
+	
+	
 	
 	
     public boolean agregarTemporada(int numero, String nombreSerie, String imagen_url, String nombreTemporada, String descripcion) { //numero y nombre de la serie
@@ -175,6 +190,12 @@ public class ServicioAdministrador {
 		
 		return repo.obtenerGeneros();
 	}
+     
+     
+     public ArrayList<Director> obtenerDirectores() {
+ 		
+ 		return repo.obtenerDirectores();
+ 	}
  
     
     public ArrayList<Usuario> obtenerUsuarios() {
@@ -189,5 +210,17 @@ public class ServicioAdministrador {
 		return repo.buscarUsuarioPorCorreoyContrasena(correo, contrasena);
 	}
 	
+    
+    //est
+    public List<CapituloEstadistica> obtenerCapitulosMasResenados() {
+		
+		return repo.obtenerCapitulosMasResenados();
+	}
+    
+    
+    public List<CapituloEstadisticaEdad> obtenerCapitulosMasResenadosEdad() {
+		
+		return repo.obtenerCapitulosMasResenadosEdad();
+	}
 
 }

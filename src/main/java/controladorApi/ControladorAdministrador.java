@@ -5,17 +5,22 @@ import io.javalin.Javalin;
 import io.javalin.http.Context;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import com.google.gson.Gson;
 
 import entidades.Serie;
 import entidades.Genero;
 import entidades.Usuario;
+import entidades.Resena;
+import entidades.Director;
 import objetosFront.AgregarSeries;
 import objetosFront.AgregarDirector;
 import objetosFront.AgregarGenero;
 import objetosFront.AgregarTemporada;
 import objetosFront.Login;
+import objetosFront.CapituloEstadistica;
+import objetosFront.CapituloEstadisticaEdad;
 import objetosFront.AgregarCapitulo;
 import servicio.ServicioAdministrador;
 import util.JWTUtil;
@@ -37,6 +42,8 @@ public class ControladorAdministrador {
 
             
             if (usuario != null && "admin".equals(usuario.getRol())) {
+            	
+            	
             	
                 String token = JWTUtil.crearToken(usuario.getId());
                 contexto.json(Map.of(
@@ -110,17 +117,27 @@ public class ControladorAdministrador {
 		    }
 		});
 
-        
+        ///////////////////////
 		
 		app.post("/admin/agregarSerie", contexto -> {/////////
-		    contexto.req().setCharacterEncoding("UTF-8");
+		contexto.req().setCharacterEncoding("UTF-8");               
+		//asi las recibe desde el front
+//		                                                           { 
+//															    	 "nombre" : "Dark2",
+//															    	 "estreno" : 2223,
+//															    	 "sinopsis" : "anio",
+//															    	 "idGenero": "cooo",
+//															    	 "idDirector" : "lo",
+//															    	 "imagenUrl" : "https://image.tmdb.org/t/p/original/1DLjjvSWMYo17B7wuz6YikB96hH.jpg"
+//															    	 
+//															    	}
 		
 		    
 		    
 		    // lee JSON del cuerpo y convertir a serie
 		    AgregarSeries nuevaSerie = new Gson().fromJson(contexto.body(), AgregarSeries.class);
 		
-		    boolean seAgrego = servicio.agregarSerie(nuevaSerie.nombre, nuevaSerie.estreno, nuevaSerie.sinopsis, nuevaSerie.id_genero, nuevaSerie.id_director, nuevaSerie.imagen_url);
+		    boolean seAgrego = servicio.agregarSerie(nuevaSerie.nombre, nuevaSerie.estreno, nuevaSerie.sinopsis, nuevaSerie.idGenero, nuevaSerie.idDirector, nuevaSerie.imagenUrl);
 		
 		    if (seAgrego) {
 		        contexto.json(Map.of("mensaje", "Serie agregada correctamente"));
@@ -128,6 +145,8 @@ public class ControladorAdministrador {
 		        contexto.status(500).json(Map.of("error", "No se pudo agregar la serie"));
 		    } 
 		});
+		
+		
 		
 		app.get("/admin/obtenerSeries", ctx -> { //////
 		    ctx.res().setCharacterEncoding("UTF-8");
@@ -197,6 +216,8 @@ public class ControladorAdministrador {
 		    } 
 		});
         
+        
+        
         app.delete("/admin/eliminarCapitulo", ctx -> {//////
         	
         	
@@ -243,7 +264,70 @@ public class ControladorAdministrador {
 		});
 		
 		
+//		
+//		app.get("/admin/gestionUsuarios", contexto -> {/////
+//		
+//			
+//		    contexto.req().setCharacterEncoding("UTF-8");
+//		    
+//		    
+//		    
+//		    String header = contexto.header("Authorization");
+//
+//		    if (header == null || !header.startsWith("Bearer ")) {
+//		        contexto.status(401).json(Map.of("error", "falta el token de autorizacion"));
+//		        return;
+//		    }
+//
+//		    String token = header.replace("Bearer ", "");
+//		    Integer idUsuario = JWTUtil.verificarToken(token);
+//
+//		    if (idUsuario == null) {
+//		        contexto.status(401).json(Map.of("error", "Token invalido o expirado"));
+//		        return;
+//		    }
+//		    
+//		    
+//
+//		  
+//		    ArrayList<Usuario> obtener = servicio.obtenerUsuarios();
+//		    ArrayList<Resena> obtenerResenas = servicio.obtenerResenas(idUsuario);
+//		    contexto.json(obtener); 
+//		});
 		
+		
+		
+		app.get("/admin/capitulosMasResenados", contexto -> { //da una lista de capitulos desde los mas resenados hasta los menos
+		    contexto.req().setCharacterEncoding("UTF-8");
+
+		  
+		    List<CapituloEstadistica> obtener = servicio.obtenerCapitulosMasResenados(); 
+		    contexto.json(obtener);                                                     
+		});
+		
+		
+		
+		app.get("/admin/capitulosMasResenadosEdad", contexto -> { ////da una lista de capitulos desde los mas resenados hasta los menos
+		    contexto.req().setCharacterEncoding("UTF-8");         /// pero ahora en cada capitulo tambien da la edad promerio de los resenadores en cada capitulo
+
+		  
+		    List<CapituloEstadisticaEdad> obtener = servicio.obtenerCapitulosMasResenadosEdad();
+		    contexto.json(obtener); 
+		});
+		
+		
+		
+        app.get("/admin/obtenerDirectores", ctx -> {
+			
+			
+		    ctx.res().setCharacterEncoding("UTF-8");
+
+		    ArrayList<Director> obtener = servicio.obtenerDirectores();
+		    
+		    ctx.json(obtener); 
+		});
+		
+        
 		
 		
     }
