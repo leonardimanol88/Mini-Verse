@@ -19,26 +19,26 @@ public class ServicioAdministrador {
 	RepositorioAdministrador repo = new RepositorioAdministrador();
 	
 	
-	public boolean agregarSerie(String nombre, int estreno, String sinopsis, String id_genero, String id_director, String imagen_url) {
+	public boolean agregarSerie(String nombre, int estreno, String sinopsis, int id_genero, int id_director, String imagen_url) {
 		
 		
 		//System.out.println("buscando director con nombre : '" + id_director + "'");
-		int idDirector = repo.buscarIdDirectorporNombre(id_director); //estas funciones porque serie tiene fk
-		int idGenero = repo.buscarIdGeneroporNombre(id_genero);
+//		int idDirector = repo.buscarIdDirectorporNombre(id_director); //estas funciones porque serie tiene fk
+//		int idGenero = repo.buscarIdGeneroporNombre(id_genero);
 		 
-		if (idDirector == 0) {
+		if (id_director == 0) {
 			    System.out.println("Error: Director o género no encontrados");
 			    return false;
 			}
 		
-		if (idGenero == 0) {
+		if (id_genero == 0) {
 		    System.out.println("Error:  o género no encontrados");
 		    return false;
 		}
 		
 	    if (repo.existeSerie(nombre)) {System.out.println("La serie ya existe");return false;}
 		
-		Serie serieNueva = new Serie(nombre, estreno, sinopsis, idGenero, idDirector, imagen_url);
+		Serie serieNueva = new Serie(nombre, estreno, sinopsis, id_genero, id_director, imagen_url);
 		
 		return repo.agregarSerie(serieNueva);
 	}

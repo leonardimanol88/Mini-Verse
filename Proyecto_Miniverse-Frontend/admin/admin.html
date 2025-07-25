@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - MiniVerse</title>
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="#">
+                    <img src="/img/image.png" alt="MiniVerse Logo" class="logo">
+                </a>
+            </div>
+            
+            <div class="nav-center">
+                <ul class="nav-menu">
+                    <li class="nav-item"><a href="admin.html" class="nav-link">Agregar series</a></li>
+                    <li class="nav-item"><a href="/admin/agregartemporadas.html" class="nav-link">Temporadas</a></li>
+                    <li class="nav-item"><a href="/admin/Gestionusuario.html" class="nav-link active">Gestión reseñas</a></li>
+                    <li class="nav-item"><a href="/admin/agregardirector.html" class="nav-link">Agregar Director</a></li>
+                    <li class="nav-item"><a href="/admin/agregargenero.html" class="nav-link">Agregar Genero</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Estadisticas</a></li>
+                </ul>
+            </div>
+            
+            <div class="nav-right">
+                <button class="logout-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Cerrar sesión
+                </button>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div class="form-container">
+            <h1 style="color: #fff; text-align: center; margin-bottom: 30px;">Agregar Nueva Serie</h1>
+            
+            <form id="serieForm">
+                <div class="form-grid">
+                    
+                    <div class="image-section">
+                        <div class="series-image" id="imagePreview">
+                            <img id="seriesImg" src="https://placehold.co/350x500/4a4a4a/ffffff?text=SERIE" alt="Series">
+                        </div>
+                        <input type="text" id="imageUrl" class="form-input" placeholder="URL de la imagen">
+                    </div>
+
+                    <div class="form-section">
+                        <div class="form-row">
+                            <input type="text" id="nombreSerie" class="form-input" placeholder="Nombre de la serie" required>
+                        </div>
+
+                        <div class="form-row">
+                            <input type="number" id="anio" class="form-input" placeholder="Año de estreno" min="1900" max="2030" required>
+                        </div>
+
+                        <div class="form-row">
+                            <textarea id="sinopsis" class="form-input" placeholder="Añadir Sinopsis" rows="3" required></textarea>
+                        </div>
+                        
+                        <div class="form-row">
+    <select id="genero" class="form-input" required>
+        <option value="" selected disabled>Selecciona un género</option>
+    </select>
+</div>
+<div class="form-row">
+    <select id="director" class="form-input" required>
+        <option value="" selected disabled>Selecciona un director</option>
+    </select>
+</div>
+
+                        <div class="form-row">
+                            <input type="text" id="nombreSerieEliminar" class="form-input" placeholder="Nombre de la serie a eliminar">
+                            <button type="button" id="btnEliminarSerie" class="btn-danger">Eliminar Serie</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button type="submit" class="btn-primary">Guardar Serie</button>
+                    <button type="button" class="btn-danger" onclick="limpiarFormulario()">Limpiar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="/admin/script.js"></script>
+    <script src="/admin/auth-admin.js"></script>
+</script>
+</body>
+</html>

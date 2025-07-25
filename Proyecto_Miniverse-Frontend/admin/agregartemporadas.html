@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Temporada - MiniVerse</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="agregartemporada.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="#">
+                    <img src="/img/image.png" alt="MiniVerse Logo" class="logo">
+                </a>
+            </div>
+            
+            <div class="nav-center">
+                <ul class="nav-menu">
+                    <li class="nav-item"><a href="admin.html" class="nav-link">Agregar series</a></li>
+                    <li class="nav-item"><a href="/admin/agregartemporadas.html" class="nav-link">Temporadas</a></li>
+                    <li class="nav-item"><a href="/admin/Gestionusuario.html" class="nav-link active">Gestión reseñas</a></li>
+                    <li class="nav-item"><a href="/admin/agregardirector.html" class="nav-link">Agregar Director</a></li>
+                    <li class="nav-item"><a href="/admin/agregargenero.html" class="nav-link">Agregar Genero</a></li>
+                    <li class="nav-item"><a href="/admin/estadisticas.html" class="nav-link">Estadisticas</a></li>
+                </ul>
+            </div>
+            
+            <div class="nav-right">
+                <button class="search-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21 21L16.514 16.506M19 10.5C19 15.194 15.194 19 10.5 19C5.806 19 2 15.194 2 10.5C2 5.806 5.806 2 10.5 2C15.194 2 19 5.806 19 10.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <h1 class="page-title">Agregar Temporada</h1>
+        
+        <div class="form-container">
+            <h2 class="section-title">Agregar Nueva Temporada</h2>
+            <form id="temporadaForm">
+                <div class="form-group">
+                    <label for="buscarSerie">Nombre de la Serie</label>
+                    <input type="text" id="buscarSerie" name="buscarSerie" placeholder="Escribe el nombre de la serie" required>
+                    <div id="sugerenciasSeries" class="sugerencias-container"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="nombreTemporada">Nombre de la temporada</label>
+                    <input type="text" class="form-control" id="nombreTemporada" name="nombreTemporada" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="numeroTemporada">Número de Temporada</label>
+                    <input type="number" id="numeroTemporada" name="numeroTemporada" placeholder="Ej: 1, 2, 3..." min="1" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="imagenTemporada">URL de la Imagen (Opcional)</label>
+                    <input type="text" id="imagenTemporada" name="imagenTemporada" placeholder="URL de la imagen de la temporada">
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Descripción</label>
+                    <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                </div>
+                
+                <button type="submit" class="save-button">Guardar Temporada</button>
+            </form>
+
+            <div class="form-container">
+                <h2 class="section-title">Eliminar Temporada</h2>
+                <form id="eliminarTemporadaForm">
+                    <div class="form-group">
+                        <label for="buscarSerieEliminar">Nombre de la Serie</label>
+                        <input type="text" id="buscarSerieEliminar" placeholder="Escribe el nombre de la serie" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="numeroTemporadaEliminar">Número de Temporada</label>
+                        <input type="number" id="numeroTemporadaEliminar" min="1" required>
+                    </div>
+        
+                    <button type="submit" class="delete-button">Eliminar Temporada</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="form-container">
+    <h2 class="section-title">Agregar Nuevo Capítulo</h2>
+    <form id="capituloForm">
+        <div class="form-group">
+            <label for="buscarSerieCapitulo">Nombre de la Serie</label>
+            <input type="text" id="buscarSerieCapitulo" placeholder="Escribe el nombre de la serie" required>
+        </div>
+
+        <div class="form-group">
+            <label for="numeroTemporadaCapitulo">Número de Temporada</label>
+            <input type="number" id="numeroTemporadaCapitulo" min="1" required>
+        </div>
+
+        
+        <div class="form-group">
+            <label for="tituloCapitulo">Título del Capítulo</label>
+            <input type="text" id="tituloCapitulo" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="numeroCapitulo">Número de Capítulo</label>
+            <input type="number" id="numeroCapitulo" min="1" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="duracionCapitulo">Duración (HH:MM:SS)</label>
+            <input type="text" id="duracionCapitulo" 
+                placeholder="00:00:00"
+                pattern="^([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$"
+                title="Formato requerido: HH:MM:SS (ej. 01:30:00)"
+                required>
+        </div>
+        
+        <button type="submit" class="save-button">Guardar Capítulo</button>
+    </form>
+
+    <div class="form-container">
+    <h2 class="section-title">Eliminar Capítulo</h2>
+    <form id="eliminarCapituloForm">
+        <div class="form-group">
+            <label for="buscarSerieEliminarCapitulo">Nombre de la Serie</label>
+            <input type="text" id="buscarSerieEliminarCapitulo" placeholder="Escribe el nombre de la serie" required>
+        </div>
+
+        <div class="form-group">
+            <label for="numeroTemporadaEliminarCapitulo">Número de Temporada</label>
+            <input type="number" id="numeroTemporadaEliminarCapitulo" min="1" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="tituloCapituloEliminar">Título del Capítulo</label>
+            <input type="text" id="tituloCapituloEliminar" required>
+        </div>
+        
+        <button type="submit" class="delete-button">Eliminar Capítulo</button>
+    </form>
+</div>
+</div>
+
+        <!-- Sección de capítulos se mantiene igual -->
+    </main>
+
+    <script src="agregartemporadascapitulos.js"></script>
+    <script src="/admin/auth-admin.js"></script>
+</body>
+</html>

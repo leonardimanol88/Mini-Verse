@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Nuevo Director - MiniVerse</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="agregardirector.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="#">
+                    <img src="/img/image.png" alt="MiniVerse Logo" class="logo">
+                </a>
+            </div>
+            
+            <div class="nav-center">
+                <ul class="nav-menu">
+                    <li class="nav-item"><a href="admin.html" class="nav-link">Agregar series</a></li>
+                    <li class="nav-item"><a href="/admin/agregartemporadas.html" class="nav-link">Temporadas</a></li>
+                    <li class="nav-item"><a href="/admin/Gestionusuario.html" class="nav-link active">Gestión reseñas</a></li>
+                    <li class="nav-item"><a href="/admin/agregardirector.html" class="nav-link">Agregar Director</a></li>
+                    <li class="nav-item"><a href="/admin/agregargenero.html" class="nav-link">Agregar Genero</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Estadisticas</a></li>
+                </ul>
+            </div>
+            
+            <div class="nav-right">
+                <button class="search-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21 21L16.514 16.506M19 10.5C19 15.194 15.194 19 10.5 19C5.806 19 2 15.194 2 10.5C2 5.806 5.806 2 10.5 2C15.194 2 19 5.806 19 10.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    
+    <main class="main-content">
+        <h1 class="page-title">Agregar Nuevo Director</h1>
+        
+        
+        <div class="form-container">
+            <form id="directorForm">
+                <div class="form-group">
+                    <label for="directorName">Nombre del director (ej: Christopher Nolan)</label>
+                    <input type="text" id="directorName" name="directorName" placeholder="Ingresa el nombre del director">
+                </div>
+                
+                <div class="form-group">
+                    <label for="directorBio">Biografía</label>
+                    <textarea id="directorBio" name="directorBio" placeholder="Escribe la biografía del director..."></textarea>
+                </div>
+                
+                <button type="submit" class="save-button">Guardar Director</button>
+            </form>
+        </div>
+
+        
+        <div class="directors-section">
+            <h2 class="section-title">Directores Registrados</h2>
+            
+            <div class="director-card">
+                <div class="director-name">Christopher Nolan</div>
+                <div class="director-info">Director de Inception y The Dark Knight</div>
+            </div>
+            
+        </div>
+    </main>
+
+    <script src="agregardirector.js"></script>
+    <script src="/admin/auth-admin.js"></script>
+</body>
+</html>

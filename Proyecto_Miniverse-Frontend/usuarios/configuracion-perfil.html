@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MiniVerse - Configuración de Perfil</title>
+    <link rel="stylesheet" href="configuracion-perfil.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="/inicio.html">
+                    <img src="/img/image.png" alt="MiniVerse Logo" class="logo">
+                </a>
+            </div>
+        
+            <div class="nav-center">
+                <ul class="nav-menu">
+                    <li class="nav-item"><a href="inicio.html" class="nav-link">Inicio</a></li>
+                    <li class="nav-item"><a href="perfil.html" class="nav-link">Perfil</a></li>
+                    <li class="nav-item" id="loginItem"><a href="/usuarios/ingresar.html" class="nav-link">Iniciar sesión</a></li>
+                    <li class="nav-item" id="registerItem"><a href="/usuarios/registrarse.html" class="nav-link">Crear Cuenta</a></li>
+                    <li class="nav-item" id="logoutItem" style="display: none;"><a href="#" class="nav-link">Cerrar sesión</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-right">
+                <button class="search-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21 21L16.514 16.506M19 10.5C19 15.194 15.194 19 10.5 19C5.806 19 2 15.194 2 10.5C2 5.806 5.806 2 10.5 2C15.194 2 19 5.806 19 10.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+
+                <div class="search-container" id="searchContainer" style="display: none;">
+    <input type="text" class="search-input" id="searchInput" placeholder="Buscar series...">
+    <button class="search-close-btn" id="searchCloseBtn">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+</div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="config-container">
+            <h1 class="page-title">Configuración de perfil</h1>
+            
+            <div class="config-content">
+                <div class="config-layout">
+                    <div class="profile-section">
+                        <div class="avatar-container">
+                            <div class="user-avatar" id="userAvatar">
+                                <!-- Se llenará dinámicamente -->
+                            </div>
+                            <button class="add-photo-btn">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" stroke-width="2"/>
+                                    <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <h2 class="user-name" id="userNameDisplay">Cargando...</h2>
+                        
+                        <div class="button-section">
+                            <button class="delete-btn" id="deleteAccountBtn">Eliminar mi cuenta</button>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="form-group">
+                            <label for="email" class="form-label">Correo electrónico</label>
+                            <input type="email" id="email" class="form-input" placeholder="Tu correo actual" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="current-password" class="form-label">Contraseña actual</label>
+                            <input type="password" id="current-password" class="form-input" placeholder="Para verificar tu identidad" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="new-password" class="form-label">Nueva contraseña</label>
+                            <input type="password" id="new-password" class="form-input" placeholder="Deja en blanco si no quieres cambiar">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirm-password" class="form-label">Confirmar nueva contraseña</label>
+                            <input type="password" id="confirm-password" class="form-input" placeholder="Repite la nueva contraseña">
+                        </div>
+                        
+                        <div class="save-button-section">
+                            <button class="save-btn" id="saveChangesBtn">Guardar cambios</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal de confirmación -->
+    <div class="confirmation-modal" id="confirmModal" style="display: none;">
+        <div class="modal-content">
+            <h3 class="modal-title" id="modalTitle">Confirmación</h3>
+            <p class="modal-message" id="modalMessage">¿Estás seguro que deseas realizar esta acción?</p>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-secondary" id="cancelModalBtn">Cancelar</button>
+                <button class="modal-btn modal-btn-primary" id="confirmModalBtn">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="configuracion-perfil.js"></script>
+    <script src="search.js"></script>
+</body>
+</html>

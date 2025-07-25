@@ -1,0 +1,122 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+header {
+    display: flex;
+}
+
+.logo {
+    display: flex;
+    position: absolute;
+    top: 60px;
+    left: 60px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo img {
+    height: 80px;
+}
+
+.brand-name {
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: -0.5px;
+}
+
+body {
+    background-color: #000000;
+    color: white;
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-title {
+    font-size: 28px;
+    font-weight: 400;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.form-group {
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.form-label {
+    display: block;
+    font-size: 16px;
+    font-weight: 400;
+    margin-bottom: 8px;
+    color: white;
+}
+
+.form-input {
+    width: 467px;
+    height: 47px;
+    padding: 0 20px;
+    background-color: #d3d3d3;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    color: #333;
+    outline: none;
+    text-align: left;
+}
+
+.form-input::placeholder {
+    color: #888;
+}
+
+.login-button {
+    width: 467px;
+    height: 47px;
+    background-color: #ff4444;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+.login-button:hover {
+    background-color: #e63939;
+}
+
+.login-button:active {
+    background-color: #cc3333;
+}
+
+.error-message {
+    color: #ff4444;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255,255,255,.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+    margin-left: 10px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}

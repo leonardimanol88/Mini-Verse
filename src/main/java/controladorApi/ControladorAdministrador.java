@@ -186,6 +186,7 @@ public class ControladorAdministrador {
 		    } 
 		});
 		
+		
         app.delete("/admin/eliminarTemporada", ctx -> {////
 			
         	AgregarTemporada datosEliminar = new Gson().fromJson(ctx.body(), AgregarTemporada.class);

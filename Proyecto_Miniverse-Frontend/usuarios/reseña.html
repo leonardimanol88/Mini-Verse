@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breaking Bad - Reseñas - MiniVerse</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="reseñas.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="/inicio.html">
+                    <img src="/img/image.png" alt="MiniVerse Logo" class="logo">
+                </a>
+            </div>
+        
+            <div class="nav-center">
+                <ul class="nav-menu">
+                    <li class="nav-item"><a href="inicio.html" class="nav-link">Inicio</a></li>
+                    <li class="nav-item"><a href="perfil.html" class="nav-link">Perfil</a></li>
+                    <li class="nav-item" id="loginItem"><a href="/usuarios/ingresar.html" class="nav-link">Iniciar sesión</a></li>
+                    <li class="nav-item" id="registerItem"><a href="/usuarios/registrarse.html" class="nav-link">Crear Cuenta</a></li>
+                    <li class="nav-item" id="logoutItem" style="display: none;"><a href="#" class="nav-link">Cerrar sesión</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-right">
+                <button class="search-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21 21L16.514 16.506M19 10.5C19 15.194 15.194 19 10.5 19C5.806 19 2 15.194 2 10.5C2 5.806 5.806 2 10.5 2C15.194 2 19 5.806 19 10.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+
+                <div class="search-container" id="searchContainer" style="display: none;">
+    <input type="text" class="search-input" id="searchInput" placeholder="Buscar series...">
+    <button class="search-close-btn" id="searchCloseBtn">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+</div>
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="main-container">
+        <div class="left-column">
+            <div class="serie-poster">
+                <img src="" alt="" class="poster-img"> <!-- Eliminada la imagen por defecto -->
+        </div>
+
+            <div class="action-buttons">
+    <button class="action-btn favorite-btn" id="favoriteBtn">
+        <svg class="star-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+        </svg>
+        Añadir a favoritos
+    </button>
+</div>
+        </div>
+            
+        <div class="serie-content">
+            <div class="serie-header">
+                <div class="serie-year"></div> <!-- Eliminado el año por defecto -->
+                <h1 class="serie-title"></h1> <!-- Eliminado el título por defecto -->
+            </div>
+    
+            <p class="serie-description"></p> <!-- Eliminada la descripción por defecto -->
+
+
+            <div class="reviews-list">
+                <div class="review-item">
+                    <div class="review-header">
+                        <div class="user-info">
+                            <div class="user-avatar small">Y</div>
+                            <div class="user-details">
+                                <span class="user-name">Usuario</span>
+                                <span class="review-date">ahora</span>
+                            </div>
+                        </div>
+                        <div class="review-actions">
+                            <button class="like-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2" fill="none"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <p class="review-text">
+                        Me sorprendió la sutileza con la que muestra la escena incluso en los silencios logra mantenerse al borde sin revelar demasiado ajjjjjuuuuuuuuuu
+                    </p>
+                    <div class="respond-section">
+                        <button class="respond-btn">Responder</button>
+                    </div>
+                </div>
+
+                <div class="review-item">
+                    <div class="review-header">
+                        <div class="user-info">
+                            <div class="user-avatar small">J</div>
+                            <div class="user-details">
+                                <span class="user-name">Jose Martinez</span>
+                                <span class="review-date">hace 2 días</span>
+                            </div>
+                        </div>
+                        <div class="review-actions">
+                            <button class="like-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2" fill="none"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <p class="review-text">
+                        Cuando a un profesor de química le diagnostican cáncer terminal, decide asegurar el futuro de su familiakkkkkkkkkkkkkkkkkkkkkkkkkkkkkkksssssssssss
+                    </p>
+                    <div class="respond-section">
+                        <button class="respond-btn">Responder</button>
+                    </div>
+                </div>
+
+                <div class="review-item">
+                    <div class="review-header">
+                        <div class="user-info">
+                            <div class="user-avatar small">J</div>
+                            <div class="user-details">
+                                <span class="user-name">Jose Martinez</span>
+                                <span class="review-date">hace 2 días</span>
+                            </div>
+                        </div>
+                        <div class="review-actions">
+                            <button class="like-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2" fill="none"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <p class="review-text">
+                        Cuando a un profesor de química le diagnostican cáncer terminal, decide asegurar el futuro de su familia(oooooooeeeeeeeeeeeeeeeeeeeeeeeeeoeoeooeoe
+                    </p>
+                    <div class="respond-section">
+                        <button class="respond-btn">Responder</button>
+                    </div>
+                </div>
+
+                <div class="review-item">
+                    <div class="review-header">
+                        <div class="user-info">
+                            <div class="user-avatar small">J</div>
+                            <div class="user-details">
+                                <span class="user-name">Jose Martinez</span>
+                                <span class="review-date">hace 2 días</span>
+                            </div>
+                        </div>
+                        <div class="review-actions">
+                            <button class="like-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2" fill="none"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <p class="review-text">
+                        Cuando a un profesor(eeeeeeeeeeeeeeeeeeeeeee) de diagnostican cáncer terminal, decide asegurar el futuro de su familia
+                    </p>
+                    <div class="respond-section">
+                        <button class="respond-btn">Responder</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-comment-section">
+            <input type="text" class="comment-input" placeholder="Me sorprendió la sutileza con la que muestra la escena incluso en los silencios logra mantenerse al borde sin revelar demasiado ajjjjjuuuuuuuuuu">
+            <button class="comment-btn">Comentar</button>
+        </div>
+    </div>
+    <script src="auth.js"></script>
+    <script src="reseña.js"></script>
+    <script src="search.js"></script>
+
+</body>
+</html>
