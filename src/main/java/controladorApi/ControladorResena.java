@@ -11,6 +11,8 @@ import java.util.List;
 
 
 import objetosFront.DatosResena;
+import objetosFront.EditarComentario;
+import objetosFront.EditarResena;
 import objetosFront.DatosComentario;
 import servicio.ServicioResena;
 import objetosFront.ResenaConComentario;
@@ -69,6 +71,77 @@ public class ControladorResena {
 		
 		
 		
+		app.delete("/eliminarResena", contexto -> { 
+		    contexto.req().setCharacterEncoding("UTF-8");
+		
+		   
+		    
+		    String header = contexto.header("Authorization");
+
+		    if (header == null || !header.startsWith("Bearer ")) {
+		        contexto.status(401).json(Map.of("error", "falta el token de autorizacion"));
+		        return;
+		    }
+		    
+		    String token = header.replace("Bearer ", "");
+		    Integer idUsuario = JWTUtil.verificarToken(token);
+
+		    if (idUsuario == null) {
+		        contexto.status(401).json(Map.of("error", "Token invalido o expirado"));
+		        return;
+		    }
+		    
+		    
+		    DatosResena datos = new Gson().fromJson(contexto.body(), DatosResena.class); 
+		    
+		    boolean seEliminoResena = servicio.eliminarResena(idUsuario, datos.getId(), datos.getContenido());
+		    
+		    if (seEliminoResena) {
+		        contexto.json(Map.of("mensaje", "Resena eliminada correctamente"));
+		    } else {
+		        contexto.status(500).json(Map.of("error", "No se pudo eliminar la resena"));
+		    }
+
+		});
+		
+		
+		
+		app.put("/editarResena", contexto -> { 
+		    contexto.req().setCharacterEncoding("UTF-8");
+		
+		   
+		    
+		    String header = contexto.header("Authorization");
+
+		    if (header == null || !header.startsWith("Bearer ")) {
+		        contexto.status(401).json(Map.of("error", "falta el token de autorizacion"));
+		        return;
+		    }
+		    
+		    String token = header.replace("Bearer ", "");
+		    Integer idUsuario = JWTUtil.verificarToken(token);
+
+		    if (idUsuario == null) {
+		        contexto.status(401).json(Map.of("error", "Token invalido o expirado"));
+		        return;
+		    }
+		    
+		    
+		    EditarResena datos = new Gson().fromJson(contexto.body(), EditarResena.class);
+
+		    boolean actualizado = servicio.editarResena(idUsuario, datos.idCapitulo, datos.contenidoAntiguo, datos.contenidoNuevo);
+
+		    if (actualizado) {
+		        contexto.status(200).result("Resena actualizada");
+		    } else {
+		        contexto.status(400).result("No se pudo actualizar la resena");
+		    }
+
+		});
+		
+		
+		
+		
 		app.post("/hacerComentario", contexto -> { 
 		    contexto.req().setCharacterEncoding("UTF-8");
 		
@@ -98,6 +171,74 @@ public class ControladorResena {
 		        contexto.json(Map.of("mensaje", "Comentario agregada correctamente"));
 		    } else {
 		        contexto.status(500).json(Map.of("error", "No se pudo agregar el comentario"));
+		    }
+
+		});
+		
+		
+		app.delete("/eliminarComentario", contexto -> { 
+		    contexto.req().setCharacterEncoding("UTF-8");
+		
+		   
+		    
+		    String header = contexto.header("Authorization");
+
+		    if (header == null || !header.startsWith("Bearer ")) {
+		        contexto.status(401).json(Map.of("error", "falta el token de autorizacion"));
+		        return;
+		    }
+		    
+		    String token = header.replace("Bearer ", "");
+		    Integer idUsuario = JWTUtil.verificarToken(token);
+
+		    if (idUsuario == null) {
+		        contexto.status(401).json(Map.of("error", "Token invalido o expirado"));
+		        return;
+		    }
+		    
+		    
+		    DatosComentario datos = new Gson().fromJson(contexto.body(), DatosComentario.class); 
+		    
+		    boolean seEliminoComentario = servicio.eliminarComentario(idUsuario, datos.getId(), datos.getContenido());
+		    
+		    if (seEliminoComentario) {
+		        contexto.json(Map.of("mensaje", "Comentario eliminado correctamente"));
+		    } else {
+		        contexto.status(500).json(Map.of("error", "No se pudo eliminar el comentario"));
+		    }
+
+		});
+		
+		
+		app.put("/editarComentario", contexto -> { 
+		    contexto.req().setCharacterEncoding("UTF-8");
+		
+		   
+		    
+		    String header = contexto.header("Authorization");
+
+		    if (header == null || !header.startsWith("Bearer ")) {
+		        contexto.status(401).json(Map.of("error", "falta el token de autorizacion"));
+		        return;
+		    }
+		    
+		    String token = header.replace("Bearer ", "");
+		    Integer idUsuario = JWTUtil.verificarToken(token);
+
+		    if (idUsuario == null) {
+		        contexto.status(401).json(Map.of("error", "Token invalido o expirado"));
+		        return;
+		    }
+		    
+		    
+		    EditarComentario datos = new Gson().fromJson(contexto.body(), EditarComentario.class);
+
+		    boolean actualizado = servicio.editarComentario(idUsuario, datos.idResena, datos.contenidoAntiguo, datos.contenidoNuevo);
+
+		    if (actualizado) {
+		        contexto.status(200).result("Resena actualizada");
+		    } else {
+		        contexto.status(400).result("No se pudo actualizar la resena");
 		    }
 
 		});

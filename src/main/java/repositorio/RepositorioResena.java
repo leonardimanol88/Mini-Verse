@@ -103,6 +103,28 @@ public class RepositorioResena {
 	}
     
     
+    
+    public boolean eliminarComentario(int id_usuario, int id_resena, String contenido) {
+	    boolean eliminado = false;
+
+	    String sql = "DELETE FROM comentario WHERE id_usuario = ? AND id_resena = ? AND contenido = ?";
+
+	    try (Connection con = Conexion.conectar();
+	         PreparedStatement ps = con.prepareStatement(sql)) {
+	        
+	        ps.setInt(1, id_usuario);
+	        ps.setInt(2, id_resena);
+	        ps.setString(3, contenido);
+
+	        eliminado = ps.executeUpdate() > 0;
+	    } catch (Exception e) {
+	        System.out.println("erroe al eliminar comentario: " + e.getMessage());
+	    }
+
+	    return eliminado;
+	}
+    
+    
     public boolean buscarComentarioIgual(int idUsuario, String contenido) {
 		
         boolean encontrado = false;
@@ -223,5 +245,71 @@ public class RepositorioResena {
    }
    
    
+   public boolean eliminarResena(int id_usuario, int id_capitulo, String contenido) {
+	    boolean eliminado = false;
+
+	    String sql = "DELETE FROM resena WHERE id_usuario = ? AND id_capitulo = ? AND contenido = ?";
+
+	    try (Connection con = Conexion.conectar();
+	         PreparedStatement ps = con.prepareStatement(sql)) {
+	        
+	        ps.setInt(1, id_usuario);
+	        ps.setInt(2, id_capitulo);
+	        ps.setString(3, contenido);
+
+	        eliminado = ps.executeUpdate() > 0;
+	    } catch (Exception e) {
+	        System.out.println("erroe al eliminar resena: " + e.getMessage());
+	    }
+
+	    return eliminado;
+	}
+   
+   
+   public boolean editarResena(int id_usuario, int id_capitulo, String contenidoAntiguo, String contenidoNuevo) {
+	    boolean eliminado = false;
+
+	    String sql = "UPDATE resena SET contenido = ? WHERE id_usuario = ? AND id_capitulo = ? AND contenido = ?";
+
+	    try (Connection con = Conexion.conectar();
+	         PreparedStatement ps = con.prepareStatement(sql)) {
+
+	        ps.setString(1, contenidoNuevo);
+	        ps.setInt(2, id_usuario);
+	        ps.setInt(3, id_capitulo);
+	        ps.setString(4, contenidoAntiguo);
+
+	        eliminado = ps.executeUpdate() > 0;
+	        
+	    } catch (Exception e) {
+	        System.out.println("error al editar resena: " + e.getMessage());
+	    }
+
+	    return eliminado;
+	}
+   
+   
+   
+   public boolean editarComentario(int id_usuario, int id_resena, String contenidoAntiguo, String contenidoNuevo) {
+	    boolean eliminado = false;
+
+	    String sql = "UPDATE comentario SET contenido = ? WHERE id_usuario = ? AND id_resena = ? AND contenido = ?";
+
+	    try (Connection con = Conexion.conectar();
+	         PreparedStatement ps = con.prepareStatement(sql)) {
+
+	        ps.setString(1, contenidoNuevo);
+	        ps.setInt(2, id_usuario);
+	        ps.setInt(3, id_resena);
+	        ps.setString(4, contenidoAntiguo);
+
+	        eliminado = ps.executeUpdate() > 0;
+	        
+	    } catch (Exception e) {
+	        System.out.println("error al editar comentario: " + e.getMessage());
+	    }
+
+	    return eliminado;
+	}
     
 }

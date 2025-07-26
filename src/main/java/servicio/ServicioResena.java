@@ -28,6 +28,38 @@ public class ServicioResena {
 	}
 	
 	
+    public boolean eliminarResena(int idUsuario, int idCapitulo, String contenido) {
+		
+		if (contenido.isBlank()) {
+	        System.out.println("Campos vacios");
+	        return false;
+	    }
+		
+//		if (repo.buscarResenaIgual(idUsuario, contenido)) { System.out.println("Comentario repetido"); return false;}
+		
+		return repo.eliminarResena(idUsuario, idCapitulo, contenido);
+		
+	}
+    
+    
+    public boolean editarResena(int idUsuario, int idCapitulo, String contenidoAntiguo, String contenidoNuevo) {
+		
+		if (contenidoAntiguo.isBlank()) {
+	        System.out.println("Campos vacios");
+	        return false;
+	    }
+		
+		if (contenidoNuevo.isBlank()) {
+	        System.out.println("Campos vacios");
+	        return false;
+	    }
+		
+		
+		return repo.editarResena(idUsuario, idCapitulo, contenidoAntiguo, contenidoNuevo);
+		
+	}
+	
+	
     public boolean agregarComentario(int idUsuario, int idResena, String contenido) {
 		
 		if (contenido.isBlank()) {
@@ -38,6 +70,37 @@ public class ServicioResena {
 		if (repo.buscarComentarioIgual(idUsuario, contenido)) { System.out.println("Comentario repetido"); return false;}
 		
 		return repo.agregarComentario(idUsuario, idResena, contenido);
+		
+	}
+    
+    
+    public boolean editarComentario(int idUsuario, int idResena, String contenidoAntiguo, String contenidoNuevo) {
+		
+		if (contenidoAntiguo.isBlank()) {
+	        System.out.println("Campos vacios");
+	        return false;
+	    }
+		
+		if (contenidoNuevo.isBlank()) {
+	        System.out.println("Campos vacios");
+	        return false;
+	    }
+		
+		
+		return repo.editarComentario(idUsuario, idResena, contenidoAntiguo, contenidoNuevo);
+		
+	}
+    
+    
+    public boolean eliminarComentario(int idUsuario, int idResena, String contenido) {
+		
+		if (contenido.isBlank()) {
+	        System.out.println("Campos vacios");
+	        return false;
+	    }
+		
+
+		return repo.eliminarComentario(idUsuario, idResena, contenido);
 		
 	}
     
