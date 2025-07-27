@@ -1,10 +1,8 @@
 package objetosFront;
 
-public class EditarComentario {
+public class EliminarComentario {
 	
 	private int Id;
 	
-    public String contenidoNuevo;
-
     public int getId() {return this.Id;}
 }

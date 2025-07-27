@@ -19,6 +19,7 @@ import objetosFront.ResenaConComentario;
 import entidades.Resena;
 import entidades.Capitulo;
 import entidades.Comentario;
+import entidades.Director;
 
 
 
@@ -104,21 +105,20 @@ public class RepositorioResena {
     
     
     
-    public boolean eliminarComentario(int id_usuario, int id_resena, String contenido) {
+    public boolean eliminarComentario(int id) {
 	    boolean eliminado = false;
 
-	    String sql = "DELETE FROM comentario WHERE id_usuario = ? AND id_resena = ? AND contenido = ?";
+	    String sql = "DELETE FROM comentario WHERE id = ?";
 
 	    try (Connection con = Conexion.conectar();
 	         PreparedStatement ps = con.prepareStatement(sql)) {
 	        
-	        ps.setInt(1, id_usuario);
-	        ps.setInt(2, id_resena);
-	        ps.setString(3, contenido);
+	        ps.setInt(1, id);
+	      
 
 	        eliminado = ps.executeUpdate() > 0;
 	    } catch (Exception e) {
-	        System.out.println("erroe al eliminar comentario: " + e.getMessage());
+	        System.out.println("error al eliminar comentario: " + e.getMessage());
 	    }
 
 	    return eliminado;
@@ -245,39 +245,37 @@ public class RepositorioResena {
    }
    
    
-   public boolean eliminarResena(int id_usuario, int id_capitulo, String contenido) {
+   public boolean eliminarResena(int id) {
 	    boolean eliminado = false;
 
-	    String sql = "DELETE FROM resena WHERE id_usuario = ? AND id_capitulo = ? AND contenido = ?";
+	    String sql = "DELETE FROM resena WHERE id = ?";
 
 	    try (Connection con = Conexion.conectar();
 	         PreparedStatement ps = con.prepareStatement(sql)) {
 	        
-	        ps.setInt(1, id_usuario);
-	        ps.setInt(2, id_capitulo);
-	        ps.setString(3, contenido);
+	        ps.setInt(1, id);
+	       
 
 	        eliminado = ps.executeUpdate() > 0;
 	    } catch (Exception e) {
-	        System.out.println("erroe al eliminar resena: " + e.getMessage());
+	        System.out.println("error al eliminar resena: " + e.getMessage());
 	    }
 
 	    return eliminado;
 	}
    
    
-   public boolean editarResena(int id_usuario, int id_capitulo, String contenidoAntiguo, String contenidoNuevo) {
+   public boolean editarResena(int id, String contenidoNuevo) {
 	    boolean eliminado = false;
 
-	    String sql = "UPDATE resena SET contenido = ? WHERE id_usuario = ? AND id_capitulo = ? AND contenido = ?";
+	    String sql = "UPDATE resena SET contenido = ? WHERE id= ?";
 
 	    try (Connection con = Conexion.conectar();
 	         PreparedStatement ps = con.prepareStatement(sql)) {
 
 	        ps.setString(1, contenidoNuevo);
-	        ps.setInt(2, id_usuario);
-	        ps.setInt(3, id_capitulo);
-	        ps.setString(4, contenidoAntiguo);
+	        ps.setInt(2, id);
+	        
 
 	        eliminado = ps.executeUpdate() > 0;
 	        
@@ -290,18 +288,17 @@ public class RepositorioResena {
    
    
    
-   public boolean editarComentario(int id_usuario, int id_resena, String contenidoAntiguo, String contenidoNuevo) {
+   public boolean editarComentario(int id, String contenidoNuevo) {
 	    boolean eliminado = false;
 
-	    String sql = "UPDATE comentario SET contenido = ? WHERE id_usuario = ? AND id_resena = ? AND contenido = ?";
+	    String sql = "UPDATE comentario SET contenido = ? WHERE id= ?";
 
 	    try (Connection con = Conexion.conectar();
 	         PreparedStatement ps = con.prepareStatement(sql)) {
 
 	        ps.setString(1, contenidoNuevo);
-	        ps.setInt(2, id_usuario);
-	        ps.setInt(3, id_resena);
-	        ps.setString(4, contenidoAntiguo);
+	        ps.setInt(2, id);
+	        
 
 	        eliminado = ps.executeUpdate() > 0;
 	        
@@ -311,5 +308,52 @@ public class RepositorioResena {
 
 	    return eliminado;
 	}
+   
+   
+   public int buscarIdUsuarioPorResena(int id_resena) {
+	    int id = 0;
+
+	    String sql = "SELECT id_usuario from resena WHERE id = ? ";
+
+	    try (Connection con = Conexion.conectar();
+	         PreparedStatement ps = con.prepareStatement(sql)) {
+
+	        ps.setInt(1, id_resena);
+	        ResultSet rs = ps.executeQuery();
+	        
+	        if (rs.next()) { 
+ 				id = rs.getInt("id");
+	        }
+	        
+	    } catch (Exception e) {
+	        System.out.println("error al buscar el id del usuario: " + e.getMessage());
+	    }
+
+	    return id;
+	}
+   
+   
+   public int buscarIdUsuarioPorComentario(int id_comentario) {
+	    int id = 0;
+
+	    String sql = "SELECT id_usuario from comentario WHERE id = ? ";
+
+	    try (Connection con = Conexion.conectar();
+	         PreparedStatement ps = con.prepareStatement(sql)) {
+
+	        ps.setInt(1, id_comentario);
+	        ResultSet rs = ps.executeQuery();
+	        
+	        if (rs.next()) { 
+				id = rs.getInt("id");
+	        }
+	        
+	    } catch (Exception e) {
+	        System.out.println("error al buscar el id del usuario: " + e.getMessage());
+	    }
+
+	    return id;
+	}
+   
     
 }

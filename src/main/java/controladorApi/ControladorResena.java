@@ -6,6 +6,9 @@ import io.javalin.http.Context;
 
 import java.util.Map;
 import com.google.gson.Gson;
+
+import entidades.Resena;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +16,8 @@ import java.util.List;
 import objetosFront.DatosResena;
 import objetosFront.EditarComentario;
 import objetosFront.EditarResena;
+import objetosFront.EliminarComentario;
+import objetosFront.EliminarResena;
 import objetosFront.DatosComentario;
 import servicio.ServicioResena;
 import objetosFront.ResenaConComentario;
@@ -92,9 +97,9 @@ public class ControladorResena {
 		    }
 		    
 		    
-		    DatosResena datos = new Gson().fromJson(contexto.body(), DatosResena.class); 
+		    EliminarResena datos = new Gson().fromJson(contexto.body(), EliminarResena.class); 
 		    
-		    boolean seEliminoResena = servicio.eliminarResena(idUsuario, datos.getId(), datos.getContenido());
+		    boolean seEliminoResena = servicio.eliminarResena(idUsuario, datos.getId());
 		    
 		    if (seEliminoResena) {
 		        contexto.json(Map.of("mensaje", "Resena eliminada correctamente"));
@@ -128,8 +133,14 @@ public class ControladorResena {
 		    
 		    
 		    EditarResena datos = new Gson().fromJson(contexto.body(), EditarResena.class);
+		    
+//		    if (!servicio.validarIdUsuarioResena(idUsuario, datos.getId())) {
+//		    	 contexto.status(401).json(Map.of("error", "Esta resena no es aplicable a editar"));
+//			        return;
+//		    	
+//		    }
 
-		    boolean actualizado = servicio.editarResena(idUsuario, datos.idCapitulo, datos.contenidoAntiguo, datos.contenidoNuevo);
+		    boolean actualizado = servicio.editarResena(idUsuario, datos.contenidoNuevo, datos.getId());
 
 		    if (actualizado) {
 		        contexto.status(200).result("Resena actualizada");
@@ -197,11 +208,11 @@ public class ControladorResena {
 		    }
 		    
 		    
-		    DatosComentario datos = new Gson().fromJson(contexto.body(), DatosComentario.class); 
+		    EliminarComentario datos = new Gson().fromJson(contexto.body(), EliminarComentario.class); 
 		    
-		    boolean seEliminoComentario = servicio.eliminarComentario(idUsuario, datos.getId(), datos.getContenido());
+		    boolean seEliminoResena = servicio.eliminarResena(idUsuario, datos.getId());
 		    
-		    if (seEliminoComentario) {
+		    if (seEliminoResena) {
 		        contexto.json(Map.of("mensaje", "Comentario eliminado correctamente"));
 		    } else {
 		        contexto.status(500).json(Map.of("error", "No se pudo eliminar el comentario"));
@@ -232,13 +243,14 @@ public class ControladorResena {
 		    
 		    
 		    EditarComentario datos = new Gson().fromJson(contexto.body(), EditarComentario.class);
+		    
 
-		    boolean actualizado = servicio.editarComentario(idUsuario, datos.idResena, datos.contenidoAntiguo, datos.contenidoNuevo);
+		    boolean actualizado = servicio.editarResena(idUsuario, datos.contenidoNuevo, datos.getId());
 
 		    if (actualizado) {
-		        contexto.status(200).result("Resena actualizada");
+		        contexto.status(200).result("Comentario actualizado");
 		    } else {
-		        contexto.status(400).result("No se pudo actualizar la resena");
+		        contexto.status(400).result("No se pudo actualizar el comentario");
 		    }
 
 		});

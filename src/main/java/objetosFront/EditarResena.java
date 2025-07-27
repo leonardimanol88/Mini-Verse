@@ -2,10 +2,9 @@ package objetosFront;
 
 public class EditarResena {
 	
-    public int idCapitulo;
-   
-    public String contenidoAntiguo;
+	private int Id;
+	
     public String contenidoNuevo;
 
-    
+    public int getId() {return this.Id;}
 }

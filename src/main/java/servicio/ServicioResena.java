@@ -28,34 +28,38 @@ public class ServicioResena {
 	}
 	
 	
-    public boolean eliminarResena(int idUsuario, int idCapitulo, String contenido) {
+    public boolean eliminarResena(int idUsuario, int idResena) {
 		
-		if (contenido.isBlank()) {
-	        System.out.println("Campos vacios");
+
+		
+		if (repo.buscarIdUsuarioPorResena(idResena) == idUsuario) {
+			System.out.println("Esta resena no es aplicable a eliminar");
 	        return false;
-	    }
+		}
 		
 //		if (repo.buscarResenaIgual(idUsuario, contenido)) { System.out.println("Comentario repetido"); return false;}
 		
-		return repo.eliminarResena(idUsuario, idCapitulo, contenido);
+		return repo.eliminarResena(idResena);
 		
 	}
     
     
-    public boolean editarResena(int idUsuario, int idCapitulo, String contenidoAntiguo, String contenidoNuevo) {
+    public boolean editarResena(int idUsuario, String contenidoNuevo, int idResena) {
 		
-		if (contenidoAntiguo.isBlank()) {
-	        System.out.println("Campos vacios");
-	        return false;
-	    }
 		
 		if (contenidoNuevo.isBlank()) {
 	        System.out.println("Campos vacios");
-	        return false;
+	        return false; 
 	    }
 		
 		
-		return repo.editarResena(idUsuario, idCapitulo, contenidoAntiguo, contenidoNuevo);
+		if (repo.buscarIdUsuarioPorResena(idResena) == idUsuario) {
+			System.out.println("Esta resena no es aplicable a editar");
+	        return false;
+		}
+		
+		
+		return repo.editarResena(idResena, contenidoNuevo);
 		
 	}
 	
@@ -74,33 +78,37 @@ public class ServicioResena {
 	}
     
     
-    public boolean editarComentario(int idUsuario, int idResena, String contenidoAntiguo, String contenidoNuevo) {
+    public boolean editarComentario(int idUsuario, String contenidoNuevo, int idComentario) {
 		
-		if (contenidoAntiguo.isBlank()) {
-	        System.out.println("Campos vacios");
-	        return false;
-	    }
 		
 		if (contenidoNuevo.isBlank()) {
 	        System.out.println("Campos vacios");
-	        return false;
+	        return false; 
 	    }
 		
 		
-		return repo.editarComentario(idUsuario, idResena, contenidoAntiguo, contenidoNuevo);
+		if (repo.buscarIdUsuarioPorComentario(idComentario) == idUsuario) {
+			System.out.println("Este comentario no es aplicable a editar");
+	        return false;
+		}
+		
+		
+		return repo.editarResena(idComentario, contenidoNuevo);
 		
 	}
     
     
-    public boolean eliminarComentario(int idUsuario, int idResena, String contenido) {
-		
-		if (contenido.isBlank()) {
-	        System.out.println("Campos vacios");
-	        return false;
-	    }
+    public boolean eliminarComentario(int idUsuario, int idComentario) {
 		
 
-		return repo.eliminarComentario(idUsuario, idResena, contenido);
+		
+		if (repo.buscarIdUsuarioPorComentario(idComentario) == idUsuario) {
+			System.out.println("Este comentario no es aplicable a eliminar");
+	        return false;
+		}
+	
+		
+		return repo.eliminarComentario(idComentario);
 		
 	}
     
@@ -131,5 +139,7 @@ public class ServicioResena {
 
         return resultado;
     }
+    
+    
     
 }
