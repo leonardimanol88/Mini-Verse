@@ -206,7 +206,12 @@ public class RepositorioResena {
     	                     rs.getInt("id_usuario"),
     	                     rs.getInt("id_resena")
     						);
-    				listaComentarios.add(r);
+    				
+    				String nombreUsuario = buscarNombreUsuario(r.getIdUsuario());
+                    r.setNombreUsuario(nombreUsuario);
+                    
+                    listaComentarios.add(r);
+   
     			}
     		}
     	}
@@ -322,7 +327,7 @@ public class RepositorioResena {
 	        ResultSet rs = ps.executeQuery();
 	        
 	        if (rs.next()) { 
- 				id = rs.getInt("id");
+ 				id = rs.getInt("id_usuario");
 	        }
 	        
 	    } catch (Exception e) {
@@ -345,7 +350,7 @@ public class RepositorioResena {
 	        ResultSet rs = ps.executeQuery();
 	        
 	        if (rs.next()) { 
-				id = rs.getInt("id");
+				id = rs.getInt("id_usuario");
 	        }
 	        
 	    } catch (Exception e) {

@@ -32,7 +32,7 @@ public class ServicioResena {
 		
 
 		
-		if (repo.buscarIdUsuarioPorResena(idResena) == idUsuario) {
+		if (repo.buscarIdUsuarioPorResena(idResena) != idUsuario) {
 			System.out.println("Esta resena no es aplicable a eliminar");
 	        return false;
 		}
@@ -53,7 +53,7 @@ public class ServicioResena {
 	    }
 		
 		
-		if (repo.buscarIdUsuarioPorResena(idResena) == idUsuario) {
+		if (repo.buscarIdUsuarioPorResena(idResena) != idUsuario) {
 			System.out.println("Esta resena no es aplicable a editar");
 	        return false;
 		}
@@ -87,7 +87,7 @@ public class ServicioResena {
 	    }
 		
 		
-		if (repo.buscarIdUsuarioPorComentario(idComentario) == idUsuario) {
+		if (repo.buscarIdUsuarioPorResena(idComentario) != idUsuario) {
 			System.out.println("Este comentario no es aplicable a editar");
 	        return false;
 		}
@@ -102,7 +102,7 @@ public class ServicioResena {
 		
 
 		
-		if (repo.buscarIdUsuarioPorComentario(idComentario) == idUsuario) {
+		if (repo.buscarIdUsuarioPorResena(idComentario) != idUsuario) {
 			System.out.println("Este comentario no es aplicable a eliminar");
 	        return false;
 		}
@@ -130,6 +130,8 @@ public class ServicioResena {
             combinado.setId(r.getId());
             combinado.setContenido(r.getContenido());
             combinado.setNombreUsuario(repo.buscarNombreUsuario(r.getIdUsuario()));
+            combinado.setIdUsuario(r.getIdUsuario());
+            
             combinado.setFechaCreacion(r.getFechaCreacion());
             
             combinado.setComentarios(comentarios);

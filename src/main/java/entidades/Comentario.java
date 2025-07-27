@@ -10,6 +10,7 @@ public class Comentario {
 	private LocalDateTime fecha_creacion;
 	private int id_usuario;
 	private int id_resena;
+	private String nombreUsuario;
 	
 	public Comentario (int id, String contenido, LocalDateTime fecha_creacion, int id_usuario, int id_resena) {
 		
@@ -34,4 +35,8 @@ public class Comentario {
     public LocalDateTime getFechaCreacion() { return this.fecha_creacion; }
     public int getIdResena() { return this.id_resena; }
     public int getIdUsuario() { return this.id_usuario; }
+    
+    
+    public String getNombreUsuario() { return this.nombreUsuario; }
+    public void setNombreUsuario(String nombreUsuario) { this.nombreUsuario = nombreUsuario; }
 }

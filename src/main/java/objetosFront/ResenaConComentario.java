@@ -10,6 +10,7 @@ public class ResenaConComentario {
     private int id;
     private String contenido;
     private String nombreUsuario; 
+    private int idUsuario;
     private LocalDateTime fechaCreacion;
     
     private List<Comentario> comentarios;
@@ -28,6 +29,10 @@ public class ResenaConComentario {
 	
 	public int getId() {return id;}
 	public void setId(int id) {this.id = id;}
+	
+	
+	public int getIdUsuario() {return idUsuario;}
+	public void setIdUsuario(int idUsuario) {this.idUsuario = idUsuario;}
 
 	public String getContenido() {return contenido;}
     public void setContenido(String contenido) {this.contenido = contenido;}

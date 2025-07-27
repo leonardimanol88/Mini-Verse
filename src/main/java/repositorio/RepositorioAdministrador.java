@@ -14,6 +14,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import dao.Conexion;
 import entidades.Serie;
 import entidades.Usuario;
+import entidades.Comentario;
 import entidades.Director;
 import entidades.Genero;
 import entidades.Resena;
@@ -797,6 +798,73 @@ public class RepositorioAdministrador {
         System.out.println("Errorr al obtener las ultimas resenas co edad: " + e.getMessage()); 
     }
     return lista;
+    }
+   
+   
+   
+   public List<Resena> obtenerResenasPorUsuario(int idUsuario) {
+	   
+	    List<Resena> lista = new ArrayList<>();
+	    String sql = "SELECT r.id, r.id_capitulo, r.contenido " +
+	                 "FROM resena r WHERE r.id_usuario = ?";
+
+	    try (Connection con = Conexion.conectar();
+	         PreparedStatement ps = con.prepareStatement(sql)) {
+	        
+	        ps.setInt(1, idUsuario);
+	        ResultSet rs = ps.executeQuery();
+
+	        while (rs.next()) {
+	        	
+	        	Resena r = new Resena(
+						 rs.getInt("id"),
+	                     rs.getString("contenido"), 
+	                     rs.getTimestamp("fecha_creacion").toLocalDateTime(),
+	                     rs.getInt("id_capitulo"),
+	                     rs.getInt("id_usuario")
+						);
+				lista.add(r);
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return lista;
+	}
+   
+   
+   
+
+    public List<Comentario> obtenerComentariosPorUsuario(int idUsuario) {
+    	
+	    List<Comentario> lista = new ArrayList<>();
+	    String sql = "SELECT c.id, c.id_capitulo, c.contenido " +
+	                 "FROM comentario c WHERE c.id_usuario = ?";
+	
+	    try (Connection con = Conexion.conectar();
+	         PreparedStatement ps = con.prepareStatement(sql)) {
+	        
+	        ps.setInt(1, idUsuario);
+	        ResultSet rs = ps.executeQuery();
+	
+	        while (rs.next()) {
+	        	Comentario c = new Comentario(
+	        			
+						 rs.getInt("id"),
+	                     rs.getString("contenido"), 
+	                     rs.getTimestamp("fecha_creacion").toLocalDateTime(),
+	                     rs.getInt("id_usuario"),
+	                     rs.getInt("id_resena")
+						);
+				lista.add(c);
+	        }
+	
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	
+	    return lista;
     }
 
 }

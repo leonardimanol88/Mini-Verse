@@ -266,7 +266,7 @@ public class ControladorAdministrador {
 		
 		
 //		
-//		app.get("/admin/gestionUsuarios", contexto -> {/////
+//		app.get("/admin/gestionResenas", contexto -> {/////
 //		
 //			
 //		    contexto.req().setCharacterEncoding("UTF-8");
@@ -295,7 +295,7 @@ public class ControladorAdministrador {
 //		    ArrayList<Resena> obtenerResenas = servicio.obtenerResenas(idUsuario);
 //		    contexto.json(obtener); 
 //		});
-		
+//		
 		
 		
 		app.get("/admin/capitulosMasResenados", contexto -> { //da una lista de capitulos desde los mas resenados hasta los menos
@@ -327,6 +327,20 @@ public class ControladorAdministrador {
 		    
 		    ctx.json(obtener); 
 		});
+        
+        
+//        
+//       app.get("/admin/obtenerResenasPorUsuario", ctx -> {
+//			
+//			
+//		    ctx.res().setCharacterEncoding("UTF-8");
+//		    
+//		    int idUsuario = ctx.pathParam("idUsuario");
+//
+//		    ArrayList<Director> obtener = servicio.obtenerResenasPorUsuario(idUsuario);
+//		    
+//		    ctx.json(obtener); 
+//		});
 		
         
 		

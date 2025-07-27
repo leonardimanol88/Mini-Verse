@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entidades.Serie;
+import entidades.Comentario;
 import entidades.Director;
 import entidades.Genero;
 import entidades.Resena;
@@ -222,5 +223,17 @@ public class ServicioAdministrador {
 		
 		return repo.obtenerCapitulosMasResenadosEdad();
 	}
+    
+    
+    public List<Resena> obtenerResenasPorUsuario(int idUsuario){
+    	
+    	return repo.obtenerResenasPorUsuario(idUsuario);
+    }
+    
+    
+    public List<Comentario> obtenerComentariosPorUsuario(int idUsuario){
+    	
+    	return repo.obtenerComentariosPorUsuario(idUsuario);
+    }
 
 }
