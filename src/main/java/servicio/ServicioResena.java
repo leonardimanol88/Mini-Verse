@@ -93,7 +93,7 @@ public class ServicioResena {
 		}
 		
 		
-		return repo.editarResena(idComentario, contenidoNuevo);
+		return repo.editarComentario(idComentario, contenidoNuevo);
 		
 	}
     
