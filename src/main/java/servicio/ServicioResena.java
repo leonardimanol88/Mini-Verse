@@ -87,7 +87,7 @@ public class ServicioResena {
 	    }
 		
 		
-		if (repo.buscarIdUsuarioPorResena(idComentario) != idUsuario) {
+		if (repo.buscarIdUsuarioPorComentario(idComentario) != idUsuario) {
 			System.out.println("Este comentario no es aplicable a editar");
 	        return false;
 		}
@@ -102,7 +102,7 @@ public class ServicioResena {
 		
 
 		
-		if (repo.buscarIdUsuarioPorResena(idComentario) != idUsuario) {
+		if (repo.buscarIdUsuarioPorComentario(idComentario) != idUsuario) {
 			System.out.println("Este comentario no es aplicable a eliminar");
 	        return false;
 		}
