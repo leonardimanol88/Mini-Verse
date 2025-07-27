@@ -74,6 +74,66 @@ public class RepositorioAdministrador {
 	}
 	
 	
+    public boolean eliminarUsuario(int idUsuario) {
+		
+		boolean eliminada = false;
+		String sql = "DELETE from usuario WHERE id = ?";
+		
+		 try(Connection con = Conexion.conectar();
+		     PreparedStatement ps = con.prepareStatement(sql);
+         ){
+			 
+			ps.setInt(1, idUsuario);
+	    	eliminada = ps.executeUpdate() > 0;
+			 
+		 } catch (Exception e) {
+	            System.out.println("error al eliminar: " + e.getMessage());
+		 }
+		 
+		 return eliminada;
+	}
+    
+    
+    public boolean eliminarResena(int idResena) {
+		
+		boolean eliminada = false;
+		String sql = "DELETE from resena WHERE id = ?";
+		
+		 try(Connection con = Conexion.conectar();
+		     PreparedStatement ps = con.prepareStatement(sql);
+         ){
+			 
+			ps.setInt(1, idResena);
+	    	eliminada = ps.executeUpdate() > 0;
+			 
+		 } catch (Exception e) {
+	            System.out.println("error al eliminar: " + e.getMessage());
+		 }
+		 
+		 return eliminada;
+	}
+    
+    
+    public boolean eliminarComentario(int idComentario) {
+		
+		boolean eliminada = false;
+		String sql = "DELETE from comentario WHERE id = ?";
+		
+		 try(Connection con = Conexion.conectar();
+		     PreparedStatement ps = con.prepareStatement(sql);
+         ){
+			 
+			ps.setInt(1, idComentario);
+	    	eliminada = ps.executeUpdate() > 0;
+			 
+		 } catch (Exception e) {
+	            System.out.println("error al eliminar: " + e.getMessage());
+		 }
+		 
+		 return eliminada;
+	}
+	
+	
     public boolean eliminarGenero(String nombre) {
 		
 		boolean eliminado = false;
@@ -865,6 +925,72 @@ public class RepositorioAdministrador {
 	    }
 	
 	    return lista;
+    }
+    
+    
+    public List<Usuario> buscarUsuariosPorNombre(String nombre) {
+   	 
+   	 
+	    List<Usuario> usuarios = new ArrayList<>();
+	    String sql = "SELECT * FROM usuario WHERE nombre LIKE ?";
+
+	    try (Connection con = Conexion.conectar();
+	         PreparedStatement ps = con.prepareStatement(sql)) {
+
+	        ps.setString(1, "%" + nombre + "%");
+
+	        try (ResultSet rs = ps.executeQuery()) {
+	            while (rs.next()) {
+	                Usuario u = new Usuario(
+	                		rs.getInt("id"),
+    	    	            rs.getString("nombre"),
+    	    	            rs.getString("correo"),
+    	    	            rs.getString("contrasena"),
+    	    	            rs.getInt("edad")
+	                );
+	                usuarios.add(u);
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return usuarios;
+	}
+    
+    
+    
+     public Usuario buscarUsuario(int id) {
+    	
+        Usuario usuario = null;
+        String sql = "SELECT id, nombre, correo, contrasena, edad, rol FROM usuario WHERE id = ?";
+        
+        try (Connection con = Conexion.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            
+            ps.setInt(1, id);
+            
+            ResultSet rs = ps.executeQuery();
+           
+            
+            if (rs.next()) {
+       
+                   
+                	
+                	usuario = new Usuario(
+                        rs.getInt("id"),
+                        rs.getString("nombre"),
+                        rs.getString("correo"),
+                        rs.getString("contrasena"), 
+                        rs.getInt("edad")
+                    );
+                	usuario.setRol(rs.getString("rol"));
+                }
+            }
+         catch (Exception e) {
+            System.out.println("Error al buscar usuario: " + e.getMessage());
+        }
+        return usuario;
     }
 
 }

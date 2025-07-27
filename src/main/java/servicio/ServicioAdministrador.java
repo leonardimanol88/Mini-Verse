@@ -236,4 +236,34 @@ public class ServicioAdministrador {
     	return repo.obtenerComentariosPorUsuario(idUsuario);
     }
 
+    
+    public List<Usuario> buscarUsuariosPorNombre(String nombre){
+    	
+    	return repo.buscarUsuariosPorNombre(nombre);
+    }
+    
+    
+    public boolean eliminarUsuario(int id){
+    	
+    	return repo.eliminarUsuario(id);
+    }
+    
+    
+    public boolean eliminarResena(int id){
+    	
+    	return repo.eliminarResena(id);
+    }
+    
+    
+    public boolean eliminarComentario(int id){
+    	
+    	return repo.eliminarComentario(id);
+    }
+    
+    public Usuario mostrarUsuario(int id) {
+		
+		
+		return repo.buscarUsuario(id);
+	}
+    
 }

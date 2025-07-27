@@ -13,6 +13,7 @@ import entidades.Serie;
 import entidades.Genero;
 import entidades.Usuario;
 import entidades.Resena;
+import entidades.Comentario;
 import entidades.Director;
 import objetosFront.AgregarSeries;
 import objetosFront.AgregarDirector;
@@ -327,6 +328,205 @@ public class ControladorAdministrador {
 		    
 		    ctx.json(obtener); 
 		});
+        
+        
+        
+        ///////
+        
+        
+        app.get("/admin/busquedaUsuarios", contexto -> {
+			
+		    contexto.req().setCharacterEncoding("UTF-8");
+		    
+		    
+//		    String header = contexto.header("Authorization");
+//		    
+//		    if (header == null || !header.startsWith("Bearer ")) {
+//		        contexto.status(401).json(Map.of("error", "falta el token de autorizacion"));
+//		        return;
+//		    }
+//           
+//		    
+//		    String token = header.replace("Bearer ", "");
+//		    Integer idUsuario = JWTUtil.verificarToken(token);
+//
+//		    if (idUsuario == null) {
+//		        contexto.status(401).json(Map.of("error", "Token invalido o expirado"));
+//		        return;
+//		    }
+		    
+		    String nombre = contexto.queryParam("nombre");
+		    if (nombre == null || nombre.isEmpty()) {
+		        contexto.status(400).result("Falta el parametro de busqueda");
+		        return;
+		    }
+		    
+		    List<Usuario> resultados = servicio.buscarUsuariosPorNombre(nombre);
+		    
+		    if (resultados.isEmpty()) {
+		        contexto.status(404).result("No se encontraron usuarios con ese nombre");
+		    } else {
+		        contexto.json(resultados);
+		    }
+		   
+		});
+        
+        
+        
+        app.get("/admin/mostrarUsuario", contexto -> {/////
+		    contexto.req().setCharacterEncoding("UTF-8");
+
+		  
+            String idParam = contexto.queryParam("id");
+		    
+		    
+		    if (idParam == null || idParam.isEmpty()) {
+		        contexto.status(400).result("El parametro de usuario es requerido");
+		        return;
+		    }
+
+		   
+		    	
+		        int idUsuario = Integer.parseInt(idParam); 
+		        Usuario u = servicio.mostrarUsuario(idUsuario);
+		        
+		        contexto.json(u);
+		    
+		});
+        
+        
+        
+       app.get("/admin/obtenerResenasdelUsuario", contexto -> { ////////
+			
+			
+		    contexto.res().setCharacterEncoding("UTF-8");
+		    
+		    
+		    String idParam = contexto.queryParam("id");
+		    
+		    
+		    if (idParam == null || idParam.isEmpty()) {
+		        contexto.status(400).result("El parametro de usuario es requerido");
+		        return;
+		    }
+
+		    try {
+		    	
+		        int idUsuario = Integer.parseInt(idParam); 
+		        List<Resena> resenas = servicio.obtenerResenasPorUsuario(idUsuario);
+		        
+		        contexto.json(resenas);
+		    } catch (NumberFormatException e) {
+		        contexto.status(400).result("El parametro id debe ser un numero entero ");
+		    }
+		});
+      
+      
+      app.get("/admin/obtenerComentariosdelUsuario", contexto -> { ////////
+			
+			
+		    contexto.res().setCharacterEncoding("UTF-8");
+		    
+		    
+		    String idParam = contexto.queryParam("id");
+		    
+		    
+		    if (idParam == null || idParam.isEmpty()) {
+		        contexto.status(400).result("El parametro de usuario es requerido");
+		        return;
+		    }
+
+		    try {
+		    	
+		        int idUsuario = Integer.parseInt(idParam); 
+		        List<Comentario> comentarios = servicio.obtenerComentariosPorUsuario(idUsuario);
+		        
+		        contexto.json(comentarios);
+		    } catch (NumberFormatException e) {
+		        contexto.status(400).result("El parametro id debe ser un numero entero ");
+		    }
+		});
+        
+      
+      
+      app.delete("/admin/eliminarUsuario", contexto -> {////
+			
+
+    	    String idParam = contexto.queryParam("id");
+		    
+		    
+		    if (idParam == null || idParam.isEmpty()) {
+		        contexto.status(400).result("El parametro de usuario es requerido");
+		        return;
+		    }
+		    	
+		    int idUsuario = Integer.parseInt(idParam); 
+		
+		
+		    
+		    
+		    boolean seElimino = servicio.eliminarUsuario(idUsuario);
+
+		    if (seElimino) {
+		        contexto.json(Map.of("mensaje", "usuario eliminado correctamente"));
+		    } else {
+		        contexto.status(500).json(Map.of("error", "No se pudo eliminar el usuario"));
+		    }  
+		});
+      
+      
+      app.delete("/admin/eliminarResena", contexto -> {////
+			
+
+  	    String idParam = contexto.queryParam("id");
+		    
+		    
+		    if (idParam == null || idParam.isEmpty()) {
+		        contexto.status(400).result("El parametro id de resena es requerido");
+		        return;
+		    }
+		    	
+		    int idResena = Integer.parseInt(idParam); 
+		
+		
+		    
+		    
+		    boolean seElimino = servicio.eliminarResena(idResena);
+
+		    if (seElimino) {
+		        contexto.json(Map.of("mensaje", "resena eliminada correctamente"));
+		    } else {
+		        contexto.status(500).json(Map.of("error", "No se pudo eliminar la resena"));
+		    }  
+		});
+      
+      
+      app.delete("/admin/eliminarComentario", contexto -> {////
+			
+
+    	    String idParam = contexto.queryParam("id");
+  		    
+  		    
+  		    if (idParam == null || idParam.isEmpty()) {
+  		        contexto.status(400).result("El parametro id de comentario es requerido");
+  		        return;
+  		    }
+  		    	
+  		    int idComentario = Integer.parseInt(idParam); 
+  		
+  		
+  		    
+  		    
+  		    boolean seElimino = servicio.eliminarComentario(idComentario);
+
+  		    if (seElimino) {
+  		        contexto.json(Map.of("mensaje", "comentario eliminado correctamente"));
+  		    } else {
+  		        contexto.status(500).json(Map.of("error", "No se pudo eliminar el comentario"));
+  		    }  
+  		});
+      
+        
         
         
 //        
