@@ -17,10 +17,11 @@ public class JWTUtil {
     
     
     
-    public static String crearToken(int idUsuario) {
+    public static String crearToken(int idUsuario, String rol) {
     	
         return JWT.create()
                 .withClaim("id", idUsuario)
+                .withClaim("rol", rol) 
                 .withExpiresAt(new Date(System.currentTimeMillis()  + 24 * 3600 * 1000)) // 1 hora
                 .sign(algoritmo);
     }
@@ -35,6 +36,18 @@ public class JWTUtil {
             return jwt.getClaim("id").asInt(); //accede al atributo y lo devuelve
         } 
         catch (Exception e) {
+            return null;
+        }
+    }
+    
+    
+    public static String obtenerRol(String token) {
+        try {
+        	
+            JWTVerifier verificador = JWT.require(algoritmo).build();
+            DecodedJWT jwt = verificador.verify(token);
+            return jwt.getClaim("rol").asString();
+        } catch (Exception e) {
             return null;
         }
     }

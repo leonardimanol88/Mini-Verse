@@ -33,45 +33,60 @@ public class ControladorAdministrador {
         ServicioAdministrador servicio = new ServicioAdministrador();
         
         
-        app.post("/admin/iniciarSesion", contexto -> {
-        	
-        	
-            contexto.req().setCharacterEncoding("UTF-8");
-
-            Login datos = new Gson().fromJson(contexto.body(), Login.class);
-            Usuario usuario = servicio.devolverUsuario(datos.correo, datos.contrasena);
-
-            
-            if (usuario != null && "admin".equals(usuario.getRol())) {
-            	
-            	
-            	
-                String token = JWTUtil.crearToken(usuario.getId());
-                contexto.json(Map.of(
-                    "mensaje", "Inicio de sesion exitoso",
-                    "token", token
-                ));
-            } else {
-                contexto.status(401).json(Map.of(
-                    "error", "no eres administrador"
-                ));
-            }
-        });
+//        app.post("/admin/iniciarSesion", contexto -> {
+//        	
+//        	
+//            contexto.req().setCharacterEncoding("UTF-8");
+//
+//            Login datos = new Gson().fromJson(contexto.body(), Login.class);
+//            Usuario usuario = servicio.devolverUsuario(datos.correo, datos.contrasena);
+//
+//            
+//            if (usuario != null && "admin".equals(usuario.getRol())) {
+//            	
+//            	
+//            	
+//                String token = JWTUtil.crearToken(usuario.getId());
+//                contexto.json(Map.of(
+//                    "mensaje", "Inicio de sesion exitoso",
+//                    "token", token
+//                ));
+//            } else {
+//                contexto.status(401).json(Map.of(
+//                    "error", "no eres administrador"
+//                ));
+//            }
+//        });
 
         
 	    
-        app.post("/admin/agregarDirector", ctx -> {///////////
-		    ctx.req().setCharacterEncoding("UTF-8");
+        app.post("/admin/agregarDirector", contexto -> {///////////
+		    contexto.req().setCharacterEncoding("UTF-8");
+		    
+		    
+            String header = contexto.header("Authorization");
+		    
+		    if (header == null || !header.startsWith("Bearer ")) {
+		        contexto.status(401).json(Map.of("error", "falta el token de autorizacion"));
+		        return;
+		    }
+		    String token = header.replace("Bearer ", "").trim();
+		    String rol = JWTUtil.obtenerRol(token);
+
+		    if (rol == null || !rol.equals("admin")) {
+		        contexto.status(403).json(Map.of("error", "No autorizado solo admins"));
+		        return;
+		    }
 		
 		    
-		    AgregarDirector nuevoDirector = new Gson().fromJson(ctx.body(), AgregarDirector.class);
+		    AgregarDirector nuevoDirector = new Gson().fromJson(contexto.body(), AgregarDirector.class);
 		
 		    boolean seAgrego = servicio.agregarDirector(nuevoDirector.nombre, nuevoDirector.biografia);
 		
 		    if (seAgrego) {
-		        ctx.json(Map.of("mensaje", "Director agregado correctamente"));
+		        contexto.json(Map.of("mensaje", "Director agregado correctamente"));
 		    } else {
-		        ctx.status(500).json(Map.of("error", "No se pudo agregar el director"));
+		        contexto.status(500).json(Map.of("error", "No se pudo agregar el director"));
 		    } 
 		});
         
@@ -80,6 +95,20 @@ public class ControladorAdministrador {
 		app.post("/admin/agregarGenero", ctx -> {/////////
 		    ctx.req().setCharacterEncoding("UTF-8");
 		
+		    
+            String header = ctx.header("Authorization");
+		    
+		    if (header == null || !header.startsWith("Bearer ")) {
+		        ctx.status(401).json(Map.of("error", "falta el token de autorizacion"));
+		        return;
+		    }
+		    String token = header.replace("Bearer ", "").trim();
+		    String rol = JWTUtil.obtenerRol(token);
+
+		    if (rol == null || !rol.equals("admin")) {
+		        ctx.status(403).json(Map.of("error", "No autorizado solo admins"));
+		        return;
+		    }
 		    
 		    
 		    
@@ -95,7 +124,21 @@ public class ControladorAdministrador {
 		});
 		
         app.get("/admin/obtenerGeneros", ctx -> { ////////
-			
+        	ctx.req().setCharacterEncoding("UTF-8");
+        	
+            String header = ctx.header("Authorization");
+		    
+		    if (header == null || !header.startsWith("Bearer ")) {
+		        ctx.status(401).json(Map.of("error", "falta el token de autorizacion"));
+		        return;
+		    }
+		    String token = header.replace("Bearer ", "").trim();
+		    String rol = JWTUtil.obtenerRol(token);
+
+		    if (rol == null || !rol.equals("admin")) {
+		        ctx.status(403).json(Map.of("error", "No autorizado solo admins"));
+		        return;
+		    }
 			
 		    ctx.res().setCharacterEncoding("UTF-8");
 
@@ -106,6 +149,21 @@ public class ControladorAdministrador {
         
 		
         app.delete("/admin/eliminarGenero/{nombre}", ctx -> {///////
+        	ctx.req().setCharacterEncoding("UTF-8");
+        	
+           String header = ctx.header("Authorization");
+		    
+		    if (header == null || !header.startsWith("Bearer ")) {
+		        ctx.status(401).json(Map.of("error", "falta el token de autorizacion"));
+		        return;
+		    }
+		    String token = header.replace("Bearer ", "").trim();
+		    String rol = JWTUtil.obtenerRol(token);
+
+		    if (rol == null || !rol.equals("admin")) {
+		        ctx.status(403).json(Map.of("error", "No autorizado solo admins"));
+		        return;
+		    }
 			
 		    String nombre = ctx.pathParam("nombre");
 
@@ -133,6 +191,20 @@ public class ControladorAdministrador {
 //															    	 
 //															    	}
 		
+		String header = contexto.header("Authorization");
+	    
+	    if (header == null || !header.startsWith("Bearer ")) {
+	        contexto.status(401).json(Map.of("error", "falta el token de autorizacion"));
+	        return;
+	    }
+	    String token = header.replace("Bearer ", "").trim();
+	    String rol = JWTUtil.obtenerRol(token);
+
+	    if (rol == null || !rol.equals("admin")) {
+	        contexto.status(403).json(Map.of("error", "No autorizado solo admins"));
+	        return;
+	    }
+		
 		    
 		    
 		    // lee JSON del cuerpo y convertir a serie
@@ -150,6 +222,21 @@ public class ControladorAdministrador {
 		
 		
 		app.get("/admin/obtenerSeries", ctx -> { //////
+			ctx.req().setCharacterEncoding("UTF-8");
+			
+            String header = ctx.header("Authorization");
+		    
+		    if (header == null || !header.startsWith("Bearer ")) {
+		        ctx.status(401).json(Map.of("error", "falta el token de autorizacion"));
+		        return;
+		    }
+		    String token = header.replace("Bearer ", "").trim();
+		    String rol = JWTUtil.obtenerRol(token);
+
+		    if (rol == null || !rol.equals("admin")) {
+		        ctx.status(403).json(Map.of("error", "No autorizado solo admins"));
+		        return;
+		    }
 		    ctx.res().setCharacterEncoding("UTF-8");
 
 		    ArrayList<Serie> obtener = servicio.obtenerSeries();
@@ -157,7 +244,24 @@ public class ControladorAdministrador {
 		    ctx.json(obtener); 
 		});
 		
+		
+		
 		app.delete("/admin/eliminarSerie/{nombre}", ctx -> {//////
+			ctx.req().setCharacterEncoding("UTF-8");
+			
+           String header = ctx.header("Authorization");
+		    
+		    if (header == null || !header.startsWith("Bearer ")) {
+		        ctx.status(401).json(Map.of("error", "falta el token de autorizacion"));
+		        return;
+		    }
+		    String token = header.replace("Bearer ", "").trim();
+		    String rol = JWTUtil.obtenerRol(token);
+
+		    if (rol == null || !rol.equals("admin")) {
+		        ctx.status(403).json(Map.of("error", "No autorizado solo admins"));
+		        return;
+		    }
 			
 		    String nombre = ctx.pathParam("nombre");
 
@@ -174,6 +278,21 @@ public class ControladorAdministrador {
 		
 		app.post("/admin/agregarTemporada", ctx -> {  //formulario numero , nombre de la serie, link imagen
 		    ctx.req().setCharacterEncoding("UTF-8");
+		    
+		    
+           String header = ctx.header("Authorization");
+		    
+		    if (header == null || !header.startsWith("Bearer ")) {
+		        ctx.status(401).json(Map.of("error", "falta el token de autorizacion"));
+		        return;
+		    }
+		    String token = header.replace("Bearer ", "").trim();
+		    String rol = JWTUtil.obtenerRol(token);
+
+		    if (rol == null || !rol.equals("admin")) {
+		        ctx.status(403).json(Map.of("error", "No autorizado solo admins"));
+		        return;
+		    }
 		
 		    
 		    AgregarTemporada nuevaTemporada = new Gson().fromJson(ctx.body(), AgregarTemporada.class);
@@ -189,6 +308,21 @@ public class ControladorAdministrador {
 		
 		
         app.delete("/admin/eliminarTemporada", ctx -> {////
+        	ctx.req().setCharacterEncoding("UTF-8");
+        	
+           String header = ctx.header("Authorization");
+		    
+		    if (header == null || !header.startsWith("Bearer ")) {
+		        ctx.status(401).json(Map.of("error", "falta el token de autorizacion"));
+		        return;
+		    }
+		    String token = header.replace("Bearer ", "").trim();
+		    String rol = JWTUtil.obtenerRol(token);
+
+		    if (rol == null || !rol.equals("admin")) {
+		        ctx.status(403).json(Map.of("error", "No autorizado solo admins"));
+		        return;
+		    }
 			
         	AgregarTemporada datosEliminar = new Gson().fromJson(ctx.body(), AgregarTemporada.class);
 
@@ -205,6 +339,21 @@ public class ControladorAdministrador {
         
         app.post("/admin/agregarCapitulo", ctx -> { //formulario titulo, numero, duracion(solo 00:00:00), nombre de la serie, numero de temporada )
 		    ctx.req().setCharacterEncoding("UTF-8");
+		    
+		    
+            String header = ctx.header("Authorization");
+		    
+		    if (header == null || !header.startsWith("Bearer ")) {
+		        ctx.status(401).json(Map.of("error", "falta el token de autorizacion"));
+		        return;
+		    }
+		    String token = header.replace("Bearer ", "").trim();
+		    String rol = JWTUtil.obtenerRol(token);
+
+		    if (rol == null || !rol.equals("admin")) {
+		        ctx.status(403).json(Map.of("error", "No autorizado solo admins"));
+		        return;
+		    }
 		
 		    
 		    AgregarCapitulo nuevoCapitulo = new Gson().fromJson(ctx.body(), AgregarCapitulo.class);
@@ -221,7 +370,21 @@ public class ControladorAdministrador {
         
         
         app.delete("/admin/eliminarCapitulo", ctx -> {//////
+        	ctx.req().setCharacterEncoding("UTF-8");
         	
+            String header = ctx.header("Authorization");
+		    
+		    if (header == null || !header.startsWith("Bearer ")) {
+		        ctx.status(401).json(Map.of("error", "falta el token de autorizacion"));
+		        return;
+		    }
+		    String token = header.replace("Bearer ", "").trim();
+		    String rol = JWTUtil.obtenerRol(token);
+
+		    if (rol == null || !rol.equals("admin")) {
+		        ctx.status(403).json(Map.of("error", "No autorizado solo admins"));
+		        return;
+		    }
         	
 			
         	AgregarCapitulo datosEliminar = new Gson().fromJson(ctx.body(), AgregarCapitulo.class);
@@ -250,6 +413,20 @@ public class ControladorAdministrador {
 		
 		app.get("/admin/mostrarUsuarios", contexto -> {/////
 		    contexto.req().setCharacterEncoding("UTF-8");
+		    
+            String header = contexto.header("Authorization");
+		    
+		    if (header == null || !header.startsWith("Bearer ")) {
+		        contexto.status(401).json(Map.of("error", "falta el token de autorizacion"));
+		        return;
+		    }
+		    String token = header.replace("Bearer ", "").trim();
+		    String rol = JWTUtil.obtenerRol(token);
+
+		    if (rol == null || !rol.equals("admin")) {
+		        contexto.status(403).json(Map.of("error", "No autorizado solo admins"));
+		        return;
+		    }
 
 		  
 		    ArrayList<Usuario> obtener = servicio.obtenerUsuarios();
@@ -259,6 +436,20 @@ public class ControladorAdministrador {
 		
 		app.get("/admin/mostrarSeriesAdmin", contexto -> {
 		    contexto.req().setCharacterEncoding("UTF-8");
+		    
+           String header = contexto.header("Authorization");
+		    
+		    if (header == null || !header.startsWith("Bearer ")) {
+		        contexto.status(401).json(Map.of("error", "falta el token de autorizacion"));
+		        return;
+		    }
+		    String token = header.replace("Bearer ", "").trim();
+		    String rol = JWTUtil.obtenerRol(token);
+
+		    if (rol == null || !rol.equals("admin")) {
+		        contexto.status(403).json(Map.of("error", "No autorizado solo admins"));
+		        return;
+		    }
 
 		  
 		    ArrayList<Serie> obtener = servicio.obtenerSeries();
@@ -301,6 +492,21 @@ public class ControladorAdministrador {
 		
 		app.get("/admin/capitulosMasResenados", contexto -> { //da una lista de capitulos desde los mas resenados hasta los menos
 		    contexto.req().setCharacterEncoding("UTF-8");
+		    
+		    
+            String header = contexto.header("Authorization");
+		    
+		    if (header == null || !header.startsWith("Bearer ")) {
+		        contexto.status(401).json(Map.of("error", "falta el token de autorizacion"));
+		        return;
+		    }
+		    String token = header.replace("Bearer ", "").trim();
+		    String rol = JWTUtil.obtenerRol(token);
+
+		    if (rol == null || !rol.equals("admin")) {
+		        contexto.status(403).json(Map.of("error", "No autorizado solo admins"));
+		        return;
+		    }
 
 		  
 		    List<CapituloEstadistica> obtener = servicio.obtenerCapitulosMasResenados(); 
@@ -312,7 +518,20 @@ public class ControladorAdministrador {
 		app.get("/admin/capitulosMasResenadosEdad", contexto -> { ////da una lista de capitulos desde los mas resenados hasta los menos
 		    contexto.req().setCharacterEncoding("UTF-8");         /// pero ahora en cada capitulo tambien da la edad promerio de los resenadores en cada capitulo
 
-		  
+            String header = contexto.header("Authorization");
+		    
+		    if (header == null || !header.startsWith("Bearer ")) {
+		        contexto.status(401).json(Map.of("error", "falta el token de autorizacion"));
+		        return;
+		    }
+		    String token = header.replace("Bearer ", "").trim();
+		    String rol = JWTUtil.obtenerRol(token);
+
+		    if (rol == null || !rol.equals("admin")) {
+		        contexto.status(403).json(Map.of("error", "No autorizado solo admins"));
+		        return;
+		    }
+		    
 		    List<CapituloEstadisticaEdad> obtener = servicio.obtenerCapitulosMasResenadosEdad();
 		    contexto.json(obtener); 
 		});
@@ -323,6 +542,22 @@ public class ControladorAdministrador {
 			
 			
 		    ctx.res().setCharacterEncoding("UTF-8");
+		    
+		    
+		    
+           String header = ctx.header("Authorization");
+		    
+		    if (header == null || !header.startsWith("Bearer ")) {
+		        ctx.status(401).json(Map.of("error", "falta el token de autorizacion"));
+		        return;
+		    }
+		    String token = header.replace("Bearer ", "").trim();
+		    String rol = JWTUtil.obtenerRol(token);
+
+		    if (rol == null || !rol.equals("admin")) {
+		        ctx.status(403).json(Map.of("error", "No autorizado solo admins"));
+		        return;
+		    }
 
 		    ArrayList<Director> obtener = servicio.obtenerDirectores();
 		    
@@ -355,6 +590,20 @@ public class ControladorAdministrador {
 //		        return;
 //		    }
 		    
+            String header = contexto.header("Authorization");
+		    
+		    if (header == null || !header.startsWith("Bearer ")) {
+		        contexto.status(401).json(Map.of("error", "falta el token de autorizacion"));
+		        return;
+		    }
+		    String token = header.replace("Bearer ", "").trim();
+		    String rol = JWTUtil.obtenerRol(token);
+
+		    if (rol == null || !rol.equals("admin")) {
+		        contexto.status(403).json(Map.of("error", "No autorizado solo admins"));
+		        return;
+		    }
+		    
 		    String nombre = contexto.queryParam("nombre");
 		    if (nombre == null || nombre.isEmpty()) {
 		        contexto.status(400).result("Falta el parametro de busqueda");
@@ -375,6 +624,21 @@ public class ControladorAdministrador {
         
         app.get("/admin/mostrarUsuario", contexto -> {/////
 		    contexto.req().setCharacterEncoding("UTF-8");
+		    
+		    
+            String header = contexto.header("Authorization");
+		    
+		    if (header == null || !header.startsWith("Bearer ")) {
+		        contexto.status(401).json(Map.of("error", "falta el token de autorizacion"));
+		        return;
+		    }
+		    String token = header.replace("Bearer ", "").trim();
+		    String rol = JWTUtil.obtenerRol(token);
+
+		    if (rol == null || !rol.equals("admin")) {
+		        contexto.status(403).json(Map.of("error", "No autorizado solo admins"));
+		        return;
+		    }
 
 		  
             String idParam = contexto.queryParam("id");
@@ -402,6 +666,21 @@ public class ControladorAdministrador {
 		    contexto.res().setCharacterEncoding("UTF-8");
 		    
 		    
+            String header = contexto.header("Authorization");
+		    
+		    if (header == null || !header.startsWith("Bearer ")) {
+		        contexto.status(401).json(Map.of("error", "falta el token de autorizacion"));
+		        return;
+		    }
+		    String token = header.replace("Bearer ", "").trim();
+		    String rol = JWTUtil.obtenerRol(token);
+
+		    if (rol == null || !rol.equals("admin")) {
+		        contexto.status(403).json(Map.of("error", "No autorizado solo admins"));
+		        return;
+		    }
+		    
+		    
 		    String idParam = contexto.queryParam("id");
 		    
 		    
@@ -427,6 +706,20 @@ public class ControladorAdministrador {
 			
 		    contexto.res().setCharacterEncoding("UTF-8");
 		    
+            String header = contexto.header("Authorization");
+		    
+		    if (header == null || !header.startsWith("Bearer ")) {
+		        contexto.status(401).json(Map.of("error", "falta el token de autorizacion"));
+		        return;
+		    }
+		    String token = header.replace("Bearer ", "").trim();
+		    String rol = JWTUtil.obtenerRol(token);
+
+		    if (rol == null || !rol.equals("admin")) {
+		        contexto.status(403).json(Map.of("error", "No autorizado solo admins"));
+		        return;
+		    }
+		    
 		    
 		    String idParam = contexto.queryParam("id");
 		    
@@ -451,6 +744,20 @@ public class ControladorAdministrador {
       
       app.delete("/admin/eliminarUsuario", contexto -> {////
 			
+    	  
+    	  String header = contexto.header("Authorization");
+		    
+		    if (header == null || !header.startsWith("Bearer ")) {
+		        contexto.status(401).json(Map.of("error", "falta el token de autorizacion"));
+		        return;
+		    }
+		    String token = header.replace("Bearer ", "").trim();
+		    String rol = JWTUtil.obtenerRol(token);
+
+		    if (rol == null || !rol.equals("admin")) {
+		        contexto.status(403).json(Map.of("error", "No autorizado solo admins"));
+		        return;
+		    }
 
     	    String idParam = contexto.queryParam("id");
 		    
@@ -477,6 +784,19 @@ public class ControladorAdministrador {
       
       app.delete("/admin/eliminarResena", contexto -> {////
 			
+    	  String header = contexto.header("Authorization");
+		    
+		    if (header == null || !header.startsWith("Bearer ")) {
+		        contexto.status(401).json(Map.of("error", "falta el token de autorizacion"));
+		        return;
+		    }
+		    String token = header.replace("Bearer ", "").trim();
+		    String rol = JWTUtil.obtenerRol(token);
+
+		    if (rol == null || !rol.equals("admin")) {
+		        contexto.status(403).json(Map.of("error", "No autorizado solo admins"));
+		        return;
+		    }
 
   	    String idParam = contexto.queryParam("id");
 		    
@@ -504,6 +824,20 @@ public class ControladorAdministrador {
       app.delete("/admin/eliminarComentario", contexto -> {////
 			
 
+    	  String header = contexto.header("Authorization");
+		    
+		    if (header == null || !header.startsWith("Bearer ")) {
+		        contexto.status(401).json(Map.of("error", "falta el token de autorizacion"));
+		        return;
+		    }
+		    String token = header.replace("Bearer ", "").trim();
+		    String rol = JWTUtil.obtenerRol(token);
+
+		    if (rol == null || !rol.equals("admin")) {
+		        contexto.status(403).json(Map.of("error", "No autorizado solo admins"));
+		        return;
+		    }
+    	  
     	    String idParam = contexto.queryParam("id");
   		    
   		    

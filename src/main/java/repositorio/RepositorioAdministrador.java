@@ -865,7 +865,7 @@ public class RepositorioAdministrador {
    public List<Resena> obtenerResenasPorUsuario(int idUsuario) {
 	   
 	    List<Resena> lista = new ArrayList<>();
-	    String sql = "SELECT r.id, r.id_capitulo, r.contenido " +
+	    String sql = "SELECT r.id, r.id_capitulo, r.contenido, r.fecha_creacion, r.id_usuario " +
 	                 "FROM resena r WHERE r.id_usuario = ?";
 
 	    try (Connection con = Conexion.conectar();
@@ -899,7 +899,7 @@ public class RepositorioAdministrador {
     public List<Comentario> obtenerComentariosPorUsuario(int idUsuario) {
     	
 	    List<Comentario> lista = new ArrayList<>();
-	    String sql = "SELECT c.id, c.id_capitulo, c.contenido " +
+	    String sql = "SELECT c.id, c.id_resena, c.contenido, c.fecha_creacion, c.id_usuario " +
 	                 "FROM comentario c WHERE c.id_usuario = ?";
 	
 	    try (Connection con = Conexion.conectar();

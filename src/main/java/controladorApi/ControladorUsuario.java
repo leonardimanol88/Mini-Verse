@@ -168,10 +168,11 @@ public class ControladorUsuario {
 		    Usuario usuario = servicio.devolverUsuario(datos.correo, datos.contrasena);
 
 		    if (usuario != null) {
-		        String token = JWTUtil.crearToken(usuario.getId()); //se crea el token con el metodo de jwtutil
+		        String token = JWTUtil.crearToken(usuario.getId(), usuario.getRol()); //se crea el token con el metodo de jwtutil
 		        contexto.json(Map.of(
 		            "mensaje", "Inicio de sesion exitoso",
-		            "token", token  //devuelvo el token al front
+		            "token", token,  //devuelvo el token al front
+		            "rol", usuario.getRol() // el rol del usuario log
 		        ));
 		    } else {
 		        contexto.status(401).json(Map.of(
