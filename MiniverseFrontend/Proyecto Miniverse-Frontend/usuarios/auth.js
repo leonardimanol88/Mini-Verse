@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
         logoutItem.addEventListener('click', (e) => {
             e.preventDefault();
             localStorage.removeItem('authToken');
-            window.location.href = '/inicio.html';
+            window.location.href = '/usuarios/inicio.html';
         });
     }
 });

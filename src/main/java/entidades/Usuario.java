@@ -10,7 +10,6 @@ public class Usuario {
     private int edad;
     private String rol;
     
-    //doble constructor uno para acceder a un usurio ya creado(que en base de datos ya tenga un id) y otro para cuando se crea un nuevo
     public Usuario(int id, String nombre, String correo, String contrasena, int edad) {
         this.id = id;
         this.nombre = nombre;
@@ -19,7 +18,6 @@ public class Usuario {
         this.edad = edad;
     }
     
-
     public Usuario(String nombre, String correo, String contrasena, int edad) {
         this.nombre = nombre;
         this.correo = correo;
@@ -27,7 +25,6 @@ public class Usuario {
         this.edad = edad;
     }
 
-    
     public int getId(){return this.id;}
     public String getNombre() { return this.nombre; }
     public String getCorreo() { return this.correo; }

@@ -1,21 +1,15 @@
 package repositorio;
 
-//import java.security.Timestamp;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Time;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
-import org.mindrot.jbcrypt.BCrypt; //contrasenas
-import java.util.Date;
+import org.mindrot.jbcrypt.BCrypt; 
 import java.util.List;
 import java.sql.Timestamp;
-
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 
 
 import dao.Conexion;
@@ -29,17 +23,16 @@ import entidades.Usuario;
 public class RepositorioUsuario {
 
 	
-	//post //registrarusuario
-	//guardar usuarios en base, (recibe un objeto usuario) ///registro
+
     public boolean agregarUsuario(Usuario usuario) { 
     	
     	boolean insertado = false;
     	
-    	String hashContrasena = BCrypt.hashpw(usuario.getContrasena(), BCrypt.gensalt());//convertir la contrasena
-        String sql = "INSERT INTO usuario (nombre, correo, contrasena, edad) VALUES (?, ?, ?, ?)";//este sera el string a utilizar en la base
+    	String hashContrasena = BCrypt.hashpw(usuario.getContrasena(), BCrypt.gensalt());
+        String sql = "INSERT INTO usuario (nombre, correo, contrasena, edad) VALUES (?, ?, ?, ?)";
         
         try (Connection con = Conexion.conectar();
-            PreparedStatement ps = con.prepareStatement(sql)) {//aqui se pone el string
+            PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, usuario.getNombre());
             ps.setString(2, usuario.getCorreo());
             ps.setString(3, hashContrasena);
@@ -60,7 +53,7 @@ public class RepositorioUsuario {
              PreparedStatement Consulta = con.prepareStatement(stringConsulta)) {
             Consulta.setString(1, correo);
             ResultSet resultado = Consulta.executeQuery();
-            return resultado.next(); // si cuando devuelva eso da algo , el correo ya existe
+            return resultado.next(); 
             
         } catch (Exception e) {
             System.out.println("El correo ya esta registrado: " + e.getMessage());
@@ -117,7 +110,7 @@ public class RepositorioUsuario {
     }
     
     
-    public Usuario buscarUsuarioPorId(int id) {////
+    public Usuario buscarUsuarioPorId(int id) {
     	
     	Usuario usuario = null;
     	
@@ -190,9 +183,9 @@ public class RepositorioUsuario {
            
             
             if (rs.next()) {
-                String hashAlmacenado = rs.getString("contrasena");// contrasena modificada almacenada
+                String hashAlmacenado = rs.getString("contrasena");
                 
-                if (BCrypt.checkpw(contrasena, hashAlmacenado)) { //verificar la contrasena original con la encriptada con .checkpw
+                if (BCrypt.checkpw(contrasena, hashAlmacenado)) { 
                    
                 	
                 	usuario = new Usuario(
@@ -493,49 +486,7 @@ public class RepositorioUsuario {
          return lista;
  	}
     
-     
-//     public boolean agregarFavorita(int idUsuario, int idSerie) {
-// 
-//
-//    	    String sql = "INSERT INTO favorita (id_usuario, id_serie) VALUES (?, ?)";
-//
-//    	    try (Connection con = Conexion.conectar();
-//    	         PreparedStatement ps = con.prepareStatement(sql)) {
-//
-//    	        ps.setInt(1, idUsuario);
-//    	        ps.setInt(2, idSerie);
-//    	        ps.executeUpdate();
-//    	        return true;
-//
-//    	    } catch (SQLException e) {
-//    	        e.printStackTrace();
-//    	        return false;
-//    	    }
-//    	}
-//     
-//     
-//     public int contarFavoritas(int idUsuario) {
-//    	    String sql = "SELECT COUNT(*) FROM favorito WHERE id_usuario = ?";
-//    	    int total = 0;
-//
-//    	    try (Connection con = Conexion.conectar();
-//    	         PreparedStatement ps = con.prepareStatement(sql)) {
-//
-//    	        ps.setInt(1, idUsuario);
-//    	        ResultSet rs = ps.executeQuery();
-//
-//    	        if (rs.next()) {
-//    	            total = rs.getInt(1);
-//    	        }
-//    	    } catch (SQLException e) {
-//    	        e.printStackTrace();
-//    	    }
-//
-//    	    return total;
-//    	}
-     
-     
-     
+        
      public List<Serie> buscarSeriesPorNombre(String nombre) {
     	 
     	 

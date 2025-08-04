@@ -78,7 +78,7 @@ function mostrarModalLogin() {
     
     document.getElementById('cancelLoginBtn')?.addEventListener('click', () => {
         modal.classList.remove('show');
-        window.location.href = '/inicio.html';
+        window.location.href = '/usuarios/inicio.html';
     });
 }
 
@@ -205,7 +205,7 @@ function mostrarSeriesFavoritas(series) {
     document.querySelectorAll('.series-card').forEach(card => {
         card.addEventListener('click', () => {
             const serieId = card.getAttribute('data-id');
-            window.location.href = `/serie.html?id=${serieId}`;
+            window.location.href = `/usuarios/serie.html?id=${serieId}`;
         });
     });
 }

@@ -24,10 +24,10 @@ public class RepositorioSerie {
         String sql = "SELECT * FROM serie";
         
         try (
-    	    Connection con = Conexion.conectar(); //hacer el metodo conectar de la clase conexion en el objeto con
+    	    Connection con = Conexion.conectar(); 
             PreparedStatement ps = con.prepareStatement(sql); 
-            ResultSet rs = ps.executeQuery()) { //obtener el resultado al ejecutar la sentencia (select)
-            while (rs.next()) { //con .next() avanza al siguiente elemento de la sentencia ejecutada 
+            ResultSet rs = ps.executeQuery()) { 
+            while (rs.next()) { 
                 Serie serieObtenida = new Serie( 
                    
                     rs.getString("nombre"), 

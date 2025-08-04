@@ -1,27 +1,25 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Miniverse - Ingreso Administrador</title>
+    <title>Miniverse - Ingresar</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/admin/login-admin.css">
+    <link rel="stylesheet" href="ingresar.css">
 </head>
 <body>
     <header>
         <div class="logo">
-            <img src="/img/image.png" alt="Miniverse">
-        </div>
+        <img src="/img/image.png" alt="Miniverse">
+    </div>
     </header>
 
     <div class="container">
-        <h1 class="login-title">Ingreso Administrador</h1>
+        <h1 class="login-title">Ingresar</h1>
 
-        <form id="loginForm">
-            <div id="errorMessage" class="error-message" style="display: none;"></div>
-            
+        <form>
             <div class="form-group">
                 <label class="form-label" for="email">Correo</label>
                 <input type="email" id="email" class="form-input" required>
@@ -32,13 +30,13 @@
                 <input type="password" id="password" class="form-input" required>
             </div>
 
-            <button type="submit" class="login-button" id="loginBtn">
-                <span id="loginText">Acceder</span>
-                <span id="loginSpinner" class="loading" style="display: none;"></span>
-            </button>
+            <button type="submit" class="login-button">Acceder</button>
         </form>
-    </div>
 
-    <script src="/admin/login-admin.js"></script>
+        <div class="back-to-home">
+    <a href="/usuarios/inicio.html">← Volver al inicio</a>
+</div>
+    </div>
+    <script src="/usuarios/auth-login.js"></script>
 </body>
 </html>

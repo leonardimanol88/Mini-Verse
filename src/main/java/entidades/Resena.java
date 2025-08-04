@@ -1,7 +1,6 @@
 package entidades;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 public class Resena {
 
@@ -26,8 +25,7 @@ public class Resena {
 		this.id_capitulo = id_capitulo;
 		this.id_usuario = id_usuario;
 	}
-	
-	
+
     public int getId() { return this.id; }
     public String getContenido() { return this.contenido; }
     public LocalDateTime getFechaCreacion() { return this.fecha_creacion; }

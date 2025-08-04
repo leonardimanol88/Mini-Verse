@@ -1,8 +1,6 @@
 package servicio;
 
 import repositorio.RepositorioAdministrador;
-
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,11 +20,7 @@ public class ServicioAdministrador {
 	
 	public boolean agregarSerie(String nombre, int estreno, String sinopsis, int id_genero, int id_director, String imagen_url) {
 		
-		
-		//System.out.println("buscando director con nombre : '" + id_director + "'");
-//		int idDirector = repo.buscarIdDirectorporNombre(id_director); //estas funciones porque serie tiene fk
-//		int idGenero = repo.buscarIdGeneroporNombre(id_genero);
-		 
+	
 		if (id_director == 0) {
 			    System.out.println("Error: Director o género no encontrados");
 			    return false;
@@ -67,7 +61,7 @@ public class ServicioAdministrador {
 	}
     
     
-    public boolean eliminarTemporada(int numero, String nombreSerie) { //numero y nombre de la serie
+    public boolean eliminarTemporada(int numero, String nombreSerie) { 
 		
     	if (numero <= 0 || nombreSerie == null || nombreSerie.trim().isEmpty()) {
             System.out.println("Error: numero invalido o nombre de serie vacio");
@@ -89,7 +83,7 @@ public class ServicioAdministrador {
 	}
     
     
-    public boolean eliminarCapitulo(String titulo, String nombreSerie, int numTemporada) { //numero y nombre de la serie
+    public boolean eliminarCapitulo(String titulo, String nombreSerie, int numTemporada) { 
 		
     	if (numTemporada <= 0 || titulo == null || titulo.trim().isEmpty()) {
             System.out.println("Error: numero invalido o nombre de serie vacio");

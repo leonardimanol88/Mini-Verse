@@ -2,7 +2,7 @@ const API_BASE_URL = 'http://44.209.91.221:7002';
 
 document.addEventListener('DOMContentLoaded', function() {
     // Verificar autenticación
-    checkAdminAuth();
+    
     
     // Cargar datos iniciales
     loadStatistics();
@@ -11,32 +11,24 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('refreshBtn').addEventListener('click', loadStatistics);
     
     // Configurar botón de logout
-    document.getElementById('logoutBtn').addEventListener('click', function() {
-        localStorage.removeItem('adminToken');
-        window.location.href = '/login.html';
-    });
+    
 });
 
 function loadStatistics() {
     showLoading(true);
     
-    const token = localStorage.getItem('adminToken');
-    if (!token) {
-        showMessage('Error de autenticación', 'error');
-        window.location.href = '/login.html';
-        return;
-    }
+    
     
     Promise.all([
         fetch(`${API_BASE_URL}/admin/capitulosMasResenados`, {
             headers: {
-                'Authorization': `Bearer ${token}`,
+                
                 'Content-Type': 'application/json'
             }
         }),
         fetch(`${API_BASE_URL}/admin/capitulosMasResenadosEdad`, {
             headers: {
-                'Authorization': `Bearer ${token}`,
+                
                 'Content-Type': 'application/json'
             }
         })

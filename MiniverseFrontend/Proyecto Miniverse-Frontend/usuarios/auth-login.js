@@ -19,12 +19,19 @@ document.querySelector('form').addEventListener('submit', async (e) => {
         const data = await response.json();
 
         if (response.ok) {
-            // Guardar el token en localStorage
+            // Guardar token y rol en localStorage
             localStorage.setItem('authToken', data.token);
-            
+            localStorage.setItem('usuarioRol', data.rol);
+
             showMessage('Inicio de sesión exitoso. Redirigiendo...', 'success');
+
+            // Redireccionar segun el rol
             setTimeout(() => {
-                window.location.href = '/inicio.html';
+                if (data.rol === 'admin') {
+                    window.location.href = '/admin/admin.html';
+                } else {
+                    window.location.href = '/usuarios/inicio.html';
+                }
             }, 2000);
         } else {
             showMessage(data.error || 'Credenciales incorrectas', 'error');

@@ -3,19 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Serie - MiniVerse</title>
+    <title>Breaking Bad - Reseñas - MiniVerse</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="serie.css">
+    <link rel="stylesheet" href="reseñas.css">
 </head>
 <body>
-
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-left">
-                <a href="/inicio.html">
+                <a href="/usuarios/inicio.html">
                     <img src="/img/image.png" alt="MiniVerse Logo" class="logo">
                 </a>
             </div>
@@ -38,47 +37,55 @@
                 </button>
 
                 <div class="search-container" id="searchContainer" style="display: none;">
-    <input type="text" class="search-input" id="searchInput" placeholder="Buscar series...">
-    <button class="search-close-btn" id="searchCloseBtn">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-    </button>
-</div>
+                    <input type="text" class="search-input" id="searchInput" placeholder="Buscar series...">
+                    <button class="search-close-btn" id="searchCloseBtn">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
         </div>
     </nav>
 
     <div class="main-container">
-        <main class="main-content">
-            <div class="hero-image" id="serieImage">
-                
+        <div class="left-column">
+            <div class="serie-poster">
+                <img src="" alt="" class="poster-img">
             </div>
 
-            <div class="content-info">
-                <div class="year" id="year"></div>
-                <h1 class="title" id="serieTitle"></h1>
-                <p class="description" id="serieDescription"></p>
+            <div class="action-buttons">
+                <button class="action-btn favorite-btn" id="favoriteBtn">
+                    <svg class="star-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                    </svg>
+                    Añadir a favoritos
+                </button>
 
-                <div class="seasons-container" id="seasonsContainer">
-                    
-                </div>
-    
-                
-                <div class="platforms">
-                    <h2 class="platforms-title">Plataformas</h2>
-                    <div class="platforms-icons" id="platformsContainer">
-                        
-                    </div>
-                </div>
+                <div id="director-info" style="margin-top: 1em;"></div>
             </div>
-        </main>
-
+        </div>
+            
+        <div class="serie-content">
+            <div class="serie-header">
+                <div class="serie-year"></div>
+                <h1 class="serie-title"></h1>
+            </div>
     
-        <button class="nav-arrow">›</button>
+            <p class="serie-description"></p>
+
+            <div class="reviews-list">
+                <!-- Las reseñas se cargarán dinámicamente aquí -->
+            </div>
+        </div>
+
+        <div class="bottom-comment-section">
+            <input type="text" class="comment-input" placeholder="Escribe tu reseña...">
+            <button class="comment-btn">Comentar</button>
+        </div>
     </div>
     <script src="auth.js"></script>
-    <script src="serie.js"></script>
+    <script src="reseña.js"></script>
     <script src="search.js"></script>
 </body>
 </html>

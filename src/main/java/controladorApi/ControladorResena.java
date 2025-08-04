@@ -1,18 +1,8 @@
 package controladorApi;
-
-
 import io.javalin.Javalin;
-import io.javalin.http.Context;
-
 import java.util.Map;
 import com.google.gson.Gson;
-
-import entidades.Resena;
-
-import java.util.ArrayList;
 import java.util.List;
-
-
 import objetosFront.DatosResena;
 import objetosFront.EditarComentario;
 import objetosFront.EditarResena;
@@ -44,8 +34,6 @@ public class ControladorResena {
 		app.post("/hacerResena", contexto -> { 
 		    contexto.req().setCharacterEncoding("UTF-8");
 		
-		   
-		    
 		    String header = contexto.header("Authorization");
 
 		    if (header == null || !header.startsWith("Bearer ")) {
@@ -61,8 +49,7 @@ public class ControladorResena {
 		        return;
 		    }
 		    
-		    
-		    DatosResena datos = new Gson().fromJson(contexto.body(), DatosResena.class); //aqui esta el id del capitulo y el contenido de resena
+		    DatosResena datos = new Gson().fromJson(contexto.body(), DatosResena.class);
 		    
 		    boolean seAgregoResena = servicio.agregarResena(idUsuario, datos.getId(), datos.getContenido());
 		    
@@ -73,7 +60,6 @@ public class ControladorResena {
 		    }
 
 		});
-		
 		
 		
 		app.delete("/eliminarResena", contexto -> { 
@@ -96,7 +82,6 @@ public class ControladorResena {
 		        return;
 		    }
 		    
-		    
 		    EliminarResena datos = new Gson().fromJson(contexto.body(), EliminarResena.class); 
 		    
 		    boolean seEliminoResena = servicio.eliminarResena(idUsuario, datos.getId());
@@ -108,7 +93,6 @@ public class ControladorResena {
 		    }
 
 		});
-		
 		
 		
 		app.put("/editarResena", contexto -> { 
@@ -133,12 +117,6 @@ public class ControladorResena {
 		    
 		    
 		    EditarResena datos = new Gson().fromJson(contexto.body(), EditarResena.class);
-		    
-//		    if (!servicio.validarIdUsuarioResena(idUsuario, datos.getId())) {
-//		    	 contexto.status(401).json(Map.of("error", "Esta resena no es aplicable a editar"));
-//			        return;
-//		    	
-//		    }
 
 		    boolean actualizado = servicio.editarResena(idUsuario, datos.contenidoNuevo, datos.getId());
 
@@ -151,13 +129,9 @@ public class ControladorResena {
 		});
 		
 		
-		
-		
 		app.post("/hacerComentario", contexto -> { 
 		    contexto.req().setCharacterEncoding("UTF-8");
-		
-		   
-		    
+				    
 		    String header = contexto.header("Authorization");
 
 		    if (header == null || !header.startsWith("Bearer ")) {
@@ -172,7 +146,6 @@ public class ControladorResena {
 		        contexto.status(401).json(Map.of("error", "Token invalido o expirado"));
 		        return;
 		    }
-		    
 		    
 		    DatosComentario datos = new Gson().fromJson(contexto.body(), DatosComentario.class); 
 		    
@@ -190,8 +163,6 @@ public class ControladorResena {
 		app.delete("/eliminarComentario", contexto -> { 
 		    contexto.req().setCharacterEncoding("UTF-8");
 		
-		   
-		    
 		    String header = contexto.header("Authorization");
 
 		    if (header == null || !header.startsWith("Bearer ")) {
@@ -206,7 +177,6 @@ public class ControladorResena {
 		        contexto.status(401).json(Map.of("error", "Token invalido o expirado"));
 		        return;
 		    }
-		    
 		    
 		    EliminarComentario datos = new Gson().fromJson(contexto.body(), EliminarComentario.class); 
 		    
@@ -224,8 +194,6 @@ public class ControladorResena {
 		app.put("/editarComentario", contexto -> { 
 		    contexto.req().setCharacterEncoding("UTF-8");
 		
-		   
-		    
 		    String header = contexto.header("Authorization");
 
 		    if (header == null || !header.startsWith("Bearer ")) {
@@ -241,10 +209,8 @@ public class ControladorResena {
 		        return;
 		    }
 		    
-		    
 		    EditarComentario datos = new Gson().fromJson(contexto.body(), EditarComentario.class);
 		    
-
 		    boolean actualizado = servicio.editarComentario(idUsuario, datos.contenidoNuevo, datos.getId());
 
 		    if (actualizado) {

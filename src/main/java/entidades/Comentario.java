@@ -1,7 +1,6 @@
 package entidades;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 public class Comentario {
 
@@ -28,7 +27,6 @@ public class Comentario {
 		this.id_usuario = id_usuario;
 		this.id_resena = id_resena;
 	}
-	
 	
     public int getId() { return this.id; }
     public String getContenido() { return this.contenido; }

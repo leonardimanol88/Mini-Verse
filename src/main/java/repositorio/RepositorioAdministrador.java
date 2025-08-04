@@ -681,28 +681,28 @@ public class RepositorioAdministrador {
 	}
     
     
-  //obtener una lista de objetos usuario 
-    public ArrayList<Usuario> obtenerTodos() { //metodo que retorna un array de objetos usuario
+   
+    public ArrayList<Usuario> obtenerTodos() { 
     	
-        ArrayList<Usuario> lista = new ArrayList<>();//creacion del array de objetos usuario
-        String sql = "SELECT * FROM usuario"; // string de consulta select en la base
+        ArrayList<Usuario> lista = new ArrayList<>();
+        String sql = "SELECT * FROM usuario"; 
         
         try (
-    	    Connection con = Conexion.conectar(); //hacer el metodo conectar de la clase conexion en el objeto con
-            PreparedStatement ps = con.prepareStatement(sql); //ejecutar la sentencia sql con el string
-            ResultSet rs = ps.executeQuery()) { //obtener el resultado al ejecutar la sentencia (select)
-            while (rs.next()) { //con .next() avanza al siguiente elemento de la sentencia ejecutada 
-                Usuario u = new Usuario( //creacion de un objeto usuario dentro del while, y en su constructor se guaradaran los elementos siguientes
-                    rs.getInt("id"), //obtener el primer elemento "id" de lo obtenido de la ejecucion
-                    rs.getString("nombre"), //en esta seccion obtiene lo de cada elemento de lo seleccionado en la base
+    	    Connection con = Conexion.conectar(); 
+            PreparedStatement ps = con.prepareStatement(sql); 
+            ResultSet rs = ps.executeQuery()) { 
+            while (rs.next()) { 
+                Usuario u = new Usuario( 
+                    rs.getInt("id"), 
+                    rs.getString("nombre"), 
                     rs.getString("correo"),
                     rs.getString("contrasena"),
                     rs.getInt("edad")
             );
-                lista.add(u); // se agrega el usuario creado en el array creado al inicio , se agregan todos los usuarios hasta finalizar el while
+                lista.add(u); 
             }
         } catch (Exception e) {
-            System.out.println("Error al obtener usuarios: " + e.getMessage()); //mostrar el error
+            System.out.println("Error al obtener usuarios: " + e.getMessage());
         }
         return lista;
     }
@@ -722,9 +722,9 @@ public class RepositorioAdministrador {
            
             
             if (rs.next()) {
-                String hashAlmacenado = rs.getString("contrasena");// contrasena modificada almacenada
+                String hashAlmacenado = rs.getString("contrasena");
                 
-                if (BCrypt.checkpw(contrasena, hashAlmacenado)) { //verificar la contrasena original con la encriptada con .checkpw
+                if (BCrypt.checkpw(contrasena, hashAlmacenado)) { 
                    
                 	
                 	usuario = new Usuario(

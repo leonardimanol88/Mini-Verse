@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         mostrarError('No se encontró la serie solicitada');
         return;
     }
+    
 
     try {
         // Obtener datos de la serie desde la API
@@ -273,3 +274,4 @@ function actualizarUI() {
     const isLoggedIn = !!localStorage.getItem('authToken');
 
 }
+

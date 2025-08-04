@@ -810,3 +810,171 @@ body {
 .comentarios-container[style*="display: block"] {
     display: block !important;
 }
+
+/* Estilos para el menú desplegable */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-toggle {
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.dropdown-toggle:hover {
+    color: #fff;
+}
+
+.dropdown-menu {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background-color: #222;
+    border: 1px solid #333;
+    border-radius: 6px;
+    padding: 5px 0;
+    min-width: 120px;
+    z-index: 100;
+    display: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.dropdown.active .dropdown-menu {
+    display: block;
+}
+
+.dropdown-item {
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    padding: 8px 15px;
+    text-align: left;
+    width: 100%;
+    font-size: 13px;
+    transition: all 0.2s ease;
+    font-family: "Poppins", sans-serif;
+}
+
+.dropdown-item:hover {
+    background-color: #ff0000;
+}
+
+.dropdown-item.delete-btn:hover {
+    background-color: #ff3333;
+}
+
+/* Para comentarios */
+.comentario-item {
+    position: relative;
+}
+
+.comentario-actions {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+/* Asegurar que el menú no se corte en elementos pequeños */
+.review-item, .comentario-item {
+    overflow: visible;
+}
+
+.review-item.propio {
+    border-left-color: #FFD700;
+    background-color: rgba(255, 215, 0, 0.05);
+}
+
+.comentario-item.propio {
+    border-left: 2px solid #FFD700;
+    padding-left: 18px;
+    margin-left: -18px;
+}
+
+.edit-form {
+    background-color: #111;
+    border-radius: 6px;
+    padding: 15px;
+    margin-top: 10px;
+    border-left: 3px solid #ff0000;
+}
+
+/* Área de texto para edición */
+.edit-form .edit-textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 12px;
+    background-color: #222;
+    border: 1px solid #333;
+    color: #fff;
+    border-radius: 4px;
+    font-family: "Poppins", sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    resize: vertical;
+    margin-bottom: 12px;
+    transition: all 0.3s ease;
+}
+
+.edit-form .edit-textarea:focus {
+    outline: none;
+    border-color: #ff0000;
+    box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.2);
+}
+
+/* Contenedor de botones */
+.edit-form .edit-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* Estilos base para botones */
+.edit-form .cancel-edit-btn,
+.edit-form .save-edit-btn {
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: "Poppins", sans-serif;
+}
+
+/* Botón Cancelar */
+.edit-form .cancel-edit-btn {
+    background-color: #222;
+    color: #ccc;
+    border: 1px solid #333;
+}
+
+.edit-form .cancel-edit-btn:hover {
+    background-color: #333;
+    color: #fff;
+}
+
+/* Botón Guardar */
+.edit-form .save-edit-btn {
+    background-color: #ff0000;
+    color: white;
+    border: 1px solid #e50000;
+}
+
+.edit-form .save-edit-btn:hover {
+    background-color: #e50000;
+}
+
+/* Efecto al hacer clic */
+.edit-form .cancel-edit-btn:active,
+.edit-form .save-edit-btn:active {
+    transform: translateY(1px);
+}
+

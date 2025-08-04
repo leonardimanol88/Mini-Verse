@@ -8,7 +8,7 @@ public class DatosResena {
 
     public int getId() { return id; } //id capitulo
    
-    public String getContenido() { return contenido; } //contenido de la resena
+    public String getContenido() { return contenido; } 
     
     
 }

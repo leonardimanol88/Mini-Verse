@@ -6,7 +6,6 @@ public class Director {
     private String nombre;
     private String biografia;
 
-
 	public Director(int id, String nombre, String biografia) {
 		this.id = id;
 		this.nombre = nombre;
@@ -17,7 +16,6 @@ public class Director {
 		this.nombre = nombre;
 		this.biografia = biografia;
 	}
-	
 	
 	public int getId() {return this.id;}
 	public String getNombre() {return this.nombre;}

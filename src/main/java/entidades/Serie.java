@@ -1,6 +1,5 @@
  package entidades;
 
-
 public class Serie {
 	
     private int id;
@@ -30,7 +29,6 @@ public class Serie {
         this.imagen_url = imagen_url;
     }
 
- 
     public int getId() { return this.id; }
     public String getNombre() { return this.nombre; }
     public int getEstreno() { return this.estreno; }

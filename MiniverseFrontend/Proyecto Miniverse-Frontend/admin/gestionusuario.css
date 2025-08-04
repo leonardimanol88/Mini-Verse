@@ -353,3 +353,171 @@ body {
         align-items: stretch;
     }
 }
+
+
+/* Estilos adicionales para la gestión de usuarios */
+.search-results {
+    background-color: #333;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.results-header {
+    padding: 15px 20px;
+    font-weight: 600;
+    color: #fff;
+    border-bottom: 1px solid #444;
+}
+
+.users-list {
+    padding: 0;
+}
+
+.user-item {
+    padding: 15px 20px;
+    border-bottom: 1px solid #444;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user-item:hover {
+    background-color: #444;
+}
+
+.user-item:last-child {
+    border-bottom: none;
+}
+
+.user-item-name {
+    font-weight: 500;
+    color: #fff;
+}
+
+.user-item-email {
+    font-size: 14px;
+    color: #ccc;
+}
+
+.reviews-list, .comments-list {
+    padding: 0;
+}
+
+.review-item, .comment-item {
+    padding: 15px 20px;
+    border-bottom: 1px solid #555;
+    font-size: 14px;
+    color: #ccc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.review-item:last-child, .comment-item:last-child {
+    border-bottom: none;
+}
+
+.review-content, .comment-content {
+    flex: 1;
+}
+
+.delete-review-btn, .delete-comment-btn {
+    background-color: #ff4500;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 12px;
+    margin-left: 10px;
+}
+
+.delete-review-btn:hover, .delete-comment-btn:hover {
+    background-color: #ff6600;
+}
+
+/* Modal styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    overflow: auto;
+}
+
+.modal-content {
+    background-color: #1a1a1a;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #333;
+}
+
+.modal-header h3 {
+    color: #fff;
+    font-size: 20px;
+}
+
+.close-modal {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-modal:hover {
+    color: #fff;
+}
+
+.modal-body {
+    margin-bottom: 20px;
+    color: #ccc;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+}
+
+.btn-cancel {
+    background-color: #666 !important;
+}
+
+.btn-cancel:hover {
+    background-color: #777 !important;
+}
+
+.loading-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255,255,255,.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+    margin-left: 10px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}

@@ -4,22 +4,16 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 
 
 import dao.Conexion;
 import entidades.Usuario;
-import objetosFront.ResenaConComentario;
 import entidades.Resena;
-import entidades.Capitulo;
 import entidades.Comentario;
-import entidades.Director;
+
 
 
 

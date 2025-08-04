@@ -1,7 +1,5 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    
     actualizarUI();
-    
     configurarEventos();
     
     // Obtener parámetros de la URL
@@ -30,7 +28,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         await Promise.all([
             cargarDatosSerie(idSerie),
-            cargarResenas(idCapitulo)
+            cargarResenas(idCapitulo),
+            cargarDirector(idSerie)
         ]);
         
         // Configurar botón de favoritos con el ID de serie
@@ -40,7 +39,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         mostrarError('Error al cargar datos iniciales');
     }
 });
-
 
 async function cargarDatosSerie(idSerie) {
     try {
@@ -68,6 +66,29 @@ async function cargarDatosSerie(idSerie) {
     }
 }
 
+async function cargarDirector(idSerie) {
+    try {
+        const response = await fetch(`http://44.209.91.221:7002/detalleDirector?id=${idSerie}`);
+        if (!response.ok) {
+            throw new Error('No se pudo obtener el director');
+        }
+
+        const data = await response.json();
+        const director = data.director;
+
+        const directorDiv = document.getElementById("director-info");
+        if (!director || !director.nombre) {
+            directorDiv.textContent = "🎬 Director: No disponible";
+            return;
+        }
+
+        directorDiv.textContent = `🎬 Director: ${director.nombre}`;
+    } catch (error) {
+        console.error("Error al obtener el director:", error);
+        document.getElementById("director-info").textContent = "🎬 Director: No disponible";
+    }
+}
+
 
 function mostrarDatosSerie(serie) {
     console.log('Objeto serie completo:', serie);
@@ -91,7 +112,6 @@ function mostrarDatosSerie(serie) {
     document.querySelector('.serie-year').textContent = serie.estreno || '';
     document.querySelector('.serie-description').textContent = serie.sinopsis || 'Descripción no disponible';
 }
-
 
 async function cargarResenas(idCapitulo) {
     try {
@@ -130,7 +150,6 @@ async function cargarResenas(idCapitulo) {
     }
 }
 
-
 function mostrarResenas(resenasConComentarios) {
     const reviewsList = document.querySelector('.reviews-list');
     reviewsList.innerHTML = '';
@@ -140,6 +159,11 @@ function mostrarResenas(resenasConComentarios) {
         return;
     }
     
+    // Obtener información del usuario actual
+    const token = localStorage.getItem('authToken');
+    const idUsuarioActual = token ? JWTUtil.verificarToken(token) : null;
+    const nombreUsuarioActual = token ? JWTUtil.obtenerNombreUsuario(token) : null;
+
     resenasConComentarios.forEach(resena => {
         if (!resena || !resena.nombreUsuario || !resena.contenido) {
             console.warn('Reseña inválida:', resena);
@@ -148,6 +172,12 @@ function mostrarResenas(resenasConComentarios) {
 
         const reviewItem = document.createElement('div');
         reviewItem.className = 'review-item';
+        
+        // Marcar como propio si el usuario es el autor
+        const esPropietario = idUsuarioActual && resena.idUsuario == idUsuarioActual;
+        if (esPropietario) {
+            reviewItem.classList.add('propio');
+        }
         
         let fecha;
         try {
@@ -169,6 +199,21 @@ function mostrarResenas(resenasConComentarios) {
                     </div>
                 </div>
                 <div class="review-actions">
+                    ${esPropietario ? `
+                    <div class="dropdown">
+                        <button class="dropdown-toggle" data-resena-id="${resena.id || ''}">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 13C12.5523 13 13 12.5523 13 12C13 11.4477 12.5523 11 12 11C11.4477 11 11 11.4477 11 12C11 12.5523 11.4477 13 12 13Z" fill="currentColor"/>
+                                <path d="M12 6C12.5523 6 13 5.55228 13 5C13 4.44772 12.5523 4 12 4C11.4477 4 11 4.44772 11 5C11 5.55228 11.4477 6 12 6Z" fill="currentColor"/>
+                                <path d="M12 20C12.5523 20 13 19.5523 13 19C13 18.4477 12.5523 18 12 18C11.4477 18 11 18.4477 11 19C11 19.5523 11.4477 20 12 20Z" fill="currentColor"/>
+                            </svg>
+                        </button>
+                        <div class="dropdown-menu">
+                            <button class="dropdown-item edit-btn">Editar</button>
+                            <button class="dropdown-item delete-btn">Eliminar</button>
+                        </div>
+                    </div>
+                    ` : ''}
                     <button class="like-btn" data-resena-id="${resena.id || ''}">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2" fill="none"/>
@@ -185,21 +230,18 @@ function mostrarResenas(resenasConComentarios) {
                 <button class="send-comment-btn" data-resena-id="${resena.id || ''}">Enviar comentario</button>
             </div>
             <div class="toggle-comments-section">
-    <button class="toggle-comments-btn">Ver comentarios</button>
-    <div class="comentarios-container" style="display: none;">
-        ${generarComentariosHTML(resena.comentarios)}
-    </div>
-</div>
-
+                <button class="toggle-comments-btn">Ver comentarios</button>
+                <div class="comentarios-container" style="display: none;">
+                    ${generarComentariosHTML(resena.comentarios, idUsuarioActual)}
+                </div>
+            </div>
         `;
         
         reviewsList.appendChild(reviewItem);
     });
-    
 }
 
-// Función auxiliar para generar HTML de comentarios
-function generarComentariosHTML(comentarios) {
+function generarComentariosHTML(comentarios, idUsuarioActual) {
     if (!comentarios || comentarios.length === 0) return '<div class="comentario-item">No hay comentarios</div>';
     
     return comentarios.map(comentario => {
@@ -208,19 +250,41 @@ function generarComentariosHTML(comentarios) {
         const nombreUsuario = comentario.nombreUsuario || 'Usuario';
         const inicial = nombreUsuario.charAt(0);
         
-        return `
-            <div class="comentario-item">
-                <div class="user-info">
-                    <div class="user-avatar xsmall">${inicial}</div>
-                    <span class="user-name">${nombreUsuario}</span>
-                    <div class="comentario-text">${comentario.contenido}</div>
+        // Verificar si el usuario actual es el autor del comentario
+        const esPropietario = idUsuarioActual && comentario.idUsuario == idUsuarioActual;
+        
+        const comentarioItem = document.createElement('div');
+        comentarioItem.className = 'comentario-item';
+        if (esPropietario) comentarioItem.classList.add('propio');
+        
+        comentarioItem.innerHTML = `
+            <div class="user-info">
+                <div class="user-avatar xsmall">${inicial}</div>
+                <span class="user-name">${nombreUsuario}</span>
+                <div class="comentario-text">${comentario.contenido}</div>
+            </div>
+            ${esPropietario ? `
+            <div class="comentario-actions">
+                <div class="dropdown">
+                    <button class="dropdown-toggle" data-comentario-id="${comentario.id || ''}">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 13C12.5523 13 13 12.5523 13 12C13 11.4477 12.5523 11 12 11C11.4477 11 11 11.4477 11 12C11 12.5523 11.4477 13 12 13Z" fill="currentColor"/>
+                            <path d="M12 6C12.5523 6 13 5.55228 13 5C13 4.44772 12.5523 4 12 4C11.4477 4 11 4.44772 11 5C11 5.55228 11.4477 6 12 6Z" fill="currentColor"/>
+                            <path d="M12 20C12.5523 20 13 19.5523 13 19C13 18.4477 12.5523 18 12 18C11.4477 18 11 18.4477 11 19C11 19.5523 11.4477 20 12 20Z" fill="currentColor"/>
+                        </svg>
+                    </button>
+                    <div class="dropdown-menu">
+                        <button class="dropdown-item edit-comment-btn">Editar</button>
+                        <button class="dropdown-item delete-comment-btn">Eliminar</button>
+                    </div>
                 </div>
             </div>
+            ` : ''}
         `;
+        
+        return comentarioItem.outerHTML;
     }).join('');
 }
-
-
 
 async function configurarBotonFavoritos(idSerie) {
     const favoriteBtn = document.getElementById('favoriteBtn');
@@ -242,7 +306,6 @@ async function configurarBotonFavoritos(idSerie) {
             const esFavorita = favoriteBtn.classList.contains('favorited');
             
             if (esFavorita) {
-                
                 mostrarError('Eliminar de favoritos no está implementado aún');
                 return;
             } else {
@@ -267,7 +330,6 @@ async function configurarBotonFavoritos(idSerie) {
                         'Error al agregar a favoritos');
                 }
                 
-                
                 favoriteBtn.classList.add('favorited');
                 favoriteBtn.innerHTML = `
                     <svg class="star-icon" width="16" height="16" viewBox="0 0 24 24" fill="#FFD700" xmlns="http://www.w3.org/2000/svg">
@@ -289,7 +351,6 @@ async function configurarBotonFavoritos(idSerie) {
     // Verificar estado inicial
     await verificarEstadoFavorito(idSerie, favoriteBtn);
 }
-
 
 async function verificarEstadoFavorito(idSerie, favoriteBtn) {
     const token = localStorage.getItem('authToken');
@@ -328,7 +389,6 @@ async function verificarEstadoFavorito(idSerie, favoriteBtn) {
     }
 }
 
-
 async function enviarResena() {
     if (!verificarAutenticacion()) return;
     
@@ -349,7 +409,6 @@ async function enviarResena() {
         mostrarCargando(true);
         const token = localStorage.getItem('authToken');
         
-        // Objeto corregido según backend
         const datosResena = {
             id: parseInt(idCapitulo),
             contenido: contenido
@@ -438,7 +497,6 @@ async function enviarComentario(resenaId, contenido) {
     }
 }
 
-
 function verificarAutenticacion() {
     const token = localStorage.getItem('authToken');
     if (!token) {
@@ -458,7 +516,6 @@ function verificarAutenticacion() {
     
     return true;
 }
-
 
 function formatearFecha(fecha) {
     const ahora = new Date();
@@ -486,7 +543,6 @@ function formatearFecha(fecha) {
     });
 }
 
-// Configurar eventos de los botones
 function configurarEventos() {
     // Botón de comentario principal
     document.querySelector('.comment-btn')?.addEventListener('click', enviarResena);
@@ -540,27 +596,371 @@ function configurarEventos() {
         }
 
         if (e.target.classList.contains('toggle-comments-btn')) {
-    const button = e.target;
-    const commentsContainer = button.closest('.toggle-comments-section').querySelector('.comentarios-container');
+            const button = e.target;
+            const commentsContainer = button.closest('.toggle-comments-section').querySelector('.comentarios-container');
+            
+            if (commentsContainer.style.display === 'none') {
+                commentsContainer.style.display = 'block';
+                button.textContent = 'Ocultar comentarios';
+            } else {
+                commentsContainer.style.display = 'none';
+                button.textContent = 'Ver comentarios';
+            }
+        }
+    });
+    
+    // Delegación de eventos para menú desplegable
+    document.addEventListener('click', (e) => {
+        // Cerrar menús al hacer clic fuera
+        if (!e.target.closest('.dropdown-toggle')) {
+            document.querySelectorAll('.dropdown').forEach(dropdown => {
+                dropdown.classList.remove('active');
+            });
+        }
+    });
 
-    if (commentsContainer.style.display === 'none') {
-        commentsContainer.style.display = 'block';
-        button.textContent = 'Ocultar comentarios';
-    } else {
-        commentsContainer.style.display = 'none';
-        button.textContent = 'Ver comentarios';
-    }
-}
+    document.querySelector('.reviews-list')?.addEventListener('click', (e) => {
+        // Manejar clic en el menú de tres puntos
+        if (e.target.closest('.dropdown-toggle')) {
+            e.preventDefault();
+            const dropdown = e.target.closest('.dropdown');
+            dropdown.classList.toggle('active');
+            
+            // Cerrar otros menús abiertos
+            document.querySelectorAll('.dropdown').forEach(d => {
+                if (d !== dropdown) d.classList.remove('active');
+            });
+        }
+        
+        // Manejar clic en Editar reseña
+        if (e.target.classList.contains('edit-btn')) {
+            const dropdown = e.target.closest('.dropdown');
+            const resenaId = dropdown.querySelector('.dropdown-toggle').getAttribute('data-resena-id');
+            const reviewItem = dropdown.closest('.review-item');
+            const contenidoActual = reviewItem.querySelector('.review-text').textContent;
+            
+            iniciarEdicionResena(resenaId, contenidoActual, reviewItem);
+            dropdown.classList.remove('active');
+        }
+        
+        // Manejar clic en Eliminar reseña
+        if (e.target.classList.contains('delete-btn')) {
+            const dropdown = e.target.closest('.dropdown');
+            const resenaId = dropdown.querySelector('.dropdown-toggle').getAttribute('data-resena-id');
+            const confirmar = confirm('¿Estás seguro de que quieres eliminar esta reseña?');
+            
+            if (confirmar) {
+                eliminarResena(resenaId);
+            }
+            dropdown.classList.remove('active');
+        }
+        
+        // Manejar clic en Editar comentario
+        if (e.target.classList.contains('edit-comment-btn')) {
+            const dropdown = e.target.closest('.dropdown');
+            const comentarioId = dropdown.querySelector('.dropdown-toggle').getAttribute('data-comentario-id');
+            const comentarioItem = dropdown.closest('.comentario-item');
+            const contenidoActual = comentarioItem.querySelector('.comentario-text').textContent;
+            
+            iniciarEdicionComentario(comentarioId, contenidoActual, comentarioItem);
+            dropdown.classList.remove('active');
+        }
+        
+        // Manejar clic en Eliminar comentario
+        if (e.target.classList.contains('delete-comment-btn')) {
+            const dropdown = e.target.closest('.dropdown');
+            const comentarioId = dropdown.querySelector('.dropdown-toggle').getAttribute('data-comentario-id');
+            const confirmar = confirm('¿Estás seguro de que quieres eliminar este comentario?');
+            
+            if (confirmar) {
+                eliminarComentario(comentarioId);
+            }
+            dropdown.classList.remove('active');
+        }
     });
 }
 
-// Función para manejar likes
-async function manejarLike(btn) {
+function iniciarEdicionResena(resenaId, contenidoActual, reviewItem) {
+    const reviewText = reviewItem.querySelector('.review-text');
+    const editForm = document.createElement('div');
+    editForm.className = 'edit-form';
+    
+    editForm.innerHTML = `
+        <textarea class="edit-textarea">${contenidoActual}</textarea>
+        <div class="edit-buttons">
+            <button class="cancel-edit-btn">Cancelar</button>
+            <button class="save-edit-btn" data-resena-id="${resenaId}">Guardar</button>
+        </div>
+    `;
+    
+    reviewText.replaceWith(editForm);
+    
+    // Enfocar el textarea
+    editForm.querySelector('.edit-textarea').focus();
+    
+    // Manejar eventos de los botones
+    editForm.querySelector('.cancel-edit-btn').addEventListener('click', () => {
+        editForm.replaceWith(reviewText);
+    });
+    
+    editForm.querySelector('.save-edit-btn').addEventListener('click', async () => {
+        const nuevoContenido = editForm.querySelector('.edit-textarea').value.trim();
+        if (!nuevoContenido) {
+            mostrarError('La reseña no puede estar vacía');
+            return;
+        }
+        
+        if (nuevoContenido === contenidoActual) {
+            editForm.replaceWith(reviewText);
+            return;
+        }
+        
+        try {
+            mostrarCargando(true);
+            const token = localStorage.getItem('authToken');
+            
+            const datosEdicion = {
+                Id: parseInt(resenaId),
+                contenidoNuevo: nuevoContenido
+            };
+            
+            console.log('Enviando datos de edición:', datosEdicion);
+            
+            const response = await fetch('http://44.209.91.221:7002/editarResena', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(datosEdicion)
+            });
+            
+            if (response.status === 401) {
+                localStorage.removeItem('authToken');
+                actualizarUI();
+                throw new Error('Tu sesión ha expirado');
+            }
+            
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Error al editar reseña');
+            }
+            
+            // Actualizar la UI con el nuevo contenido
+            reviewText.textContent = nuevoContenido;
+            editForm.replaceWith(reviewText);
+            
+            mostrarError('✅ Reseña actualizada correctamente');
+        } catch (error) {
+            console.error('Error al editar reseña:', error);
+            mostrarError(error.message);
+        } finally {
+            mostrarCargando(false);
+        }
+    });
+}
+
+async function eliminarResena(resenaId) {
+    if (!verificarAutenticacion()) return;
+    
+    const idCapitulo = localStorage.getItem('currentCapituloId');
+    if (!idCapitulo) {
+        mostrarError('No se identificó el capítulo');
+        return;
+    }
+    
+    try {
+        mostrarCargando(true);
+        const token = localStorage.getItem('authToken');
+        
+        const datosEliminacion = {
+            Id: parseInt(resenaId)
+        };
+        
+        console.log('Enviando datos de eliminación:', datosEliminacion);
+        
+        const response = await fetch('http://44.209.91.221:7002/eliminarResena', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(datosEliminacion)
+        });
+        
+        if (response.status === 401) {
+            localStorage.removeItem('authToken');
+            actualizarUI();
+            throw new Error('Tu sesión ha expirado');
+        }
+        
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Error al eliminar reseña');
+        }
+        
+        // Recargar las reseñas
+        await cargarResenas(idCapitulo);
+        mostrarError('✅ Reseña eliminada correctamente');
+    } catch (error) {
+        console.error('Error al eliminar reseña:', error);
+        mostrarError(error.message);
+    } finally {
+        mostrarCargando(false);
+    }
+}
+
+async function iniciarEdicionComentario(comentarioId, contenidoActual, comentarioItem) {
+    const comentarioText = comentarioItem.querySelector('.comentario-text');
+    const editForm = document.createElement('div');
+    editForm.className = 'edit-form';
+    
+    editForm.innerHTML = `
+        <textarea class="edit-textarea">${contenidoActual}</textarea>
+        <div class="edit-buttons">
+            <button class="cancel-edit-btn">Cancelar</button>
+            <button class="save-edit-btn" data-comentario-id="${comentarioId}">Guardar</button>
+        </div>
+    `;
+    
+    comentarioText.replaceWith(editForm);
+    
+    editForm.querySelector('.edit-textarea').focus();
+    
+    editForm.querySelector('.cancel-edit-btn').addEventListener('click', () => {
+        editForm.replaceWith(comentarioText);
+    });
+    
+    editForm.querySelector('.save-edit-btn').addEventListener('click', async () => {
+        const nuevoContenido = editForm.querySelector('.edit-textarea').value.trim();
+        if (!nuevoContenido) {
+            mostrarError('El comentario no puede estar vacío');
+            return;
+        }
+        
+        if (nuevoContenido === contenidoActual) {
+            editForm.replaceWith(comentarioText);
+            return;
+        }
+        
+        try {
+            mostrarCargando(true);
+            const token = localStorage.getItem('authToken');
+            
+            const datosEdicion = {
+                Id: parseInt(comentarioId),
+                contenidoNuevo: nuevoContenido
+            };
+            
+            console.log('Enviando datos de edición:', datosEdicion);
+            
+            const response = await fetch('http://44.209.91.221:7002/editarComentario', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(datosEdicion)
+            });
+            
+            // Manejar respuesta no JSON
+            const responseText = await response.text();
+            let responseData;
+            try {
+                responseData = responseText ? JSON.parse(responseText) : {};
+            } catch (e) {
+                console.error('Error parsing JSON:', e);
+                throw new Error(responseText || 'Error al editar comentario');
+            }
+            
+            if (response.status === 401) {
+                localStorage.removeItem('authToken');
+                actualizarUI();
+                throw new Error('Tu sesión ha expirado');
+            }
+            
+            if (!response.ok) {
+                throw new Error(responseData.error || responseData.message || 'Error al editar comentario');
+            }
+            
+            // 1. Actualizar el texto localmente
+            reviewText.textContent = nuevoContenido;
+            editForm.replaceWith(reviewText)
+            
+            // 2. Recargar los comentarios desde el servidor
+            const idCapitulo = localStorage.getItem('currentCapituloId');
+            await cargarResenas(idCapitulo);
+            
+            mostrarError('✅ Comentario actualizado correctamente');
+        } catch (error) {
+            console.error('Error al editar comentario:', error);
+            mostrarError(error.message);
+        } finally {
+            mostrarCargando(false);
+        }
+    });
+}
+
+
+async function eliminarComentario(comentarioId) {
+    if (!verificarAutenticacion()) return;
+    
+    try {
+        mostrarCargando(true);
+        const token = localStorage.getItem('authToken');
+        
+        const datosEliminacion = {
+            Id: parseInt(comentarioId) // Cambiado de 'Id' a 'id' para coincidir con el backend
+        };
+        
+        console.log('Enviando datos de eliminación:', datosEliminacion);
+        
+        const response = await fetch('http://44.209.91.221:7002/eliminarComentario', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(datosEliminacion)
+        });
+        
+        // Manejar respuesta no JSON
+        const responseText = await response.text();
+        let responseData;
+        try {
+            responseData = responseText ? JSON.parse(responseText) : {};
+        } catch (e) {
+            console.error('Error parsing JSON:', e);
+            throw new Error(responseText || 'Error al eliminar comentario');
+        }
+        
+        if (response.status === 401) {
+            localStorage.removeItem('authToken');
+            actualizarUI();
+            throw new Error('Tu sesión ha expirado');
+        }
+        
+        if (!response.ok) {
+            throw new Error(responseData.error || responseData.message || 'Error al eliminar comentario');
+        }
+        
+        // Recargar las reseñas y comentarios
+        const idCapitulo = localStorage.getItem('currentCapituloId');
+        await cargarResenas(idCapitulo);
+        mostrarError('✅ Comentario eliminado correctamente');
+    } catch (error) {
+        console.error('Error al eliminar comentario:', error);
+        mostrarError(error.message.includes('No se pudo') ? error.message : 'No se pudo eliminar el comentario');
+    } finally {
+        mostrarCargando(false);
+    }
+}
+
+function manejarLike(btn) {
     const heart = btn.querySelector('path');
     const isLiked = heart.getAttribute('fill') !== 'none' && heart.getAttribute('fill');
     
     try {
-        
         if (isLiked) {
             heart.setAttribute('fill', 'none');
             heart.setAttribute('stroke', 'currentColor');
@@ -581,7 +981,6 @@ async function manejarLike(btn) {
     }
 }
 
-
 function mostrarError(mensaje) {
     const errorDiv = document.createElement('div');
     errorDiv.className = 'error-message';
@@ -592,7 +991,6 @@ function mostrarError(mensaje) {
         errorDiv.remove();
     }, 3000);
 }
-
 
 function mostrarCargando(mostrar) {
     const existingLoader = document.querySelector('.loading-indicator');
@@ -609,7 +1007,6 @@ function mostrarCargando(mostrar) {
     }
 }
 
-// Función para actualizar la UI según estado de autenticación
 function actualizarUI() {
     const isLoggedIn = !!localStorage.getItem('authToken');
     const commentInput = document.querySelector('.comment-input');
@@ -633,11 +1030,19 @@ window.addEventListener('storage', () => {
 const JWTUtil = {
     verificarToken: (token) => {
         try {
-            
             const payload = JSON.parse(atob(token.split('.')[1]));
             return payload.id;
         } catch (e) {
             console.error('Error verificando token:', e);
+            return null;
+        }
+    },
+    obtenerNombreUsuario: (token) => {
+        try {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            return payload.nombreUsuario || null;
+        } catch (e) {
+            console.error('Error obteniendo nombre de usuario:', e);
             return null;
         }
     }

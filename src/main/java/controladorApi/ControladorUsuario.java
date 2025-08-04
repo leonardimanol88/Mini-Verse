@@ -1,19 +1,9 @@
 package controladorApi;
-
-
 import io.javalin.Javalin;
-import io.javalin.http.Context;
-
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.DecodedJWT;
 import com.google.gson.Gson;
-
 import entidades.Genero;
 import entidades.Serie;
 import entidades.Usuario;
@@ -21,29 +11,20 @@ import entidades.Resena;
 import entidades.Comentario;
 import objetosFront.ActualizarContrasena;
 import objetosFront.EliminarUsuario;
-import objetosFront.FavoritaDatos;
 import objetosFront.HacerResena;
 import objetosFront.Login;
 import servicio.ServicioUsuario;
 import util.JWTUtil;
-
-import java.util.Date;
-
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 
 public class ControladorUsuario {
 
     public ControladorUsuario(Javalin app) {
         ServicioUsuario servicio = new ServicioUsuario();
 
-       //guardar
-		app.post("/registrarUsuario", contexto -> { //cuando se haga una peticion post a la ruta /agregarUsuario
+       
+		app.post("/registrarUsuario", contexto -> { 
 		    contexto.req().setCharacterEncoding("UTF-8");
 		
-		    
-		    
-		    // lee JSON del cuerpo y convertir a serie
 		    Usuario nuevoUsuario = new Gson().fromJson(contexto.body(), Usuario.class);
 		
 		    boolean seAgrego = servicio.registrarUsuario(nuevoUsuario);
@@ -56,13 +37,9 @@ public class ControladorUsuario {
 		});
 		
 		
-		
 		app.put("/actualizarContrasena", contexto -> {
 		    contexto.req().setCharacterEncoding("UTF-8");
 
-		    
-		    
-		    
 		    String header = contexto.header("Authorization");
 
 		    if (header == null || !header.startsWith("Bearer ")) {
@@ -78,9 +55,6 @@ public class ControladorUsuario {
 		        return;
 		    }
 
-		    
-		    
-		    
 		    ActualizarContrasena datos = new Gson().fromJson(contexto.body(), ActualizarContrasena.class);
 
 		    boolean seCambio = servicio.actualizarContrasena(idUsuario, datos.contrasena, datos.nuevaContrasena);
@@ -93,20 +67,16 @@ public class ControladorUsuario {
 		});
 
 		
-		
 		app.delete("/eliminarMiUsuario", contexto -> { 
 		    contexto.req().setCharacterEncoding("UTF-8");
 		    
-		    
-		    
-		    ///recibe lo del header , el token creado cuando se inicio sesion
 		    String header = contexto.header("Authorization");
 
 		    if (header == null || !header.startsWith("Bearer ")) {
 		        contexto.status(401).json(Map.of("error", "falta el token de autorizacion"));
 		        return;
 		    }
-            ///verifica el token
+            
 		    String token = header.replace("Bearer ", "");
 		    Integer idUsuario = JWTUtil.verificarToken(token);
 
@@ -115,9 +85,6 @@ public class ControladorUsuario {
 		        return;
 		    }
 		
-		    
-		    
-		    
 		    EliminarUsuario datos = new Gson().fromJson(contexto.body(), EliminarUsuario.class);
 		
 		    boolean seCambio = servicio.eliminarUsuario(idUsuario, datos.contrasena);
@@ -130,49 +97,19 @@ public class ControladorUsuario {
 		});
 		
 		
-		/*  ///antiguo inicio de sesion
 		app.post("/iniciarSesion", contexto -> {
 		    contexto.req().setCharacterEncoding("UTF-8");
-
-		    
-		    
-		    
-		    Login datos = new Gson().fromJson(contexto.body(), Login.class);
-
-		    Usuario usuario = servicio.devolverUsuario(datos.correo, datos.contrasena);
-		    
-
-		    if (usuario != null) {
-		    	
-		    	int token = usuario.getId();
-		        contexto.json(Map.of(
-		            "mensaje", "Inicio de sesion exitoso",
-		            "token", token
-		        ));
-
-		    } else {
-		        contexto.status(500).json(Map.of(
-		            "error", "Correo o contrasena incorrecto"));
-		    }
-		});
-		*/
-		
-		app.post("/iniciarSesion", contexto -> {
-		    contexto.req().setCharacterEncoding("UTF-8");
-		    
-		    
-		    
 
 		    Login datos = new Gson().fromJson(contexto.body(), Login.class);
 
 		    Usuario usuario = servicio.devolverUsuario(datos.correo, datos.contrasena);
 
 		    if (usuario != null) {
-		        String token = JWTUtil.crearToken(usuario.getId(), usuario.getRol()); //se crea el token con el metodo de jwtutil
+		        String token = JWTUtil.crearToken(usuario.getId(), usuario.getRol()); 
 		        contexto.json(Map.of(
 		            "mensaje", "Inicio de sesion exitoso",
-		            "token", token,  //devuelvo el token al front
-		            "rol", usuario.getRol() // el rol del usuario log
+		            "token", token,  
+		            "rol", usuario.getRol() 
 		        ));
 		    } else {
 		        contexto.status(401).json(Map.of(
@@ -182,20 +119,16 @@ public class ControladorUsuario {
 		});
 
 		
-		
-		
 		app.get("/mostrarSeriesporGenero", contexto -> {
 		    contexto.req().setCharacterEncoding("UTF-8");
 
-		    
 		    String genero = contexto.queryParam("genero"); 
 
 		    ArrayList<Serie> obtener = servicio.obtenerSeriesporGenero(genero);
 		    contexto.json(obtener); 
 		});
 		
-		
-		
+	
 		app.get("/obtenerGenerosparaUsuario", ctx -> { 
 		    ctx.res().setCharacterEncoding("UTF-8");
 
@@ -203,7 +136,6 @@ public class ControladorUsuario {
 		    
 		    ctx.json(obtener); 
 		});
-		
 		
 		
 		app.get("/mostrarSeries", contexto -> {
@@ -233,18 +165,14 @@ public class ControladorUsuario {
 		        contexto.status(401).json(Map.of("error", "Token invalido o expirado"));
 		        return;
 		    }
-		    
-		    
 		  
 		    ArrayList<Serie> obtenerFavoritas = servicio.obtenerTodasFavoritas(idUsuario);
 		    contexto.json(obtenerFavoritas); 
 		});
 		
 		
-		
 		app.get("/mostrarUltimasResenas", contexto -> {
 		    contexto.req().setCharacterEncoding("UTF-8");
-		    
 		    
 		    String header = contexto.header("Authorization");
 		    
@@ -261,8 +189,6 @@ public class ControladorUsuario {
 		        return;
 		    }
 		    
-		    
-		  
 		    ArrayList<Resena> obtenerUltimas = servicio.obtenerUltimasResenas(idUsuario);
 		    contexto.json(obtenerUltimas); 
 		   
@@ -272,7 +198,6 @@ public class ControladorUsuario {
 		app.get("/mostrarUltimosComentarios", contexto -> {
 		    contexto.req().setCharacterEncoding("UTF-8");
 		    
-		    
 		    String header = contexto.header("Authorization");
 		    
 		    if (header == null || !header.startsWith("Bearer ")) {
@@ -287,18 +212,14 @@ public class ControladorUsuario {
 		        contexto.status(401).json(Map.of("error", "Token invalido o expirado"));
 		        return;
 		    }
-		    
-		    
-		  
+		   
 		    ArrayList<Comentario> obtenerUltimas = servicio.obtenerUltimosComentarios(idUsuario);
 		    contexto.json(obtenerUltimas); 
 		});
 		
 		
-		
-		app.get("/mostrarMiUsuario", contexto -> {  //para la info del perfil donde estan las favoritas
+		app.get("/mostrarMiUsuario", contexto -> {  
 		    contexto.req().setCharacterEncoding("UTF-8");
-		    
 		    
 		    String header = contexto.header("Authorization");
 		    
@@ -315,19 +236,15 @@ public class ControladorUsuario {
 		        return;
 		    }
 		    
-		    
-		  
 		    Usuario miUsuario = servicio.obtenerMiUsuario(idUsuario);
 		    contexto.json(miUsuario); 
 		   
 		});
 		
 		
-		
 		app.get("/busquedaSeries", contexto -> {
 			
 		    contexto.req().setCharacterEncoding("UTF-8");
-		    
 		    
 		    String header = contexto.header("Authorization");
 		    
@@ -336,7 +253,6 @@ public class ControladorUsuario {
 		        return;
 		    }
            
-		    
 		    String token = header.replace("Bearer ", "");
 		    Integer idUsuario = JWTUtil.verificarToken(token);
 
@@ -362,7 +278,6 @@ public class ControladorUsuario {
 		});
 		
 		
-		
 		app.post("/hacerResenaUsuario", contexto -> {
 			
 			contexto.req().setCharacterEncoding("UTF-8");
@@ -374,7 +289,6 @@ public class ControladorUsuario {
 		        return;
 		    }
            
-		    
 		    String token = header.replace("Bearer ", "");
 		    Integer idUsuario = JWTUtil.verificarToken(token);
 
@@ -383,12 +297,6 @@ public class ControladorUsuario {
 		        return;
 		    }
 		
-
-//		    String contenido = contexto.formParam("contenido");
-//		    int idCapitulo = Integer.parseInt(contexto.formParam("idCapitulo"));
-		   
-		    
-
 		    HacerResena datos = new Gson().fromJson(contexto.body(), HacerResena.class);
 		    
 		    boolean guardado = servicio.guardarResena(idUsuario, datos.contenido, datos.id_capitulo);
@@ -398,11 +306,7 @@ public class ControladorUsuario {
 		    } else {
 		        contexto.status(500).result("Error al guardar la resena");
 		    }
-		});
-		
-		
-		
-		
+		});	
 		
     }
 }

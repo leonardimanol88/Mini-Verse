@@ -17,12 +17,6 @@ public class Temporada {
 		this.nombre = nombre;
 		this.descripcion = descripcion;
 	}
-	/*
-	public Temporada ( int numeroTemporada, int id_serie) {
-		this.numeroTemporada = numeroTemporada;
-		this.id_serie = id_serie;
-	}
-	*/
 	
 	public Temporada ( int id, int numeroTemporada ,String imagen_url, String nombre, String descripcion) {
 		this.id = id;
@@ -32,7 +26,6 @@ public class Temporada {
 		this.nombre = nombre;
 		this.descripcion = descripcion;
 	}
-	
 	
     public int getId() { return this.id; }
     public int getNumeroTemporada() { return this.numeroTemporada; }

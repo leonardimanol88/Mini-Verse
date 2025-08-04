@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agregar Nuevo Director - MiniVerse</title>
+    <title>MiniVerse - Agregar Género</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="agregardirector.css">
+    <link rel="stylesheet" href="agregargenero.css">
 </head>
 <body>
     <nav class="navbar">
@@ -25,7 +25,7 @@
                     <li class="nav-item"><a href="/admin/Gestionusuario.html" class="nav-link active">Gestión reseñas</a></li>
                     <li class="nav-item"><a href="/admin/agregardirector.html" class="nav-link">Agregar Director</a></li>
                     <li class="nav-item"><a href="/admin/agregargenero.html" class="nav-link">Agregar Genero</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link">Estadisticas</a></li>
+                    <li class="nav-item"><a href="/admin/estadisticas.html" class="nav-link">Estadisticas</a></li>
                 </ul>
             </div>
             
@@ -39,40 +39,28 @@
         </div>
     </nav>
 
-    
     <main class="main-content">
-        <h1 class="page-title">Agregar Nuevo Director</h1>
-        
+        <h1 class="page-title">Agregar Nuevo Género</h1>
         
         <div class="form-container">
-            <form id="directorForm">
+            <form class="genre-form">
                 <div class="form-group">
-                    <label for="directorName">Nombre del director (ej: Christopher Nolan)</label>
-                    <input type="text" id="directorName" name="directorName" placeholder="Ingresa el nombre del director">
+                    <label for="genre-name" class="form-label">Nombre del género (ej: Acción, Drama, Comedia)</label>
+                    <input type="text" id="genre-name" class="form-input" placeholder="Ingresa el nombre del género">
                 </div>
                 
-                <div class="form-group">
-                    <label for="directorBio">Biografía</label>
-                    <textarea id="directorBio" name="directorBio" placeholder="Escribe la biografía del director..."></textarea>
-                </div>
                 
-                <button type="submit" class="save-button">Guardar Director</button>
+                <button type="submit" class="submit-btn">Guardar Género</button>
             </form>
         </div>
 
-        
-        <div class="directors-section">
-            <h2 class="section-title">Directores Registrados</h2>
-            
-            <div class="director-card">
-                <div class="director-name">Christopher Nolan</div>
-                <div class="director-info">Director de Inception y The Dark Knight</div>
-            </div>
-            
+        <div class="registered-section">
+            <h2 class="section-title">Géneros Registrados</h2>
+            <!-- Los géneros se cargarán dinámicamente aquí -->
         </div>
     </main>
 
-    <script src="agregardirector.js"></script>
-    <script src="/admin/auth-admin.js"></script>
+    <script src="agregargenero.js"></script>
+    
 </body>
 </html>
