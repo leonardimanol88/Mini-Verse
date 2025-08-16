@@ -31,6 +31,13 @@ public class ServicioSerie {
     
     
     
+    public Capitulo obtenerCapituloporId(int id){
+		
+		return repo.obtenerCapituloporId(id);
+	}
+    
+    
+    
     public ArrayList<Temporada> obtenerTemporadasPorSerie(int idSerie){
 		return repo.obtenerTemporadasPorSerie(idSerie);
 	}
@@ -44,7 +51,12 @@ public class ServicioSerie {
     
      public boolean agregarSerieFavorita(int idUsuario, int idSerie ){
     	
+    	int seriesFavoritas = repo.contarSeriesFavoritas(idUsuario);
     	
+    	if (seriesFavoritas >= 5 ) {
+    		return false;
+    	}
+    	 
     	return repo.agregarFavorita(idUsuario, idSerie);
     }
      

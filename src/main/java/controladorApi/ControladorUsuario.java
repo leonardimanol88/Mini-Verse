@@ -6,6 +6,7 @@ import java.util.Map;
 import com.google.gson.Gson;
 import entidades.Genero;
 import entidades.Serie;
+import entidades.Capitulo;
 import entidades.Usuario;
 import entidades.Resena;
 import entidades.Comentario;
@@ -307,6 +308,30 @@ public class ControladorUsuario {
 		        contexto.status(500).result("Error al guardar la resena");
 		    }
 		});	
+		
+		
+		app.get("/mostrarCapitulosFavoritos", contexto -> {
+		    contexto.req().setCharacterEncoding("UTF-8");
+		    
+		    
+		    String header = contexto.header("Authorization");
+		    
+		    if (header == null || !header.startsWith("Bearer ")) {
+		        contexto.status(401).json(Map.of("error", "falta el token de autorizacion"));
+		        return;
+		    }
+           
+		    String token = header.replace("Bearer ", "");
+		    Integer idUsuario = JWTUtil.verificarToken(token);
+
+		    if (idUsuario == null) {
+		        contexto.status(401).json(Map.of("error", "Token invalido o expirado"));
+		        return;
+		    }
+		  
+		    ArrayList<Capitulo> obtenerFavoritos = servicio.obtenerTodosFavoritos(idUsuario);
+		    contexto.json(obtenerFavoritos); 
+		});
 		
     }
 }

@@ -154,7 +154,7 @@ public class ControladorAdministrador {
 		    		    
 		    AgregarCapitulo nuevoCapitulo = new Gson().fromJson(ctx.body(), AgregarCapitulo.class);
 		
-		    boolean seAgrego = servicio.agregarCapitulo(nuevoCapitulo.titulo, nuevoCapitulo.numero, nuevoCapitulo.duracion, nuevoCapitulo.nombreSerie, nuevoCapitulo.temporada);
+		    boolean seAgrego = servicio.agregarCapitulo(nuevoCapitulo.titulo, nuevoCapitulo.numero, nuevoCapitulo.duracion, nuevoCapitulo.nombreSerie, nuevoCapitulo.temporada, nuevoCapitulo.sinopsis, nuevoCapitulo.imagenUrl);
 		
 		    if (seAgrego) {
 		        ctx.json(Map.of("mensaje", "Capitulo agregado correctamente"));

@@ -102,10 +102,23 @@ public class ControladorSerie {
 		    if (agregada) {
 		        contexto.status(200).result("Serie agregada a favoritos");
 		    } else {
-		        contexto.status(400).result("No se puede agregar mas de 4 series favoritas");
+		        contexto.status(400).result("No se puede agregar mas de 5 series favoritas");
 		    }
 		});
 		
+		
+		
+		app.get("/detalleCapitulo", contexto -> { 
+			contexto.req().setCharacterEncoding("UTF-8");
+				
+		    int idCapitulo = Integer.parseInt(contexto.queryParam("idCapitulo"));
+		    		    
+		    Capitulo capitulo = servicio.obtenerCapituloporId(idCapitulo);
+		    
+		    contexto.json(Map.of(
+		        "capitulo", capitulo    
+		    ));
+		});
 		
 		
     }

@@ -5,7 +5,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import org.mindrot.jbcrypt.BCrypt; 
 import java.util.List;
@@ -13,6 +15,7 @@ import java.sql.Timestamp;
 
 
 import dao.Conexion;
+import entidades.Capitulo;
 import entidades.Comentario;
 import entidades.Genero;
 import entidades.Resena;
@@ -417,6 +420,52 @@ public class RepositorioUsuario {
             }
             return favoritas;
     	}
+     
+     
+     public ArrayList<Capitulo> obtenerCapitulosFavoritos(int idUsuario) {
+    	 
+    	 
+ 	    ArrayList<Capitulo> favoritos = new ArrayList<>();
+ 	    
+ 	    String sql = "SELECT c.* FROM favorito f JOIN capitulo c ON f.id_capitulo = c.id WHERE f.id_usuario = ?";
+
+ 	    try (Connection con = Conexion.conectar();
+ 	         PreparedStatement ps = con.prepareStatement(sql)) {
+
+ 	        ps.setInt(1, idUsuario);
+ 	        ResultSet rs = ps.executeQuery();
+
+ 	        while (rs.next()) {
+ 	        	
+ 	        	Time tiempoSQL = rs.getTime("duracion");
+    			LocalTime duracion;
+
+    			if (tiempoSQL != null) {  
+    			    duracion = tiempoSQL.toLocalTime();  
+    			} else {  //
+    			    duracion = LocalTime.of(0, 0, 0);  
+    			} 
+ 	        	
+ 	            Capitulo capi = new Capitulo(
+ 	            		rs.getInt("id"),
+ 	    	            rs.getString("titulo"),
+ 	    	            rs.getInt("numero"),
+ 	    	            duracion,
+ 	    	            rs.getInt("id_temporada"),
+ 	    	            rs.getString("sinopsis"),
+ 	    	            rs.getString("imagen_url")
+ 	    	            
+ 	            		);
+ 	            
+ 	            favoritos.add(capi);
+ 	        }
+
+ 	    } catch (Exception e) {
+             System.out.println("Error al obtener los capitulos favoritos: " + e.getMessage()); 
+         }
+         return favoritos;
+ 	}
+     
      
      
      public ArrayList<Comentario> obtenerUltimosComentarios(int idUsuario) {

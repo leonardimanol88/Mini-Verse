@@ -109,7 +109,7 @@ public class ServicioAdministrador {
 	}
     
     
-    public boolean agregarCapitulo(String titulo, int numero, String duracion, String nombreSerie, int numeroTemporada) { //numero y nombre de la serie
+    public boolean agregarCapitulo(String titulo, int numero, String duracion, String nombreSerie, int numeroTemporada, String sinopsis, String imagenUrl) { //numero y nombre de la serie
 		
     	if (!repo.existeSerie(nombreSerie)) {System.out.println("La serie no existe");;return false;}
     	
@@ -132,7 +132,7 @@ public class ServicioAdministrador {
       
        if (repo.existeCapituloporNumero(numero, idTemporada)) {System.out.println("El capitulo ya existe");;return false;}//
         
-		return repo.agregarCapitulo(titulo, numero, duracion, idTemporada);
+		return repo.agregarCapitulo(titulo, numero, duracion, idTemporada, sinopsis, imagenUrl);
 	}
     
     

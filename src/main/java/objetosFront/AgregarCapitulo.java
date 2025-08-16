@@ -7,5 +7,7 @@ public class AgregarCapitulo {
 	public String duracion;
 	public String nombreSerie;
 	public int temporada; 
+	public String sinopsis;
+	public String imagenUrl;
 
 }

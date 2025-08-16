@@ -2,7 +2,7 @@ package servicio;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Optional;
 
 import entidades.Resena;
 import entidades.Comentario;
@@ -62,6 +62,34 @@ public class ServicioResena {
 		return repo.editarResena(idResena, contenidoNuevo);
 		
 	}
+    
+    
+    public void guardarPuntuacionSerie(int idUsuario, int idSerie, double puntuacion){
+    	
+        if (puntuacion < 0 || puntuacion > 5) {
+            throw new IllegalArgumentException("La puntuación debe estar entre 0 y 5");
+        }
+        repo.guardarPuntuacionSerie(idUsuario, idSerie, puntuacion);
+    }
+    
+    
+    public void guardarPuntuacionCapitulo(int idUsuario, int idCapitulo, double puntuacion){
+    	
+        if (puntuacion < 0 || puntuacion > 5) {
+            throw new IllegalArgumentException("La puntuación debe estar entre 0 y 5");
+        }
+        repo.guardarPuntuacionCapitulo(idUsuario, idCapitulo, puntuacion);
+    }
+    
+    
+    public Optional<Double> obtenerPuntuacionSerieUsuario(int idUsuario, int idSerie) {
+        return repo.obtenerPuntuacionSerieUsuario(idUsuario, idSerie);
+    }
+    
+    
+    public Optional<Double> obtenerPuntuacionCapituloUsuario(int idUsuario, int idCapitulo) {
+        return repo.obtenerPuntuacionCapituloUsuario(idUsuario, idCapitulo);
+    }
 	
 	
     public boolean agregarComentario(int idUsuario, int idResena, String contenido) {
@@ -142,6 +170,17 @@ public class ServicioResena {
         return resultado;
     }
     
+    
+    public boolean agregarCapituloFavorito(int idUsuario, int idCapitulo ){
+    	
+    	int capitulosFavoritos = repo.contarCapitulosFavoritos(idUsuario);
+    	
+    	if (capitulosFavoritos >= 10) {
+    		return false;
+    	}
+    	 
+    	return repo.agregarFavorito(idUsuario, idCapitulo);
+    }
     
     
 }

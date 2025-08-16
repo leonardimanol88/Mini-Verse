@@ -512,11 +512,11 @@ public class RepositorioAdministrador {
 	}
     
     
-    public boolean agregarCapitulo(String titulo, int numero, String duracion, int idTemporada) {
+    public boolean agregarCapitulo(String titulo, int numero, String duracion, int idTemporada, String sinopsis, String imagenUrl) {
 		
 		boolean insertado = false;
 		
-		String sql = "INSERT INTO capitulo (titulo, numero, duracion, id_temporada) VALUES (?, ?, ?, ?)";
+		String sql = "INSERT INTO capitulo (titulo, numero, duracion, id_temporada, sinopsis, imagen_url) VALUES (?, ?, ?, ?, ?, ?)";
 		
 		try(Connection con = Conexion.conectar();){
 			
@@ -526,6 +526,8 @@ public class RepositorioAdministrador {
 			    LocalTime hora = LocalTime.parse(duracion); // debe ser "00;00;00"
 		        ps.setTime(3, Time.valueOf(hora));
 			    ps.setInt(4, idTemporada);
+			    ps.setString(5, sinopsis);
+			    ps.setString(6, imagenUrl);
 			    insertado = ps.executeUpdate() >0;
 			}
 			

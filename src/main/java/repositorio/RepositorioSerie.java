@@ -113,6 +113,48 @@ public class RepositorioSerie {
 	}
 	
 	
+    public Capitulo obtenerCapituloporId(int id) {
+	   
+	    Capitulo capituloMostrar = null;
+	    String sql = "SELECT * FROM capitulo WHERE id = ?";
+	    
+	    try (
+	        Connection con = Conexion.conectar();
+	        PreparedStatement ps = con.prepareStatement(sql);
+	    ) {
+	        ps.setInt(1, id);
+	        
+	        try (ResultSet rs = ps.executeQuery()) {
+	            if(rs.next()) {
+	            	
+	            	Time tiempoSQL = rs.getTime("duracion");
+        			LocalTime duracion;
+
+        			if (tiempoSQL != null) {  
+        			    duracion = tiempoSQL.toLocalTime();  
+        			} else {  //
+        			    duracion = LocalTime.of(0, 0, 0);  
+        			} 
+	            	
+	                capituloMostrar = new Capitulo(
+	                    rs.getString("titulo"),
+	                    rs.getInt("numero"),
+	                    duracion,
+	                    rs.getInt("id_temporada"),
+	                    rs.getString("sinopsis"),
+	                    rs.getString("imagen_url")
+	                );
+	            }
+	        }
+	        
+	    } catch (Exception e) {
+	        System.out.println("Error al obtener el capitulo: " + e.getMessage()); 
+	    }
+	    
+	    return capituloMostrar;    
+	}
+	
+	
 	public ArrayList<Temporada> obtenerTemporadasPorSerie(int idSerie){
 		
 		ArrayList<Temporada> lista = new ArrayList<>();
@@ -172,13 +214,15 @@ public class RepositorioSerie {
                     	rs.getString("titulo"),
                         rs.getInt("numero"),
                         duracion,
-                        rs.getInt("id_temporada")
+                        rs.getInt("id_temporada"),
+                        rs.getString("sinopsis"),
+	                    rs.getString("imagen_url")
                 );
                     lista.add(capituloObtenido);
         	    }
             }
         } catch (Exception e) {
-            System.out.println("Error al obtener las series: " + e.getMessage()); 
+            System.out.println("Error al obtener los capitulos: " + e.getMessage()); 
         }
         return lista;
 	}
@@ -223,7 +267,7 @@ public class RepositorioSerie {
     }
  
     
-     public int contarFavoritas(int idUsuario) {
+     public int contarSeriesFavoritas(int idUsuario) {
     	 
     	 
 	    String sql = "SELECT COUNT(*) FROM favorita WHERE id_usuario = ?";
