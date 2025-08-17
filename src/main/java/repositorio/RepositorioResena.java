@@ -482,7 +482,7 @@ public class RepositorioResena {
    
    public int contarCapitulosFavoritos(int idUsuario) {
 	   
-	   String sql = "SELECT COUNT(*) FROM favoritO WHERE id_usuario = ?";
+	   String sql = "SELECT COUNT(*) FROM favorito WHERE id_usuario = ?";
 	   
 	   int total = 0;
 	   
