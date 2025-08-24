@@ -11,6 +11,7 @@ import entidades.Usuario;
 import entidades.Resena;
 import entidades.Comentario;
 import objetosFront.ActualizarContrasena;
+import objetosFront.CapituloNombreSerie;
 import objetosFront.EliminarUsuario;
 import objetosFront.HacerResena;
 import objetosFront.Login;
@@ -330,6 +331,30 @@ public class ControladorUsuario {
 		    }
 		  
 		    ArrayList<Capitulo> obtenerFavoritos = servicio.obtenerTodosFavoritos(idUsuario);
+		    contexto.json(obtenerFavoritos); 
+		});
+		
+		
+		app.get("/mostrarCapitulosFavoritosConSerie", contexto -> {
+		    contexto.req().setCharacterEncoding("UTF-8");
+		    
+		    
+		    String header = contexto.header("Authorization");
+		    
+		    if (header == null || !header.startsWith("Bearer ")) {
+		        contexto.status(401).json(Map.of("error", "falta el token de autorizacion"));
+		        return;
+		    }
+           
+		    String token = header.replace("Bearer ", "");
+		    Integer idUsuario = JWTUtil.verificarToken(token);
+
+		    if (idUsuario == null) {
+		        contexto.status(401).json(Map.of("error", "Token invalido o expirado"));
+		        return;
+		    }
+		  
+		    ArrayList<CapituloNombreSerie> obtenerFavoritos = servicio.obtenerTodosFavoritosconSerie(idUsuario);
 		    contexto.json(obtenerFavoritos); 
 		});
 		

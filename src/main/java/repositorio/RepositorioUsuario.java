@@ -21,6 +21,7 @@ import entidades.Genero;
 import entidades.Resena;
 import entidades.Serie;
 import entidades.Usuario;
+import objetosFront.CapituloNombreSerie;
 
 
 public class RepositorioUsuario {
@@ -465,6 +466,58 @@ public class RepositorioUsuario {
          }
          return favoritos;
  	}
+     
+     
+     
+     public ArrayList<CapituloNombreSerie> obtenerCapitulosFavoritosconNombreSerie(int idUsuario) {
+    	 
+    	 
+  	    ArrayList<CapituloNombreSerie> favoritos = new ArrayList<>();
+  	    
+  	    String sql = "SELECT "+
+  	              "c.*, s.nombre as nombre_serie "
+  	    		+ "FROM capitulo c "
+  	    		+ "JOIN temporada t ON c.id_temporada = t.id "
+  	    		+ "JOIN serie s ON t.id_serie = s.id "
+  	    		+ "JOIN favorito f ON c.id = f.id_capitulo "
+  	    		+ "WHERE f.id_usuario = ?";
+
+  	    try (Connection con = Conexion.conectar();
+  	         PreparedStatement ps = con.prepareStatement(sql)) {
+
+  	        ps.setInt(1, idUsuario);
+  	        ResultSet rs = ps.executeQuery();
+
+  	        while (rs.next()) {
+  	        	
+  	        	Time tiempoSQL = rs.getTime("duracion");
+     			LocalTime duracion;
+
+     			if (tiempoSQL != null) {  
+     			    duracion = tiempoSQL.toLocalTime();  
+     			} else {  //
+     			    duracion = LocalTime.of(0, 0, 0);  
+     			} 
+  	        	
+  	            CapituloNombreSerie capi = new CapituloNombreSerie(
+  	            		rs.getInt("id"),
+  	    	            rs.getString("titulo"),
+  	    	            rs.getInt("numero"),
+  	    	            duracion,
+  	    	            rs.getInt("id_temporada"),
+  	    	            rs.getString("sinopsis"),
+  	    	            rs.getString("imagen_url"),
+  	    	            rs.getString("nombre_serie")
+  	            		);
+  	            
+  	            favoritos.add(capi);
+  	        }
+
+  	    } catch (Exception e) {
+              System.out.println("Error al obtener los capitulos favoritos: " + e.getMessage()); 
+          }
+          return favoritos;
+  	}
      
      
      

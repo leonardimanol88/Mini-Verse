@@ -3,6 +3,7 @@ package servicio;
 
 import repositorio.RepositorioUsuario;
 import entidades.Usuario;
+import objetosFront.CapituloNombreSerie;
 import entidades.Capitulo;
 import entidades.Comentario;
 import entidades.Genero;
@@ -129,6 +130,10 @@ RepositorioUsuario repo = new RepositorioUsuario();
     
     public ArrayList<Capitulo> obtenerTodosFavoritos(int idUsuario) {
     	return repo.obtenerCapitulosFavoritos(idUsuario);
+	}
+    
+    public ArrayList<CapituloNombreSerie> obtenerTodosFavoritosconSerie(int idUsuario) {
+    	return repo.obtenerCapitulosFavoritosconNombreSerie(idUsuario);
 	}
 	
     
